@@ -1,0 +1,11 @@
+﻿For pushing changed:
+	1. Commit to local repo
+	2. Pull
+	2a. (If a conflict emerges)
+		Open conflict, make the changes to resolve conflict in misc file.
+		Click "Accept Merge" at top
+		Push changes
+	2b. (If no conflict)
+		In "Changes" tab, choose "Commit all and push"
+
+	
