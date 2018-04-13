@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2037
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BingVoiceSystem", "BingVoiceSystem\BingVoiceSystem.csproj", "{4508176E-AB03-4A9C-9DB4-3CEF9FABC378}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BingVoiceSystem.Web", "BingVoiceSystem\BingVoiceSystem.Web.csproj", "{4508176E-AB03-4A9C-9DB4-3CEF9FABC378}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
