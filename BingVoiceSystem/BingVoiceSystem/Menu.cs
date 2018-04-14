@@ -5,7 +5,7 @@ using System.Web;
 
 namespace BingVoiceSystem.Web
 {
-    public class Menu
+   /* public class Menu
     {
         private UserController userController;
         private Rules rules;
@@ -81,5 +81,5 @@ namespace BingVoiceSystem.Web
             Console.Write("{0}: ", description);
             return Console.ReadLine();
         }
-    }
+    }*/
 }

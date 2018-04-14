@@ -35,6 +35,7 @@
             </p>
             <p>
                 <a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301950">Learn more &raquo;</a>
+                <asp:ListBox ID="ListBox1" runat="server" Width="296px"></asp:ListBox>
             </p>
         </div>
     </div>

@@ -11,7 +11,12 @@ namespace BingVoiceSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            Rules rules = new Rules();
+            Dictionary<string, string> ruleslist = rules.PrintApprovedRules();
+            foreach (KeyValuePair<string, string> pair in ruleslist)
+            {
+                ListBox1.Items.Add(new ListItem(pair.Value, pair.Key));
+            }
         }
     }
 }
