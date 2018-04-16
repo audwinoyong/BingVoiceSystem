@@ -13,7 +13,7 @@ namespace BingVoiceSystem.Tests
         [TestInitialize]
         public void Setup()
         {
-            rules.AddRule("Am I a question?", "Yes, and I'm a response");
+            rules.AddRule("Am I a question?", "Yes, and I'm a response", "PendingRules");
         }
 
         [TestMethod]
@@ -52,7 +52,7 @@ namespace BingVoiceSystem.Tests
         [TestMethod]
         public void EditRule_EditSuccessful_True()
         {
-            rules.EditRule("Am I a question?", "Yes, and response has been edited");
+            rules.EditRule("Am I a question?", "Yes, and response has been edited", "ApprovedRules");
 
             Assert.IsTrue(rules.GetAnswer("Am I a question?").Contains("Yes, and response has been edited"));
         }
@@ -60,7 +60,7 @@ namespace BingVoiceSystem.Tests
         [TestMethod]
         public void DeleteRule_DeleteSuccessful_True()
         {
-            rules.DeleteRule("Am I a question?");
+            rules.DeleteRule("Am I a question?", "ApprovedRules");
 
             Assert.IsTrue(rules.GetRulesList().Count == 0);
         }

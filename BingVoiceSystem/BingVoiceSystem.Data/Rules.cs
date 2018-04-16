@@ -208,6 +208,15 @@ namespace BingVoiceSystem
             return ruleslist;
         }
 
+        /*TODO
+        public Dictionary<string, string> GetRulesList()
+        {
+            Dictionary<string,string> rules = new Dictionary<string,string>();
+            using (SqlConnection conn = new SqlConnection(path))
+
+        }
+        */
+
         public string GetAnswer(string question)
         {
             question = Regex.Replace(question, "\\s+", " ").Trim();
