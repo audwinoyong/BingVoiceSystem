@@ -9,14 +9,18 @@ namespace BingVoiceSystem
 {
     public partial class _Default : Page
     {
+        Rules rules;
+
         protected void Page_Load(object sender, EventArgs e)
         {
-            Rules rules = new Rules();
-            Dictionary<string, string> ruleslist = rules.PrintApprovedRules();
-            foreach (KeyValuePair<string, string> pair in ruleslist)
-            {
-                ListBox1.Items.Add(new ListItem(pair.Value, pair.Key));
-            }
+            rules = new Rules();            
+        }
+
+        protected void SubmitBtn_Click(object sender, EventArgs e)
+        {
+            answersTB.Text = rules.GetAnswer(questionTB.Text);
+            //line below is a test to get the user identity
+            //answersTB.Text = System.Web.HttpContext.Current.User.Identity.Name;
         }
     }
 }
