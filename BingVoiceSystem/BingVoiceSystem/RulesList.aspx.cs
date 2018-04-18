@@ -16,10 +16,10 @@ namespace BingVoiceSystem
                 // load data on initial page request
                 // on postback, load the data after deleting the rows
 
-                Rules rules = new Rules();
-                Dictionary<string, string> pendingRulesList = rules.PrintPendingRules();
-                Dictionary<string, string> approvedRulesList = rules.PrintApprovedRules();
-                Dictionary<string, string> rejectedRulesList = rules.PrintRejectedRules();
+                //Rules rules = new Rules();
+                Dictionary<string, string> pendingRulesList = GlobalState.rules.PrintPendingRules();
+                Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintApprovedRules();
+                Dictionary<string, string> rejectedRulesList = GlobalState.rules.PrintRejectedRules();
 
                 PendingRulesGridView.DataSource = pendingRulesList;
                 PendingRulesGridView.DataBind();
@@ -32,7 +32,10 @@ namespace BingVoiceSystem
             }
         }
 
-
+        protected void AddRuleButton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/RulesListEdit.aspx");
+        }
 
     }
 }
