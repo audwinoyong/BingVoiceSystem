@@ -10,29 +10,27 @@ namespace BingVoiceSystem
     public partial class _Default : Page
     {
         Rules rules;
-        bool submit;
+        
 
         protected void Page_Load(object sender, EventArgs e)
         {
             rules = new Rules();
-            submit = true;
+            
         }
 
         protected void SubmitBtn_Click(object sender, EventArgs e)
         {
-            if (submit)
+            if (submitBtn.Text.Equals("Submit"))
             {
-                answerLbl.Text = rules.GetAnswer(questionTb.Text);
+                answerLbl.Text = "Answer: " + rules.GetAnswer(questionTb.Text);
                 answerLbl.Visible = true;
-                submitBtn.Text = "New Question";
-                submit = false;
+                submitBtn.Text = "New Question";                
             }
             else
             {
                 questionTb.Text = "";
                 answerLbl.Visible = false;
                 submitBtn.Text = "Submit";
-                submit = true;
             }
             //line below is a test to get the user identity
             //answersTB.Text = System.Web.HttpContext.Current.User.Identity.Name;
