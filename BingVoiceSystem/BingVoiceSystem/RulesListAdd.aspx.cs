@@ -11,7 +11,7 @@ namespace BingVoiceSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            ModeLabel.Text = "New";
+
         }
 
         protected void SaveButton_Click(object sender, EventArgs e)
