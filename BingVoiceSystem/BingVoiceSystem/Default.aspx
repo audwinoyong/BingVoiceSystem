@@ -8,9 +8,13 @@
                 Enter a question and get your answer below!
             </p>
             <p>
-                <asp:TextBox ID="questionTB" runat="server" Width="400px"></asp:TextBox>
-                <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" />
-                <asp:TextBox ID="answersTB" runat="server" Width="400px" ReadOnly="true"></asp:TextBox>
+                <asp:TextBox ID="questionTb" runat="server" Width="400px"></asp:TextBox>
+                <br/>
+                <br/>
+                <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" Height="38px" Width="155px" />
+                <br/>
+                <br/>
+                <asp:Label ID="answerLbl" runat="server" Font-Size="Large" Visible="false"></asp:Label>
 
             </p>
         </div>
