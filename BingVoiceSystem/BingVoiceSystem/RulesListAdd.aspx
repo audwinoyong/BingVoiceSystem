@@ -1,7 +1,7 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesListEdit.aspx.cs" Inherits="BingVoiceSystem.RulesListEdit" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesListAdd.aspx.cs" Inherits="BingVoiceSystem.RulesListEdit" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Pending Rules: <asp:Label ID="ModeLabel" runat="server" /></h2>
+    <h2>Add New Rule</h2>
     <table>
         <tr>
             <td>Question:</td>

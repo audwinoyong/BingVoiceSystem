@@ -13,28 +13,62 @@ namespace BingVoiceSystem
         {
             if (!IsPostBack)
             {
-                // load data on initial page request
-                // on postback, load the data after deleting the rows
-
-                //Rules rules = new Rules();
-                Dictionary<string, string> pendingRulesList = GlobalState.rules.PrintPendingRules();
-                Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintApprovedRules();
-                Dictionary<string, string> rejectedRulesList = GlobalState.rules.PrintRejectedRules();
-
-                PendingRulesGridView.DataSource = pendingRulesList;
-                PendingRulesGridView.DataBind();
-
-                ApprovedRulesGridView.DataSource = approvedRulesList;
-                ApprovedRulesGridView.DataBind();
-
-                RejectedRulesGridView.DataSource = rejectedRulesList;
-                RejectedRulesGridView.DataBind();
+                ShowData();
             }
+        }
+
+        protected void ShowData()
+        {
+            Dictionary<string, string> pendingRulesList = GlobalState.rules.PrintPendingRules();
+            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintApprovedRules();
+            Dictionary<string, string> rejectedRulesList = GlobalState.rules.PrintRejectedRules();
+
+            PendingRulesGridView.DataSource = pendingRulesList;
+            PendingRulesGridView.DataBind();
+
+            ApprovedRulesGridView.DataSource = approvedRulesList;
+            ApprovedRulesGridView.DataBind();
+
+            RejectedRulesGridView.DataSource = rejectedRulesList;
+            RejectedRulesGridView.DataBind();
         }
 
         protected void AddRuleButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/RulesListEdit.aspx");
+            Response.Redirect("~/RulesListAdd.aspx");
+        }
+
+        protected void PendingRulesGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            // NewEditIndex property is used to determine the index of the row being edited.
+            PendingRulesGridView.EditIndex = e.NewEditIndex;
+            ShowData();
+        }
+
+        protected void PendingRulesGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            TextBox QuestionTextBox = (TextBox)PendingRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
+            TextBox AnswerTextBox = (TextBox)PendingRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
+
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, "PendingRules");
+            PendingRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        protected void PendingRulesGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Setting the EditIndex property to -1 to cancel the Edit mode in Gridview  
+            PendingRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        protected void PendingRulesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            string question = PendingRulesGridView.DataKeys[e.RowIndex].Value.ToString();
+            GlobalState.rules.DeleteRule(question, "PendingRules");
+
+            PendingRulesGridView.EditIndex = -1;
+            ShowData();
         }
 
     }

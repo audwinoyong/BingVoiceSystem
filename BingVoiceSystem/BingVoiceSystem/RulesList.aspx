@@ -4,10 +4,22 @@
     <h2>Rules List</h2>
 
     <h3>Pending</h3>
-    <asp:GridView ID="PendingRulesGridView" runat="server" AutoGenerateColumns="False">
+    <asp:GridView ID="PendingRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Key"
+        OnRowEditing="PendingRulesGridView_RowEditing" OnRowUpdating="PendingRulesGridView_RowUpdating" OnRowCancelingEdit="PendingRulesGridView_RowCancelingEdit" OnRowDeleting="PendingRulesGridView_RowDeleting">
         <Columns>
             <asp:BoundField DataField="Key" HeaderText="Question" />
             <asp:BoundField DataField="Value" HeaderText="Answer" />
+            <asp:TemplateField>
+                <ItemTemplate>
+                    <asp:Button ID="EditButton" runat="server" Text="Edit" CommandName="Edit" />
+                </ItemTemplate>
+                <EditItemTemplate>
+                    <asp:Button ID="UpdateButton" runat="server" Text="Update" CommandName="Update" />
+                    <asp:Button ID="CancelButton" runat="server" Text="Cancel" CommandName="Cancel" />
+                </EditItemTemplate>
+            </asp:TemplateField>
+
+            <asp:ButtonField ButtonType="Button" Text="Delete" CommandName="Delete" />
         </Columns>
     </asp:GridView>
 
@@ -31,7 +43,5 @@
             <asp:BoundField DataField="Value" HeaderText="Answer" />
         </Columns>
     </asp:GridView>
-
-
 
 </asp:Content>
