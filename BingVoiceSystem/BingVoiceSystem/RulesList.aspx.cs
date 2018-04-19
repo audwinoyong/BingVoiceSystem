@@ -71,5 +71,22 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        // for approving or rejecting rule
+        protected void PendingRulesGridView_RowCommand(object sender, GridViewCommandEventArgs e)
+        {
+            // Convert the row index stored in the CommandArgument property to an Integer.
+            int index = Convert.ToInt32(e.CommandArgument);
+            string question = PendingRulesGridView.DataKeys[index].Value.ToString();
+
+            if (e.CommandName.Equals("Approve"))
+            {
+                GlobalState.rules.ApproveRule(question);
+            }
+            else if (e.CommandName.Equals("Reject"))
+            {
+                GlobalState.rules.RejectRule(question);
+            }
+            ShowData();
+        }
     }
 }
