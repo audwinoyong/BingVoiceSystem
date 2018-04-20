@@ -71,7 +71,7 @@ namespace BingVoiceSystem
             ShowData();
         }
 
-        // for approving or rejecting rule
+        // Only for approving or rejecting rule by Approver
         protected void PendingRulesGridView_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             // Convert the row index stored in the CommandArgument property to an Integer.
@@ -88,5 +88,74 @@ namespace BingVoiceSystem
             }
             ShowData();
         }
+
+        // For Approved Rules GridView
+        protected void ApprovedRulesGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            // NewEditIndex property is used to determine the index of the row being edited.
+            ApprovedRulesGridView.EditIndex = e.NewEditIndex;
+            ShowData();
+        }
+
+        protected void ApprovedRulesGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            TextBox QuestionTextBox = (TextBox)ApprovedRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
+            TextBox AnswerTextBox = (TextBox)ApprovedRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
+
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "ApprovedRules");
+            ApprovedRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        protected void ApprovedRulesGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Setting the EditIndex property to -1 to cancel the Edit mode in Gridview  
+            ApprovedRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        protected void ApprovedRulesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            string question = ApprovedRulesGridView.DataKeys[e.RowIndex].Value.ToString();
+            GlobalState.rules.DeleteRule(question, "ApprovedRules");
+
+            ApprovedRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        // For Rejected Rules GridView
+        protected void RejectedRulesGridView_RowEditing(object sender, GridViewEditEventArgs e)
+        {
+            // NewEditIndex property is used to determine the index of the row being edited.
+            RejectedRulesGridView.EditIndex = e.NewEditIndex;
+            ShowData();
+        }
+
+        protected void RejectedRulesGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
+        {
+            TextBox QuestionTextBox = (TextBox)RejectedRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
+            TextBox AnswerTextBox = (TextBox)RejectedRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
+
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "RejectedRules");
+            RejectedRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        protected void RejectedRulesGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
+        {
+            // Setting the EditIndex property to -1 to cancel the Edit mode in Gridview  
+            RejectedRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
+        protected void RejectedRulesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
+        {
+            string question = RejectedRulesGridView.DataKeys[e.RowIndex].Value.ToString();
+            GlobalState.rules.DeleteRule(question, "RejectedRules");
+
+            RejectedRulesGridView.EditIndex = -1;
+            ShowData();
+        }
+
     }
 }
