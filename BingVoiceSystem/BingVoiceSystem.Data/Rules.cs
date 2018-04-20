@@ -63,13 +63,13 @@ namespace BingVoiceSystem
                 switch (table)
                 {
                     case "ApprovedRules":
-                        query = @"Update ApprovedRules Set Answer = @a, ApprovedBy = @i Where Question = @q";
+                        query = @"UPDATE ApprovedRules SET Answer = @a, ApprovedBy = @i WHERE Question = @q";
                         break;
                     case "RejectedRules":
-                        query = @"Update RejectedRules Set Answer = @a, RejectedBy = @i Where Question = @q";
+                        query = @"UPDATE RejectedRules SET Answer = @a, RejectedBy = @i WHERE Question = @q";
                         break;
                     case "PendingRules":
-                        query = @"Update PendingRules Set Answer = @a Where Question = @q";
+                        query = @"UPDATE PendingRules SET Answer = @a WHERE Question = @q";
                         break;
                     default:
                         break;
@@ -92,13 +92,13 @@ namespace BingVoiceSystem
                 switch (table)
                 {
                     case "ApprovedRules":
-                        query = @"Delete From ApprovedRules Where Question = @q";
+                        query = @"DELETE FROM ApprovedRules WHERE Question = @q";
                         break;
                     case "RejectedRules":
-                        query = @"Delete From RejectedRules Where Question = @q";
+                        query = @"DELETE FROM RejectedRules WHERE Question = @q";
                         break;
                     case "PendingRules":
-                        query = @"Delete From PendingRules Where Question = @q";
+                        query = @"DELETE FROM PendingRules WHERE Question = @q";
                         break;
                     default:
                         break;
@@ -117,7 +117,7 @@ namespace BingVoiceSystem
                 string rejectedquestion;
                 string rejectedanswer;
                 conn.Open();
-                string query = @"select Question, Answer from PendingRules Where Question = @q";
+                string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add(new SqlParameter("q", question));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
@@ -140,7 +140,7 @@ namespace BingVoiceSystem
                 string approvedquestion;
                 string approvedanswer;
                 conn.Open();
-                string query = @"select Question, Answer from PendingRules Where Question = @q";
+                string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add(new SqlParameter("q", question));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
@@ -162,7 +162,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("select Question, Answer from ApprovedRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer FROM ApprovedRules", conn);
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -180,7 +180,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("select Question, Answer from RejectedRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer FROM RejectedRules", conn);
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -198,7 +198,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("select Question, Answer from PendingRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer FROM PendingRules", conn);
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -226,7 +226,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                string query = @"Select Answer From ApprovedRules Where Question = @q";
+                string query = @"SELECT Answer FROM ApprovedRules WHERE Question = @q";
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add(new SqlParameter("q", question));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
@@ -249,7 +249,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("select Question, Answer, ApprovedBy from ApprovedRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules", conn);
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -270,7 +270,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("select Question, Answer, RejectedBy from RejectedRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules", conn);
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
