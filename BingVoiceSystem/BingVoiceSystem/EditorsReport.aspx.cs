@@ -19,13 +19,23 @@ namespace BingVoiceSystem
 
         protected void ShowData()
         {
+            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintUsersApprovedRules(User.Identity.Name);
 
-            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintUserRules(User.Identity.Name);
+            double approvedCount = approvedRulesList.Count();
+            double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(User.Identity.Name).Count();
+
+            Dictionary<string, string> ruleStatistics = new Dictionary<string, string>
+            {
+                { "Count of Approved", approvedCount.ToString("N0") },
+                { "Cound of Rejected", rejectedCount.ToString("N0") },
+                { "Success Rate", (approvedCount / (approvedCount + rejectedCount) * 100).ToString("N0") + "%" }
+            };
 
             MyRulesGridView.DataSource = approvedRulesList;
             MyRulesGridView.DataBind();
 
-
+            RulesStatisticsGridView.DataSource = ruleStatistics;
+            RulesStatisticsGridView.DataBind();
         }
     }
 }

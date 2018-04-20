@@ -50,7 +50,7 @@ namespace BingVoiceSystem
             TextBox QuestionTextBox = (TextBox)PendingRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
             TextBox AnswerTextBox = (TextBox)PendingRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
 
-            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, "PendingRules");
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "PendingRules");
             PendingRulesGridView.EditIndex = -1;
             ShowData();
         }
