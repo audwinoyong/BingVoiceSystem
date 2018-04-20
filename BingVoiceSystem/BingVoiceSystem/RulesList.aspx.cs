@@ -80,11 +80,11 @@ namespace BingVoiceSystem
 
             if (e.CommandName.Equals("Approve"))
             {
-                GlobalState.rules.ApproveRule(question);
+                GlobalState.rules.ApproveRule(question, User.Identity.Name);
             }
             else if (e.CommandName.Equals("Reject"))
             {
-                GlobalState.rules.RejectRule(question);
+                GlobalState.rules.RejectRule(question, User.Identity.Name);
             }
             ShowData();
         }
