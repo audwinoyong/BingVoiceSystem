@@ -240,5 +240,15 @@ namespace BingVoiceSystem
                 }
             }
         }
+
+        public int CountApproved()
+        {
+            return PrintApprovedRules().Count();
+        }
+
+        public int CountRejected()
+        {
+            return PrintRejectedRules().Count();
+        }
     }
 }
