@@ -23,7 +23,7 @@ namespace BingVoiceSystem
 
         }
 
-        public void AddRule(string question, string response, string table)
+        public void AddRule(string question, string response, string ID, string table)
         {
             question = Regex.Replace(question, "\\s+", " ").Trim();
             question = Regex.Replace(question, "[^\\w\\s]", "");
@@ -34,10 +34,10 @@ namespace BingVoiceSystem
                 switch (table)
                 {
                     case "ApprovedRules":
-                        query = @"INSERT INTO ApprovedRules (Question, Answer) Values(@q, @a)";
+                        query = @"INSERT INTO ApprovedRules (Question, Answer, ApprovedBy) Values(@q, @a, @i)";
                         break;
                     case "RejectedRules":
-                        query = @"INSERT INTO RejectedRules (Question, Answer) Values(@q, @a)";
+                        query = @"INSERT INTO RejectedRules (Question, Answer, RejectedBy) Values(@q, @a, @i)";
                         break;
                     case "PendingRules":
                         query = @"INSERT INTO PendingRules (Question, Answer) Values(@q, @a)";
@@ -48,7 +48,8 @@ namespace BingVoiceSystem
                 SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.Add(new SqlParameter("q", question));
                 cmd.Parameters.Add(new SqlParameter("a", response));
-                
+                cmd.Parameters.Add(new SqlParameter("i", ID));
+
                 cmd.ExecuteNonQuery();
             }
         }
@@ -108,7 +109,7 @@ namespace BingVoiceSystem
             }
         }
 
-        public void RejectRule(string question)
+        public void RejectRule(string question, string ID)
         {
             using (SqlConnection conn = new SqlConnection(path))
             {
@@ -125,13 +126,13 @@ namespace BingVoiceSystem
                         rejectedquestion = rdr.GetString(0);
                         rejectedanswer = rdr.GetString(1);
                         DeleteRule(question, "PendingRules");
-                        AddRule(rejectedquestion, rejectedanswer, "RejectedRules");
+                        AddRule(rejectedquestion, rejectedanswer, ID, "RejectedRules");
                     }
                 }
             }
         }
 
-        public void ApproveRule(string question)
+        public void ApproveRule(string question, string ID)
         {
             using (SqlConnection conn = new SqlConnection(path))
             {
@@ -148,7 +149,7 @@ namespace BingVoiceSystem
                         approvedquestion = rdr.GetString(0);
                         approvedanswer = rdr.GetString(1);
                         DeleteRule(question, "PendingRules");
-                        AddRule(approvedquestion, approvedanswer, "ApprovedRules");
+                        AddRule(approvedquestion, approvedanswer, ID, "ApprovedRules");
                     }
                 }
             }
@@ -239,6 +240,32 @@ namespace BingVoiceSystem
                     }
                 }
             }
+        }
+
+        public Dictionary<string, string> PrintUserRules(string ID)
+        {
+            if (ID == null)
+            {
+                ID = "0";
+            }
+
+            Dictionary<string, string> ruleslist = new Dictionary<string, string>();
+            using (SqlConnection conn = new SqlConnection(path))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules UNION SELECT Question, Answer, RejectedBy FROM RejectedRules", conn);
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        if (rdr.GetString(2) == ID)
+                        {
+                            ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
+                        }
+                    }
+                }
+            }
+            return ruleslist;
         }
 
         public int CountApproved()
