@@ -16,7 +16,7 @@ namespace BingVoiceSystem
 
         protected void SaveButton_Click(object sender, EventArgs e)
         {
-            GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "PendingRules");
+            GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserId(), "PendingRules");
             Response.Redirect("~/RulesList.aspx");
         }
 

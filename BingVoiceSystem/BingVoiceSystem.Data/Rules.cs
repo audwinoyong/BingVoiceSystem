@@ -243,42 +243,38 @@ namespace BingVoiceSystem
             }
         }
 
-        public Dictionary<string, string> PrintUsersApprovedRules(string user)
+        public Dictionary<string, string> PrintUsersApprovedRules(string userId)
         {
             Dictionary<string, string> ruleslist = new Dictionary<string, string>();
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules WHERE Id = @i", conn);
+                cmd.Parameters.Add(new SqlParameter("i", userId));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
                     {
-                        if (rdr.GetString(2) == user)
-                        {
-                            ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
-                        }
+                        ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
                     }
                 }
             }
             return ruleslist;
         }
 
-        public Dictionary<string, string> PrintUsersRejectedRules(string user)
+        public Dictionary<string, string> PrintUsersRejectedRules(string userId)
         {
             Dictionary<string, string> ruleslist = new Dictionary<string, string>();
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules WHERE Id = @i", conn);
+                cmd.Parameters.Add(new SqlParameter("i", userId));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
                     {
-                        if (rdr.GetString(2) == user)
-                        {
-                            ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
-                        }
+                        ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
                     }
                 }
             }

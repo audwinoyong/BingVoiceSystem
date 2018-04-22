@@ -50,7 +50,7 @@ namespace BingVoiceSystem
             TextBox QuestionTextBox = (TextBox)PendingRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
             TextBox AnswerTextBox = (TextBox)PendingRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
 
-            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "PendingRules");
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserId(), "PendingRules");
             PendingRulesGridView.EditIndex = -1;
             ShowData();
         }
@@ -80,11 +80,11 @@ namespace BingVoiceSystem
 
             if (e.CommandName.Equals("Approve"))
             {
-                GlobalState.rules.ApproveRule(question, User.Identity.Name);
+                GlobalState.rules.ApproveRule(question, User.Identity.GetUserId());
             }
             else if (e.CommandName.Equals("Reject"))
             {
-                GlobalState.rules.RejectRule(question, User.Identity.Name);
+                GlobalState.rules.RejectRule(question, User.Identity.GetUserId());
             }
             ShowData();
         }
@@ -102,7 +102,7 @@ namespace BingVoiceSystem
             TextBox QuestionTextBox = (TextBox)ApprovedRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
             TextBox AnswerTextBox = (TextBox)ApprovedRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
 
-            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "ApprovedRules");
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserId(), "ApprovedRules");
             ApprovedRulesGridView.EditIndex = -1;
             ShowData();
         }
@@ -136,7 +136,7 @@ namespace BingVoiceSystem
             TextBox QuestionTextBox = (TextBox)RejectedRulesGridView.Rows[e.RowIndex].Cells[0].Controls[0];
             TextBox AnswerTextBox = (TextBox)RejectedRulesGridView.Rows[e.RowIndex].Cells[1].Controls[0];
 
-            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.Name, "RejectedRules");
+            GlobalState.rules.EditRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserId(), "RejectedRules");
             RejectedRulesGridView.EditIndex = -1;
             ShowData();
         }

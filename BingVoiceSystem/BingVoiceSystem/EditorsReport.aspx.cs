@@ -19,10 +19,10 @@ namespace BingVoiceSystem
 
         protected void ShowData()
         {
-            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintUsersApprovedRules(User.Identity.Name);
+            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintUsersApprovedRules(User.Identity.GetUserId());
 
             double approvedCount = approvedRulesList.Count();
-            double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(User.Identity.Name).Count();
+            double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(User.Identity.GetUserId()).Count();
 
             Dictionary<string, string> ruleStatistics = new Dictionary<string, string>
             {
