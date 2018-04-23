@@ -41,8 +41,9 @@ namespace BingVoiceSystem
                 SqlCommand cmd = new SqlCommand("SELECT Id FROM AspNetUsers", conn);
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
-                    while (rdr.Read())
+                    while (rdr.Read() && !rdr.IsDBNull(0))
                     {
+
                         if (GetRole(rdr.GetString(0)).Contains(Role.Editor))
                         {
                             usersList.Add(rdr.GetString(0));
@@ -106,7 +107,7 @@ namespace BingVoiceSystem
                 }
             }
 
-            while (role >= 0)
+            while (role > 0)
             {
                 if (role >= 8)
                 {
@@ -128,13 +129,31 @@ namespace BingVoiceSystem
                     role -= 1;
                     roles.Add(Role.Registered);
                 }
-                else if (role == 0 && roles.Count == 0)
-                {
-                    roles.Add(Role.Guest);
-                }
+            }
+            if (role == 0 && roles.Count == 0)
+            {
+                roles.Add(Role.Guest);
             }
 
             return roles;
+        }
+        
+        public string GetUsernameFromId(string userId)
+        {
+            using (SqlConnection conn = new SqlConnection(GetPath()))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT UserName FROM AspNetUsers WHERE Id = @i", conn);
+                cmd.Parameters.Add(new SqlParameter("i", userId));
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.Read())
+                    {
+                        return rdr.GetString(0);
+                    }
+                    else return "";
+                }
+            }
         }
     }
 }

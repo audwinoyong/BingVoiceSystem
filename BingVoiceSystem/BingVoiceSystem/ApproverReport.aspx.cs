@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.Security;
@@ -19,28 +20,48 @@ namespace BingVoiceSystem
         {
             List<string> users = GlobalState.user.GetUsersByRole(Role.Editor);
 
-            Dictionary<string, string> editorStatistics = new Dictionary<string, string>();
+            List<string> editorStatistics = new List<string>();
+
+            DataTable dt = new DataTable();
+            DataRow dr;
+
+            dt.Columns.Add("Editor", typeof(string));
+            dt.Columns.Add("Approved Count", typeof(string));
+            dt.Columns.Add("Rejected Count", typeof(string));
+            dt.Columns.Add("Pending Count", typeof(string));
+            dt.Columns.Add("Success Rate", typeof(string));
+            dt.Columns.Add("Average Success Rate", typeof(string));
+
+            int count = 0;
+            double totalSuccess = 0;
 
             foreach (string user in users)
             {
-                Console.WriteLine(user);
-
                 double approvedCount = GlobalState.rules.PrintUsersApprovedRules(user).Count();
                 double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(user).Count();
-                double pendingCount = GlobalState.rules.PrintUsersPendingRules(user).Count();
+                double successRate = approvedCount / (approvedCount + rejectedCount) * 100;
+                
+                dr = dt.NewRow();
+                dr["Editor"] = GlobalState.user.GetUsernameFromId(user);
+                dr["Approved Count"] = approvedCount.ToString("N0");
+                dr["Rejected Count"] = rejectedCount.ToString("N0");
+                dr["Pending Count"] = GlobalState.rules.PrintUsersPendingRules(user).Count();
+                dr["Success Rate"] = successRate.ToString("N0") + "%";
 
-                List<string> values = new List<string>() {
-                    approvedCount.ToString("N0"),
-                    rejectedCount.ToString("N0"),
-                    pendingCount.ToString("N0"),
-                    (approvedCount / (approvedCount + rejectedCount) * 100).ToString("N0") + "%"
-                };
+                dt.Rows.Add(dr);
 
-                editorStatistics.Add(Membership.GetUser(user).UserName, approvedCount.ToString("N0"));
+                count++;
+                totalSuccess = successRate;
             }
 
-            EditorStatisticsGridView.DataSource = editorStatistics;
+            dr = dt.NewRow();
+            dr["Average Success Rate"] = (totalSuccess/count).ToString("N0") + "%";
+            dt.Rows.Add(dr);
+
+            EditorStatisticsGridView.DataSource = dt;
             EditorStatisticsGridView.DataBind();
+
+
         }
     }
 }
