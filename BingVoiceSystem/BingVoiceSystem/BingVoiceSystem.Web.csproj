@@ -389,7 +389,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="GlobalState.cs" />
-    <Compile Include="main.cs" />
     <Compile Include="Menu.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

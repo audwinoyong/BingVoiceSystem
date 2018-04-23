@@ -54,6 +54,7 @@
                         <li><a runat="server" href="~/RulesList">Rules List</a></li>
                         <li><a runat="server" href="~/RulesReport">Rules Report</a></li>
                         <li><a runat="server" href="~/EditorsReport">Editors Report</a></li>
+                        <li><a runat="server" href="~/ApproverReport">Approver Report</a></li>
                         <li><a runat="server" href="~/About">About</a></li>
                         <li><a runat="server" href="~/Contact">Contact</a></li>
                     </ul>

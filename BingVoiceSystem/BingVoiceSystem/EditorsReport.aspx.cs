@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -19,23 +20,25 @@ namespace BingVoiceSystem
 
         protected void ShowData()
         {
-            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintUsersApprovedRules(User.Identity.GetUserId());
-
-            double approvedCount = approvedRulesList.Count();
-            double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(User.Identity.GetUserId()).Count();
-
-            Dictionary<string, string> ruleStatistics = new Dictionary<string, string>
+            //Until we get screen permissions working, leave this if statement
+            if (User.Identity.GetUserId() != null)
             {
+                Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintUsersApprovedRules(User.Identity.GetUserId());
+
+                double approvedCount = GlobalState.rules.PrintUsersApprovedRules(User.Identity.GetUserId()).Count();
+                double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(User.Identity.GetUserId()).Count();
+
+                Dictionary<string, string> ruleStatistics = new Dictionary<string, string> {
                 { "Count of Approved", approvedCount.ToString("N0") },
                 { "Cound of Rejected", rejectedCount.ToString("N0") },
-                { "Success Rate", (approvedCount / (approvedCount + rejectedCount) * 100).ToString("N0") + "%" }
-            };
+                { "Success Rate", (approvedCount / (approvedCount + rejectedCount) * 100).ToString("N0") + "%" }};
 
-            MyRulesGridView.DataSource = approvedRulesList;
-            MyRulesGridView.DataBind();
+                MyRulesGridView.DataSource = approvedRulesList;
+                MyRulesGridView.DataBind();
 
-            RulesStatisticsGridView.DataSource = ruleStatistics;
-            RulesStatisticsGridView.DataBind();
+                RulesStatisticsGridView.DataSource = ruleStatistics;
+                RulesStatisticsGridView.DataBind();
+            }
         }
     }
 }

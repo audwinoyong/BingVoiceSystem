@@ -27,7 +27,7 @@ namespace BingVoiceSystem
             Dictionary<string, string> ruleStatistics = new Dictionary<string, string>
             {
                 { "Count of Approved", approvedCount.ToString("N0") },
-                { "Cound of Rejected", rejectedCount.ToString("N0") },
+                { "Count of Rejected", rejectedCount.ToString("N0") },
                 { "Success Rate", (approvedCount / (approvedCount + rejectedCount) * 100).ToString("N0") + "%" }
             };
 

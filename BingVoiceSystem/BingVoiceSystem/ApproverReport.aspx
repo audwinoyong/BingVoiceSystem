@@ -1,14 +1,14 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ApproverReport.aspx.cs" Inherits="BingVoiceSystem.ApproverReport" %>
+﻿<%@ Page Title="Approvers Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="ApproverReport.aspx.cs" Inherits="BingVoiceSystem.ApproverReport" %>
 
-<!DOCTYPE html>
+<asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
+    <h2>Approvers Report</h2>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-    <title></title>
-</head>
-<body>
-    <form id="form1" runat="server">
-        <asp:Panel ID="EditorPanel" runat="server"></asp:Panel>
-    </form>
-</body>
-</html>
+    <h3>Editor Statistics</h3>
+    <asp:GridView ID="EditorStatisticsGridView" runat="server" AutoGenerateColumns="False">
+        <Columns>
+            <asp:BoundField DataField="Key" HeaderText="Editor" />
+            <asp:BoundField DataField="Value" HeaderText="Value" />
+        </Columns>
+    </asp:GridView>
+</asp:Content>
+
