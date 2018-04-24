@@ -76,6 +76,27 @@ namespace BingVoiceSystem
         {
             Context.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
+
+        public string GetUserRoles()
+        {
+            List<string> rolesList = new List<string>();
+
+            if (Context.User.IsInRole("DataMaintainer"))
+            {
+                rolesList.Add("Data Maintainer");
+            }
+            if (Context.User.IsInRole("Editor"))
+            {
+                rolesList.Add("Editor");
+            }
+            if (Context.User.IsInRole("Approver"))
+            {
+                rolesList.Add("Approver");
+            }
+
+            string roles = string.Join(", ", rolesList.ToArray());
+            return roles;
+        }
     }
 
 }
