@@ -10,7 +10,7 @@
 namespace BingVoiceSystem {
     
     
-    public partial class RulesList {
+    public partial class RulesListEditor {
         
         /// <summary>
         /// PendingRulesGridView control.

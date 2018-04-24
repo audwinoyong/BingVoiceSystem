@@ -8,7 +8,7 @@ using System.Web.UI.WebControls;
 
 namespace BingVoiceSystem
 {
-    public partial class RulesListEdit : System.Web.UI.Page
+    public partial class RulesListAdd : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
@@ -18,12 +18,12 @@ namespace BingVoiceSystem
         protected void SaveButton_Click(object sender, EventArgs e)
         {
             GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserId(), "PendingRules");
-            Response.Redirect("~/RulesList.aspx");
+            Response.Redirect("~/RulesListEditor.aspx");
         }
 
         protected void CancelButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/RulesList.aspx");
+            Response.Redirect("~/RulesListEditor.aspx");
         }
     }
 }

@@ -10,7 +10,7 @@
 namespace BingVoiceSystem {
     
     
-    public partial class RulesListEdit {
+    public partial class RulesListAdd {
         
         /// <summary>
         /// QuestionTextBox control.

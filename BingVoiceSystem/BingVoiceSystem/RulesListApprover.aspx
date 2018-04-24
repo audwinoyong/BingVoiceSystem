@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="Rules List Approver" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesListApprover.aspx.cs" Inherits="BingVoiceSystem.RulesListApprover" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Rules List</h2>
+    <h2>Rules List Approver</h2>
 
     <h3>Pending</h3>
     <asp:GridView ID="PendingRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Key" EmptyDataText="There are no pending rules to display" 
