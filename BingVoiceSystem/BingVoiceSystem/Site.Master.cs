@@ -77,7 +77,7 @@ namespace BingVoiceSystem
             Context.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
 
-        public string GetUserRoles()
+        protected string GetUserRoles()
         {
             List<string> rolesList = new List<string>();
 

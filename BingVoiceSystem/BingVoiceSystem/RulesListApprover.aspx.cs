@@ -43,11 +43,11 @@ namespace BingVoiceSystem
 
             if (e.CommandName.Equals("Approve"))
             {
-                GlobalState.rules.ApproveRule(question, User.Identity.GetUserId());
+                GlobalState.rules.ApproveRule(question, User.Identity.GetUserName());
             }
             else if (e.CommandName.Equals("Reject"))
             {
-                GlobalState.rules.RejectRule(question, User.Identity.GetUserId());
+                GlobalState.rules.RejectRule(question, User.Identity.GetUserName());
             }
             ShowData();
         }
