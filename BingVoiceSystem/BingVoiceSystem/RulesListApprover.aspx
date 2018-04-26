@@ -4,11 +4,12 @@
     <h2>Rules List Approver</h2>
 
     <h3>Pending</h3>
-    <asp:GridView ID="PendingRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Key" EmptyDataText="There are no pending rules to display" 
+    <asp:GridView ID="PendingRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Question" EmptyDataText="There are no pending rules to display" 
         OnRowCommand="PendingRulesGridView_RowCommand">
         <Columns>
-            <asp:BoundField DataField="Key" HeaderText="Question" />
-            <asp:BoundField DataField="Value" HeaderText="Answer" />
+            <asp:BoundField DataField="Question" HeaderText="Question" />
+            <asp:BoundField DataField="Answer" HeaderText="Answer" />
+            <asp:BoundField DataField="CreatedBy" HeaderText="Created By" ReadOnly="True" />
 
             <asp:TemplateField>
                 <ItemTemplate>
@@ -23,19 +24,21 @@
     <br />
 
     <h3>Approved</h3>
-    <asp:GridView ID="ApprovedRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Key" EmptyDataText="There are no approved rules to display">
+    <asp:GridView ID="ApprovedRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Question" EmptyDataText="There are no approved rules to display">
         <Columns>
-            <asp:BoundField DataField="Key" HeaderText="Question" />
-            <asp:BoundField DataField="Value" HeaderText="Answer" />
+            <asp:BoundField DataField="Question" HeaderText="Question" />
+            <asp:BoundField DataField="Answer" HeaderText="Answer" />
+            <asp:BoundField DataField="ApprovedBy" HeaderText="Approved By" ReadOnly="True" />
 
         </Columns>
     </asp:GridView>
 
     <h3>Rejected</h3>
-    <asp:GridView ID="RejectedRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Key" EmptyDataText="There are no rejected rules to display">
+    <asp:GridView ID="RejectedRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Question" EmptyDataText="There are no rejected rules to display">
         <Columns>
-            <asp:BoundField DataField="Key" HeaderText="Question" />
-            <asp:BoundField DataField="Value" HeaderText="Answer" />
+            <asp:BoundField DataField="Question" HeaderText="Question" />
+            <asp:BoundField DataField="Answer" HeaderText="Answer" />
+            <asp:BoundField DataField="RejectedBy" HeaderText="Rejected By" ReadOnly="True" />
 
         </Columns>
     </asp:GridView>
