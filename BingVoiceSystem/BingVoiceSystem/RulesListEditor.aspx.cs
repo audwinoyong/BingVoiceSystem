@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNet.Identity;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data.SqlClient;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -20,18 +23,31 @@ namespace BingVoiceSystem
 
         protected void ShowData()
         {
-            Dictionary<string, string> pendingRulesList = GlobalState.rules.PrintPendingRules();
-            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintApprovedRules();
-            Dictionary<string, string> rejectedRulesList = GlobalState.rules.PrintRejectedRules();
+            string pendingRuleSqlCommand = "SELECT * FROM PendingRules";
+            string approvedRuleSqlCommand = "SELECT * FROM ApprovedRules";
+            string rejectedRuleSqlCommand = "SELECT * FROM RejectedRules";
 
-            PendingRulesGridView.DataSource = pendingRulesList;
-            PendingRulesGridView.DataBind();
+            BindRules(pendingRuleSqlCommand, PendingRulesGridView);
+            BindRules(approvedRuleSqlCommand, ApprovedRulesGridView);
+            BindRules(rejectedRuleSqlCommand, RejectedRulesGridView);
+        }
 
-            ApprovedRulesGridView.DataSource = approvedRulesList;
-            ApprovedRulesGridView.DataBind();
+        protected void BindRules(string ruleSqlCommand, GridView gridView)
+        {
+            string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\BingVoiceSystem.Data"));
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            path = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
 
-            RejectedRulesGridView.DataSource = rejectedRulesList;
-            RejectedRulesGridView.DataBind();
+            using (SqlConnection conn = new SqlConnection(path))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand(ruleSqlCommand, conn);
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    gridView.DataSource = rdr;
+                    gridView.DataBind();
+                }
+            }
         }
 
         protected void AddRuleButton_Click(object sender, EventArgs e)
