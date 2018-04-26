@@ -11,6 +11,7 @@
             <asp:BoundField DataField="Question" HeaderText="Question" />
             <asp:BoundField DataField="Answer" HeaderText="Answer" />
             <asp:BoundField DataField="CreatedBy" HeaderText="Created By" ReadOnly="True" />
+            <asp:BoundField DataField="EditedBy" HeaderText="Edited By" ReadOnly="True" />
 
             <asp:TemplateField>
                 <ItemTemplate>

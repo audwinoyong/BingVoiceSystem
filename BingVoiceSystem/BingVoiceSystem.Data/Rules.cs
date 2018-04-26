@@ -69,7 +69,7 @@ namespace BingVoiceSystem
                         query = @"UPDATE RejectedRules SET Answer = @a, RejectedBy = @i WHERE Question = @q";
                         break;
                     case "PendingRules":
-                        query = @"UPDATE PendingRules SET Answer = @a, CreatedBy = @i WHERE Question = @q";
+                        query = @"UPDATE PendingRules SET Answer = @a, EditedBy = @i WHERE Question = @q";
                         break;
                     default:
                         break;
