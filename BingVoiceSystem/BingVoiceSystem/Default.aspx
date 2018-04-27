@@ -7,16 +7,17 @@
             <p>
                 Enter a question and get your answer below!
             </p>
-            <p>
+<%--                <asp:Textbox textmode="multiline" runat="server" ID ="answerTxt" style="OVERFLOW:auto; width:380px; height:100px;" />--%>
+                <div runat="server" ID="chat" style="overflow-y:auto; height:200px">
+
+                </div>
                 <asp:TextBox ID="questionTb" runat="server" Width="400px"></asp:TextBox>
                 <br/>
                 <br/>
                 <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" Height="38px" Width="155px" />
                 <br/>
                 <br/>
-                <asp:Label ID="answerLbl" runat="server" Font-Size="Large" Visible="false"></asp:Label>
-
-            </p>
+                <%--<asp:Label ID="answerLbl" runat="server" Font-Size="Large" Visible="false"></asp:Label>--%>
         </div>
     </div>
 

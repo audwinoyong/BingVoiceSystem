@@ -103,10 +103,10 @@ namespace BingVoiceSystem
                 switch (table)
                 {
                     case "ApprovedRules":
-                        query = @"UPDATE ApprovedRules SET Question = @q, Answer = @a, ApprovedBy = @i WHERE Question = @oq";
+                        query = @"UPDATE ApprovedRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
                         break;
                     case "RejectedRules":
-                        query = @"UPDATE RejectedRules SET Question = @q, Answer = @a, RejectedBy = @i WHERE Question = @oq";
+                        query = @"UPDATE RejectedRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
                         break;
                     case "PendingRules":
                         query = @"UPDATE PendingRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
@@ -276,12 +276,13 @@ namespace BingVoiceSystem
 
         public Dictionary<string, string> PrintUsersApprovedRules(string userId)
         {
+            User user = new User();
             Dictionary<string, string> ruleslist = new Dictionary<string, string>();
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules WHERE ApprovedBy = @i", conn);
-                cmd.Parameters.Add(new SqlParameter("i", userId));
+                cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -296,12 +297,13 @@ namespace BingVoiceSystem
 
         public Dictionary<string, string> PrintUsersRejectedRules(string userId)
         {
+            User user = new User();
             Dictionary<string, string> ruleslist = new Dictionary<string, string>();
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules WHERE RejectedBy = @i", conn);
-                cmd.Parameters.Add(new SqlParameter("i", userId));
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules WHERE RejectedBy = @u", conn);
+                cmd.Parameters.Add(new SqlParameter("u", user.GetUsernameFromId(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -315,12 +317,13 @@ namespace BingVoiceSystem
 
         public Dictionary<string, string> PrintUsersPendingRules(string userId)
         {
+            User user = new User();
             Dictionary<string, string> ruleslist = new Dictionary<string, string>();
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Question, Answer, CreatedBy FROM PendingRules WHERE CreatedBy = @i", conn);
-                cmd.Parameters.Add(new SqlParameter("i", userId));
+                cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())

@@ -11,12 +11,7 @@ namespace BingVoiceSystem
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-            /*
-            if (!IsPostBack)
-            {
-                ShowData();
-            }
-            */
+            ShowData();
         }
 
         protected void ShowData()

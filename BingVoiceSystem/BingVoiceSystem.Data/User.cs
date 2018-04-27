@@ -60,5 +60,23 @@ namespace BingVoiceSystem
                 }
             }
         }
+
+        public string GetIdFromUserName(string userName)
+        {
+            using (SqlConnection conn = new SqlConnection(path))
+            {
+                conn.Open();
+                SqlCommand cmd = new SqlCommand("SELECT Id FROM AspNetUsers WHERE UserName = @u", conn);
+                cmd.Parameters.Add(new SqlParameter("u", userName));
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    if (rdr.Read())
+                    {
+                        return rdr.GetString(0);
+                    }
+                    else return "";
+                }
+            }
+        }
     }
 }

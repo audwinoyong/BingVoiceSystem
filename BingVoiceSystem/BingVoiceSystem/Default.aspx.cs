@@ -22,14 +22,19 @@ namespace BingVoiceSystem
         {
             if (submitBtn.Text.Equals("Submit"))
             {
-                answerLbl.Text = "Answer: " + rules.GetAnswer(questionTb.Text);
-                answerLbl.Visible = true;
-                submitBtn.Text = "New Question";                
+                Label question = new Label();
+                question.Text = questionTb.Text;
+                chat.InnerHtml += "<p align = &quot;right&quot;>" + "Question: " + questionTb.Text + "</p>" + "<br />";
+                chat.InnerHtml += "Answer: " + rules.GetAnswer(questionTb.Text) + "\r\n";
+
+                //answerTxt.Text += "Answer: " + rules.GetAnswer(questionTb.Text) + "\r\n";
+                //answerTxt.Visible = true;
+                //submitBtn.Text = "New Question";                
             }
             else
             {
-                questionTb.Text = "";
-                answerLbl.Visible = false;
+                //questionTb.Text = "";
+                //answerTxt.Visible = false;
                 submitBtn.Text = "Submit";
             }
             //line below is a test to get the user identity

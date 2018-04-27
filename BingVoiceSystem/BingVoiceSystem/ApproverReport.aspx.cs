@@ -39,23 +39,26 @@ namespace BingVoiceSystem
             {
                 double approvedCount = GlobalState.rules.PrintUsersApprovedRules(user).Count();
                 double rejectedCount = GlobalState.rules.PrintUsersRejectedRules(user).Count();
-                double successRate = approvedCount / (approvedCount + rejectedCount) * 100;
-                
+                double successRate = approvedCount / (approvedCount + rejectedCount) * 100;           
+                             
                 dr = dt.NewRow();
                 dr["Editor"] = GlobalState.user.GetUsernameFromId(user);
                 dr["Approved Count"] = approvedCount.ToString("N0");
                 dr["Rejected Count"] = rejectedCount.ToString("N0");
                 dr["Pending Count"] = GlobalState.rules.PrintUsersPendingRules(user).Count();
-                dr["Success Rate"] = successRate.ToString("N0") + "%";
+
+                if (!Double.IsNaN(successRate))
+                {
+                    dr["Success Rate"] = successRate.ToString("N0") + "%";
+                    count++;
+                    totalSuccess += Int32.Parse(successRate.ToString("N0"));
+                } else dr["Success Rate"] = "";
 
                 dt.Rows.Add(dr);
-
-                count++;
-                totalSuccess = successRate;
             }
 
             dr = dt.NewRow();
-            dr["Average Success Rate"] = (totalSuccess/count).ToString("N0") + "%";
+            dr["Average Success Rate"] = (totalSuccess/count).ToString("N2") + "%";
             dt.Rows.Add(dr);
 
             EditorStatisticsGridView.DataSource = dt;
