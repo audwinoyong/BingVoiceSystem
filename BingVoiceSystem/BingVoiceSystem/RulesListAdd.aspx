@@ -19,6 +19,12 @@
         </tr>
     </table>
 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <asp:Label ID="RuleAdded" runat="server" ForeColor="Red"></asp:Label>
+    <br />
+
     <br />
     <asp:ValidationSummary runat="server" />
     <div>

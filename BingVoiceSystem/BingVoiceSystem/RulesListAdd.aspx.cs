@@ -17,8 +17,16 @@ namespace BingVoiceSystem
 
         protected void SaveButton_Click(object sender, EventArgs e)
         {
-            GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserName(), "PendingRules");
-            Response.Redirect("~/RulesListEditor.aspx");
+            if (GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserName(), "PendingRules"))
+            {
+                RuleAdded.Text = "";
+                Response.Redirect("~/RulesListEditor.aspx");
+            }
+            else
+            {
+                RuleAdded.Text = "That question already has an answer";
+            }
+            
         }
 
         protected void CancelButton_Click(object sender, EventArgs e)

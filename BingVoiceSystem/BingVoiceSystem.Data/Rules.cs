@@ -23,10 +23,45 @@ namespace BingVoiceSystem
 
         }
 
-        public void AddRule(string question, string response, string user, string table)
+        public bool CheckExisting(string question)
+        {
+            question = Regex.Replace(question, "[^\\w\\s]", "");
+            using (SqlConnection conn = new SqlConnection(path))
+            {
+                conn.Open();
+                string query = @"SELECT Question FROM PendingRules";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        string response = Regex.Replace(rdr.GetString(0), "[^\\w\\s]", "");
+                        if (question.ToLower().Equals(response.ToLower()))
+                        {
+                            return false;
+                        }
+                    }
+                }
+                query = @"SELECT Question FROM ApprovedRules";
+                cmd = new SqlCommand(query, conn);
+                using (SqlDataReader rdr = cmd.ExecuteReader())
+                {
+                    while (rdr.Read())
+                    {
+                        string response = Regex.Replace(rdr.GetString(0), "[^\\w\\s]", "");
+                        if (question.ToLower().Equals(response.ToLower()))
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
+
+        public bool AddRule(string question, string response, string user, string table)
         {
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = Regex.Replace(question, "[^\\w\\s]", "");
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
@@ -40,6 +75,10 @@ namespace BingVoiceSystem
                         query = @"INSERT INTO RejectedRules (Question, Answer, RejectedBy) Values(@q, @a, @i)";
                         break;
                     case "PendingRules":
+                        if (!CheckExisting(question))
+                        {
+                            return false;
+                        }
                         query = @"INSERT INTO PendingRules (Question, Answer, CreatedBy) Values(@q, @a, @i)";
                         break;
                     default:
@@ -52,9 +91,10 @@ namespace BingVoiceSystem
 
                 cmd.ExecuteNonQuery();
             }
+            return true;
         }
 
-        public void EditRule(string question, string answer, string user, string table)
+        public void EditRule(string oldquestion, string question, string answer, string user, string table)
         {
             using (SqlConnection conn = new SqlConnection(path))
             {
@@ -63,13 +103,13 @@ namespace BingVoiceSystem
                 switch (table)
                 {
                     case "ApprovedRules":
-                        query = @"UPDATE ApprovedRules SET Answer = @a, ApprovedBy = @i WHERE Question = @q";
+                        query = @"UPDATE ApprovedRules SET Question = @q, Answer = @a, ApprovedBy = @i WHERE Question = @oq";
                         break;
                     case "RejectedRules":
-                        query = @"UPDATE RejectedRules SET Answer = @a, RejectedBy = @i WHERE Question = @q";
+                        query = @"UPDATE RejectedRules SET Question = @q, Answer = @a, RejectedBy = @i WHERE Question = @oq";
                         break;
                     case "PendingRules":
-                        query = @"UPDATE PendingRules SET Answer = @a, EditedBy = @i WHERE Question = @q";
+                        query = @"UPDATE PendingRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
                         break;
                     default:
                         break;
@@ -78,7 +118,7 @@ namespace BingVoiceSystem
                 cmd.Parameters.Add(new SqlParameter("q", question));
                 cmd.Parameters.Add(new SqlParameter("a", answer));
                 cmd.Parameters.Add(new SqlParameter("i", user));
-
+                cmd.Parameters.Add(new SqlParameter("oq", oldquestion));
                 cmd.ExecuteNonQuery();
             }
         }
@@ -210,15 +250,6 @@ namespace BingVoiceSystem
             return ruleslist;
         }
 
-        /*TODO
-        public Dictionary<string, string> GetRulesList()
-        {
-            Dictionary<string,string> rules = new Dictionary<string,string>();
-            using (SqlConnection conn = new SqlConnection(path))
-
-        }
-        */
-
         public string GetAnswer(string question)
         {
             question = Regex.Replace(question, "\\s+", " ").Trim();
@@ -226,9 +257,9 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                string query = @"SELECT Answer FROM ApprovedRules WHERE Question = @q";
+                string query = @"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) LIKE @q";
                 SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.Add(new SqlParameter("q", question));
+                cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     if (rdr.Read())
