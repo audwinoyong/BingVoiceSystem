@@ -79,7 +79,7 @@ namespace BingVoiceSystem
                         {
                             return false;
                         }
-                        query = @"INSERT INTO PendingRules (Question, Answer, CreatedBy) Values(@q, @a, @i)";
+                        query = @"INSERT INTO PendingRules (Question, Answer, LastEditedBy) Values(@q, @a, @i)";
                         break;
                     default:
                         break;
@@ -103,13 +103,13 @@ namespace BingVoiceSystem
                 switch (table)
                 {
                     case "ApprovedRules":
-                        query = @"UPDATE ApprovedRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
+                        query = @"UPDATE ApprovedRules SET Question = @q, Answer = @a, LastEditedBy = @i WHERE Question = @oq";
                         break;
                     case "RejectedRules":
-                        query = @"UPDATE RejectedRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
+                        query = @"UPDATE RejectedRules SET Question = @q, Answer = @a, LastEditedBy = @i WHERE Question = @oq";
                         break;
                     case "PendingRules":
-                        query = @"UPDATE PendingRules SET Question = @q, Answer = @a, EditedBy = @i WHERE Question = @oq";
+                        query = @"UPDATE PendingRules SET Question = @q, Answer = @a, LastEditedBy = @i WHERE Question = @oq";
                         break;
                     default:
                         break;
@@ -154,8 +154,8 @@ namespace BingVoiceSystem
         {
             using (SqlConnection conn = new SqlConnection(path))
             {
-                string rejectedquestion;
-                string rejectedanswer;
+                string rejectedQuestion;
+                string rejectedAnswer;
                 conn.Open();
                 string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -164,10 +164,10 @@ namespace BingVoiceSystem
                 {
                     if (rdr.Read())
                     {
-                        rejectedquestion = rdr.GetString(0);
-                        rejectedanswer = rdr.GetString(1);
+                        rejectedQuestion = rdr.GetString(0);
+                        rejectedAnswer = rdr.GetString(1);
                         DeleteRule(question, "PendingRules");
-                        AddRule(rejectedquestion, rejectedanswer, user, "RejectedRules");
+                        AddRule(rejectedQuestion, rejectedAnswer, user, "RejectedRules");
                     }
                 }
             }
@@ -177,8 +177,8 @@ namespace BingVoiceSystem
         {
             using (SqlConnection conn = new SqlConnection(path))
             {
-                string approvedquestion;
-                string approvedanswer;
+                string approvedQuestion;
+                string approvedAnswer;
                 conn.Open();
                 string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
                 SqlCommand cmd = new SqlCommand(query, conn);
@@ -187,10 +187,10 @@ namespace BingVoiceSystem
                 {
                     if (rdr.Read())
                     {
-                        approvedquestion = rdr.GetString(0);
-                        approvedanswer = rdr.GetString(1);
+                        approvedQuestion = rdr.GetString(0);
+                        approvedAnswer = rdr.GetString(1);
                         DeleteRule(question, "PendingRules");
-                        AddRule(approvedquestion, approvedanswer, user, "ApprovedRules");
+                        AddRule(approvedQuestion, approvedAnswer, user, "ApprovedRules");
                     }
                 }
             }
@@ -322,7 +322,7 @@ namespace BingVoiceSystem
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, CreatedBy FROM PendingRules WHERE CreatedBy = @i", conn);
+                SqlCommand cmd = new SqlCommand("SELECT Question, Answer, LastEditedBy FROM PendingRules WHERE LastEditedBy = @i", conn);
                 cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
