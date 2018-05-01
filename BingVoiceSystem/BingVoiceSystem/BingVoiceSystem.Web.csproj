@@ -212,7 +212,7 @@
     <Content Include="Reports.aspx" />
     <Content Include="RulesListEditor.aspx" />
     <Content Include="RulesListAdd.aspx" />
-    <Content Include="EditorsReport.aspx" />
+    <Content Include="EditorReport.aspx" />
     <Content Include="RulesListApprover.aspx" />
     <Content Include="RulesReport.aspx" />
     <Content Include="Scripts\bootstrap.js" />
@@ -415,12 +415,12 @@
     <Compile Include="RulesListAdd.aspx.designer.cs">
       <DependentUpon>RulesListAdd.aspx</DependentUpon>
     </Compile>
-    <Compile Include="EditorsReport.aspx.cs">
-      <DependentUpon>EditorsReport.aspx</DependentUpon>
+    <Compile Include="EditorReport.aspx.cs">
+      <DependentUpon>EditorReport.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="EditorsReport.aspx.designer.cs">
-      <DependentUpon>EditorsReport.aspx</DependentUpon>
+    <Compile Include="EditorReport.aspx.designer.cs">
+      <DependentUpon>EditorReport.aspx</DependentUpon>
     </Compile>
     <Compile Include="RulesListApprover.aspx.cs">
       <DependentUpon>RulesListApprover.aspx</DependentUpon>

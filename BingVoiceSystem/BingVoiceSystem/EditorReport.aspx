@@ -1,7 +1,7 @@
-﻿<%@ Page Title="Rules Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditorsReport.aspx.cs" Inherits="BingVoiceSystem.EditorsReport" %>
+﻿<%@ Page Title="Rules Report" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="EditorReport.aspx.cs" Inherits="BingVoiceSystem.EditorReport" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-    <h2>Rules Report</h2>
+    <h2>Editor Report</h2>
 
     <h3>Your Approved Rules</h3>
     <asp:GridView ID="MyRulesGridView" runat="server" AutoGenerateColumns="False">

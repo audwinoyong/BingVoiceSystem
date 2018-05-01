@@ -10,7 +10,7 @@
 namespace BingVoiceSystem {
     
     
-    public partial class EditorsReport {
+    public partial class EditorReport {
         
         /// <summary>
         /// MyRulesGridView control.

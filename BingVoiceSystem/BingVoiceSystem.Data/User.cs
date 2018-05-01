@@ -22,6 +22,7 @@ namespace BingVoiceSystem
             path = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
 
+        //Returns list of userId's who have a specific role. 
         public List<string> GetUsersByRole(Role role) 
         {
             List<string> usersList = new List< string>();
@@ -42,32 +43,15 @@ namespace BingVoiceSystem
 
             return usersList;
         }
-        
-        public string GetUsernameFromId(string userId)
+
+        //Conversion required to support different user storage formats across tables. 
+        public string ConvertIdToUsername(string userId)
         {
             using (SqlConnection conn = new SqlConnection(path))
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT UserName FROM AspNetUsers WHERE Id = @i", conn);
                 cmd.Parameters.Add(new SqlParameter("i", userId));
-                using (SqlDataReader rdr = cmd.ExecuteReader())
-                {
-                    if (rdr.Read())
-                    {
-                        return rdr.GetString(0);
-                    }
-                    else return "";
-                }
-            }
-        }
-
-        public string GetIdFromUserName(string userName)
-        {
-            using (SqlConnection conn = new SqlConnection(path))
-            {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand("SELECT Id FROM AspNetUsers WHERE UserName = @u", conn);
-                cmd.Parameters.Add(new SqlParameter("u", userName));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     if (rdr.Read())

@@ -14,20 +14,19 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        // Binds data to tables in Rules Report screen
         protected void ShowData()
         {
             double approvedCount = GlobalState.rules.CountApproved();
             double rejectedCount = GlobalState.rules.CountRejected();
 
             Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintApprovedRules();
-
             Dictionary<string, string> ruleStatistics = new Dictionary<string, string>
             {
                 { "Count of Approved", approvedCount.ToString("N0") },
                 { "Count of Rejected", rejectedCount.ToString("N0") },
                 { "Success Rate", (approvedCount / (approvedCount + rejectedCount) * 100).ToString("N0") + "%" }
             };
-
 
             ApprovedRulesGridView.DataSource = approvedRulesList;
             ApprovedRulesGridView.DataBind();
