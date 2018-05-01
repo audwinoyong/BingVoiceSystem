@@ -209,6 +209,7 @@
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="push_commands.txt" />
+    <Content Include="Reports.aspx" />
     <Content Include="RulesListEditor.aspx" />
     <Content Include="RulesListAdd.aspx" />
     <Content Include="EditorsReport.aspx" />
@@ -393,6 +394,13 @@
     <Compile Include="Menu.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Reports.aspx.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports.aspx.designer.cs">
+      <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
     <Compile Include="RulesListEditor.aspx.cs">
       <DependentUpon>RulesListEditor.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
