@@ -763,6 +763,11 @@ pre code {
   margin-left: auto;
 }
 
+.containerBox {
+    margin: auto;
+    overflow: hidden;
+}
+
 .container:before,
 .container:after {
   display: table;
