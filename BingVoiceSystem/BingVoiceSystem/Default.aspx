@@ -7,18 +7,21 @@
             <p>
                 Enter a question and get your answer below!
             </p>
-<%--                <asp:Textbox textmode="multiline" runat="server" ID ="answerTxt" style="OVERFLOW:auto; width:380px; height:100px;" />--%>
-                <div runat="server" ID="chat" style="overflow-y:auto; height:200px">
-
-                </div>
-                <asp:TextBox ID="questionTb" runat="server" Width="400px"></asp:TextBox>
+                <div runat="server" ID="chat" style="overflow-y:auto; height:200px; width:500px; border: 1px solid black" />
+                <asp:TextBox class="question" ID="questionTb" runat="server" style="width:500px"></asp:TextBox>
                 <br/>
                 <br/>
                 <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" Height="38px" Width="155px" />
                 <br/>
                 <br/>
-                <%--<asp:Label ID="answerLbl" runat="server" Font-Size="Large" Visible="false"></asp:Label>--%>
         </div>
     </div>
 
+    <%--Scrolls the chat to the bottom at each new entry--%>
+    <%--Found at: https://stackoverflow.com/questions/270612/scroll-to-bottom-of-div--%>
+    <script type="text/javascript">
+        window.onload = function () {
+            document.getElementById('<%=chat.ClientID%>').scrollTop = document.getElementById('<%=chat.ClientID%>').scrollHeight;
+        };
+    </script>
 </asp:Content>

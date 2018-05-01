@@ -18,10 +18,14 @@ namespace BingVoiceSystem
 
         protected void ShowData()
         {
-            List<string> users = GlobalState.user.GetUsersByRole(Role.Editor);
+            int count = 0;
+            double totalSuccess = 0;
 
+            List<string> users = GlobalState.user.GetUsersByRole(Role.Editor);
             List<string> editorStatistics = new List<string>();
 
+            // Since data is calculated from multiple sources and is more than two columns, 
+            // manually creates a table and defines the column names.
             DataTable dt = new DataTable();
             DataRow dr;
 
@@ -32,9 +36,7 @@ namespace BingVoiceSystem
             dt.Columns.Add("Success Rate", typeof(string));
             dt.Columns.Add("Average Success Rate", typeof(string));
 
-            int count = 0;
-            double totalSuccess = 0;
-
+            //Fills in the data for each user of Editor role, also adds up all success rates for average calculation
             foreach (string user in users)
             {
                 double approvedCount = GlobalState.rules.PrintUsersApprovedRules(user).Count();
@@ -42,11 +44,12 @@ namespace BingVoiceSystem
                 double successRate = approvedCount / (approvedCount + rejectedCount) * 100;           
                              
                 dr = dt.NewRow();
-                dr["Editor"] = GlobalState.user.GetUsernameFromId(user);
+                dr["Editor"] = GlobalState.user.ConvertIdToUsername(user);
                 dr["Approved Count"] = approvedCount.ToString("N0");
                 dr["Rejected Count"] = rejectedCount.ToString("N0");
                 dr["Pending Count"] = GlobalState.rules.PrintUsersPendingRules(user).Count();
 
+                // Don't show or count rate if rate is Not an Answer (Divided by 0)
                 if (!Double.IsNaN(successRate))
                 {
                     dr["Success Rate"] = successRate.ToString("N0") + "%";
@@ -63,8 +66,6 @@ namespace BingVoiceSystem
 
             EditorStatisticsGridView.DataSource = dt;
             EditorStatisticsGridView.DataBind();
-
-
         }
     }
 }

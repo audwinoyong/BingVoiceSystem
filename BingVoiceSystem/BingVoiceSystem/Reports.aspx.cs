@@ -28,14 +28,17 @@ namespace BingVoiceSystem
 
         protected void RulesReportBtn_Click(object sender, EventArgs e)
         {
+            Response.Redirect("RulesReport.aspx");
         }
 
         protected void EditorReportBtn_Click(object sender, EventArgs e)
         {
+            Response.Redirect("EditorReport.aspx");
         }
 
         protected void ApproverReportBtn_Click(object sender, EventArgs e)
         {
+            Response.Redirect("ApproverReport.aspx");
         }
     }
 }

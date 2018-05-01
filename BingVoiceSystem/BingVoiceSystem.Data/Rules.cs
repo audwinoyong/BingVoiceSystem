@@ -20,7 +20,6 @@ namespace BingVoiceSystem
             path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\BingVoiceSystem.Data"));
             AppDomain.CurrentDomain.SetData("DataDirectory", path);
             path = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
         }
 
         public bool CheckExisting(string question)
@@ -109,7 +108,7 @@ namespace BingVoiceSystem
                         query = @"UPDATE RejectedRules SET Question = @q, Answer = @a, LastEditedBy = @i WHERE Question = @oq";
                         break;
                     case "PendingRules":
-                        query = @"UPDATE PendingRules SET Question = @q, Answer = @a, LastEditedBy = @i WHERE Question = @oq";
+                        query = @"UPDATE PendingRules SET Question = @q, Answer = @a, LastEditedBy = @i WHERE Question = @o";
                         break;
                     default:
                         break;
@@ -118,7 +117,7 @@ namespace BingVoiceSystem
                 cmd.Parameters.Add(new SqlParameter("q", question));
                 cmd.Parameters.Add(new SqlParameter("a", answer));
                 cmd.Parameters.Add(new SqlParameter("i", user));
-                cmd.Parameters.Add(new SqlParameter("oq", oldquestion));
+                cmd.Parameters.Add(new SqlParameter("o", oldquestion));
                 cmd.ExecuteNonQuery();
             }
         }
@@ -274,6 +273,7 @@ namespace BingVoiceSystem
             }
         }
 
+        // Returns all approved rules of a specific user
         public Dictionary<string, string> PrintUsersApprovedRules(string userId)
         {
             User user = new User();
@@ -282,7 +282,7 @@ namespace BingVoiceSystem
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules WHERE ApprovedBy = @i", conn);
-                cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
+                cmd.Parameters.Add(new SqlParameter("i", user.ConvertIdToUsername(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -295,6 +295,7 @@ namespace BingVoiceSystem
             return ruleslist;
         }
 
+        // Returns all rejected rules of a specific user
         public Dictionary<string, string> PrintUsersRejectedRules(string userId)
         {
             User user = new User();
@@ -303,7 +304,7 @@ namespace BingVoiceSystem
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules WHERE RejectedBy = @u", conn);
-                cmd.Parameters.Add(new SqlParameter("u", user.GetUsernameFromId(userId)));
+                cmd.Parameters.Add(new SqlParameter("u", user.ConvertIdToUsername(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
@@ -315,6 +316,7 @@ namespace BingVoiceSystem
             return ruleslist;
         }
 
+        // Returns all pending rules of a specific user
         public Dictionary<string, string> PrintUsersPendingRules(string userId)
         {
             User user = new User();
@@ -323,7 +325,7 @@ namespace BingVoiceSystem
             {
                 conn.Open();
                 SqlCommand cmd = new SqlCommand("SELECT Question, Answer, LastEditedBy FROM PendingRules WHERE LastEditedBy = @i", conn);
-                cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
+                cmd.Parameters.Add(new SqlParameter("i", user.ConvertIdToUsername(userId)));
                 using (SqlDataReader rdr = cmd.ExecuteReader())
                 {
                     while (rdr.Read())
