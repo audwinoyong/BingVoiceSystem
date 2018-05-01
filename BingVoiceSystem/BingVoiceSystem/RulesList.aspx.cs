@@ -11,12 +11,13 @@ using System.Web.UI.WebControls;
 
 namespace BingVoiceSystem
 {
-    public partial class RulesListEditor : System.Web.UI.Page
+    public partial class RulesList : System.Web.UI.Page
     {
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                UserColumnVisibility();
                 ShowData();
             }
         }
@@ -92,19 +93,22 @@ namespace BingVoiceSystem
         // Only for approving or rejecting rule by Approver
         protected void PendingRulesGridView_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            // Convert the row index stored in the CommandArgument property to an Integer.
-            int index = Convert.ToInt32(e.CommandArgument);
-            string question = PendingRulesGridView.DataKeys[index].Value.ToString();
+            if (e.CommandName.Equals("Approve") || e.CommandName.Equals("Reject"))
+            {
+                // Convert the row index stored in the CommandArgument property to an Integer.
+                int index = Convert.ToInt32(e.CommandArgument);
+                string question = PendingRulesGridView.DataKeys[index].Value.ToString();
 
-            if (e.CommandName.Equals("Approve"))
-            {
-                GlobalState.rules.ApproveRule(question, User.Identity.GetUserName());
+                if (e.CommandName.Equals("Approve"))
+                {
+                    GlobalState.rules.ApproveRule(question, User.Identity.GetUserName());
+                }
+                else if (e.CommandName.Equals("Reject"))
+                {
+                    GlobalState.rules.RejectRule(question, User.Identity.GetUserName());
+                }
+                ShowData();
             }
-            else if (e.CommandName.Equals("Reject"))
-            {
-                GlobalState.rules.RejectRule(question, User.Identity.GetUserName());
-            }
-            ShowData();
         }
 
         // For Approved Rules GridView
@@ -175,6 +179,26 @@ namespace BingVoiceSystem
 
             RejectedRulesGridView.EditIndex = -1;
             ShowData();
+        }
+
+        // Hides/shows columns depending on whether the user should have access to it
+        protected void UserColumnVisibility()
+        {
+            if (!(User.IsInRole("Editor") || User.IsInRole("DataMaintainer")))
+            {
+                PendingRulesGridView.Columns[3].Visible = false;
+                PendingRulesGridView.Columns[4].Visible = false;
+
+                ApprovedRulesGridView.Columns[4].Visible = false;
+                ApprovedRulesGridView.Columns[5].Visible = false;
+
+                RejectedRulesGridView.Columns[4].Visible = false;
+                RejectedRulesGridView.Columns[5].Visible = false;
+            }
+            if (!User.IsInRole("Approver"))
+            {
+                PendingRulesGridView.Columns[5].Visible = false;
+            }
         }
 
     }

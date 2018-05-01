@@ -8,7 +8,7 @@
                 Enter a question and get your answer below!
             </p>
                 <div runat="server" ID="chat" style="overflow-y:auto; height:200px; width:500px; border: 1px solid black" />
-                <asp:TextBox class="question" ID="questionTb" runat="server" style="width:500px"></asp:TextBox>
+                <asp:TextBox CssClass="question" ID="questionTb" runat="server" style="width:500px"></asp:TextBox>
                 <br/>
                 <br/>
                 <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" Height="38px" Width="155px" />

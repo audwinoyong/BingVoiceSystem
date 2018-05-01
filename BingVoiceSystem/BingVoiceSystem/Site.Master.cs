@@ -69,7 +69,11 @@ namespace BingVoiceSystem
 
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!(Page.User.IsInRole("Editor") || Page.User.IsInRole("DataMaintainer") || Page.User.IsInRole("Approver")))
+            {
+                rulesList.Visible = false;
+                reports.Visible = false;
+            }
         }
 
         protected void Unnamed_LoggingOut(object sender, LoginCancelEventArgs e)

@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Rules List Editor" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesListEditor.aspx.cs" Inherits="BingVoiceSystem.RulesListEditor" %>
+﻿<%@ Page Title="Rules List Editor" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesList.aspx.cs" Inherits="BingVoiceSystem.RulesList" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Rules List Editor</h2>
@@ -6,7 +6,7 @@
     <h3>Pending</h3>
     <asp:GridView ID="PendingRulesGridView" runat="server" AutoGenerateColumns="False" DataKeyNames="Question" EmptyDataText="There are no pending rules to display" 
         OnRowEditing="PendingRulesGridView_RowEditing" OnRowUpdating="PendingRulesGridView_RowUpdating" OnRowCancelingEdit="PendingRulesGridView_RowCancelingEdit" 
-        OnRowDeleting="PendingRulesGridView_RowDeleting">
+        OnRowDeleting="PendingRulesGridView_RowDeleting" OnRowCommand="PendingRulesGridView_RowCommand">
         <Columns>
             <asp:BoundField DataField="Question" HeaderText="Question" />
             <asp:BoundField DataField="Answer" HeaderText="Answer" />
@@ -24,6 +24,12 @@
 
             <asp:ButtonField ButtonType="Button" Text="Delete" CommandName="Delete" />
 
+            <asp:TemplateField>
+                <ItemTemplate>
+                    <asp:Button ID="ApproveButton" runat="server" Text="Approve" CommandName="Approve" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" />
+                    <asp:Button ID="RejectButton" runat="server" Text="Reject" CommandName="Reject" CommandArgument="<%# ((GridViewRow) Container).RowIndex %>" />
+                </ItemTemplate>
+            </asp:TemplateField>
         </Columns>
     </asp:GridView>
 

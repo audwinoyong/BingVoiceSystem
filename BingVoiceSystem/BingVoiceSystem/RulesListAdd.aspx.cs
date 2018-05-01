@@ -20,7 +20,7 @@ namespace BingVoiceSystem
             if (GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserName(), "PendingRules"))
             {
                 RuleAdded.Text = "";
-                Response.Redirect("~/RulesListEditor.aspx");
+                Response.Redirect("~/RulesList.aspx");
             }
             else
             {
@@ -31,7 +31,7 @@ namespace BingVoiceSystem
 
         protected void CancelButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/RulesListEditor.aspx");
+            Response.Redirect("~/RulesList.aspx");
         }
     }
 }

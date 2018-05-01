@@ -361,17 +361,16 @@ namespace BingVoiceSystem
         public string GetAnswer(string question)
         {
             //Remove extra whitespace and punctuation from the question
-            question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = Regex.Replace(question, "[^\\w\\s]", "");
+            question = Regex.Replace((Regex.Replace(question, "\\s+", " ").Trim()), "[^\\w\\s]", "");
+            
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
                 {
                     conn.Open();
                     //Query ignores case and punctuation when finding the answer
-                    string query = @"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) LIKE @q";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
+                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
+                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower()));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         //If an answer was found return that
@@ -406,7 +405,7 @@ namespace BingVoiceSystem
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy FROM ApprovedRules WHERE ApprovedBy = @i", conn);
-                    cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
+                    cmd.Parameters.Add(new SqlParameter("i", user.ConvertIdToUsername(userId)));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         //Loop through the results found and add them to the ruleslist dictionary
@@ -436,7 +435,7 @@ namespace BingVoiceSystem
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy FROM RejectedRules WHERE RejectedBy = @u", conn);
-                    cmd.Parameters.Add(new SqlParameter("u", user.GetUsernameFromId(userId)));
+                    cmd.Parameters.Add(new SqlParameter("u", user.ConvertIdToUsername(userId)));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         //Loop through the results found and add them to the ruleslist dictionary
@@ -466,7 +465,7 @@ namespace BingVoiceSystem
                 {
                     conn.Open();
                     SqlCommand cmd = new SqlCommand("SELECT Question, Answer, LastEditedBy FROM PendingRules WHERE LastEditedBy = @i", conn);
-                    cmd.Parameters.Add(new SqlParameter("i", user.GetUsernameFromId(userId)));
+                    cmd.Parameters.Add(new SqlParameter("i", user.ConvertIdToUsername(userId)));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         //Loop through the results found and add them to the ruleslist dictionery
@@ -484,13 +483,11 @@ namespace BingVoiceSystem
             return ruleslist;
         }
 
-        /*Return the number of approved rules*/
         public int CountApproved()
         {
             return PrintApprovedRules().Count();
         }
 
-        /*Return the number of rejected rules*/
         public int CountRejected()
         {
             return PrintRejectedRules().Count();
