@@ -270,8 +270,8 @@ namespace BingVoiceSystem
         }
 
         /*Finds all of the rules in the pendingrules table and adds 
-         *them to a DataTable so they can be printed to the screen
-         Returns a DataTable conaining all of the rules*/
+         * them to a DataTable so they can be printed to the screen
+         * Returns a DataTable conaining all of the rules*/
         public DataTable PrintPendingRules()
         {
             DataTable ruleslist = new DataTable();
@@ -296,8 +296,8 @@ namespace BingVoiceSystem
         }
 
         /*Finds all of the rules in the approvedrules table and adds 
-         *them to a DataTable so they can be printed to the screen
-         Returns a DataTable conaining all of the rules*/
+         * them to a DataTable so they can be printed to the screen
+         * Returns a DataTable conaining all of the rules*/
         public DataTable PrintApprovedRules()
         {
             DataTable ruleslist = new DataTable();
@@ -322,8 +322,8 @@ namespace BingVoiceSystem
         }
 
         /*Finds all of the rules in the rejectedrules table and adds 
-         *them to a DataTable so they can be printed to the screen
-        Returns a DataTable conaining all of the rules*/
+         * them to a DataTable so they can be printed to the screen
+         * Returns a DataTable conaining all of the rules*/
         public DataTable PrintRejectedRules()
         {
             DataTable ruleslist = new DataTable();
@@ -348,7 +348,7 @@ namespace BingVoiceSystem
         }
 
         /*Takes in a question and returns the corresponding answer for that rule 
-         *from the approvedrules table*/
+         * from the approvedrules table*/
         public string GetAnswer(string question)
         {
             //Remove extra whitespace and punctuation from the question
@@ -474,11 +474,13 @@ namespace BingVoiceSystem
             return ruleslist;
         }
 
+        /*Returns the number of approved rules.*/
         public int CountApproved()
         {
             return PrintApprovedRules().Rows.Count;
         }
 
+        /*Returns the number of rejected rules.*/
         public int CountRejected()
         {
             return PrintRejectedRules().Rows.Count;

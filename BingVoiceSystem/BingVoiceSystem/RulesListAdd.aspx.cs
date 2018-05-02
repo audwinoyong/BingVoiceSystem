@@ -15,6 +15,11 @@ namespace BingVoiceSystem
 
         }
 
+        /// <summary>
+        /// Event to add the rule into the Rules table, and check if the rule has already exists in the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void SaveButton_Click(object sender, EventArgs e)
         {
             if (GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserName(), "PendingRules"))
@@ -29,6 +34,11 @@ namespace BingVoiceSystem
             
         }
 
+        /// <summary>
+        /// Event for cancelling, redirect back to Rules List screen page.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void CancelButton_Click(object sender, EventArgs e)
         {
             Response.Redirect("~/RulesList.aspx");
