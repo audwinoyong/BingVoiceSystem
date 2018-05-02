@@ -17,11 +17,16 @@ namespace BingVoiceSystem
         {
             if (!IsPostBack)
             {
+                // Load data only on the initial page request
+                // On postback, load the data after deleting rows
                 ShowData();
                 UserColumnVisibility();
             }
         }
 
+        /// <summary>
+        /// Binds the GridViews with data from the database.
+        /// </summary>
         protected void ShowData()
         {
             PendingRulesGridView.DataSource = GlobalState.rules.PrintPendingRules();
@@ -34,7 +39,9 @@ namespace BingVoiceSystem
             RejectedRulesGridView.DataBind();
         }
 
-        // Hides/shows columns depending on whether the user should have access to it
+        /// <summary>
+        /// Hides or Shows columns depending on whether the user should have access to it
+        /// </summary>
         protected void UserColumnVisibility()
         {
             // Hide the Edit and Delete columns, also hide AddRule button
@@ -58,11 +65,21 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Redirect to Add Rule screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void AddRuleButton_Click(object sender, EventArgs e)
         {
             Response.Redirect("~/RulesListAdd.aspx");
         }
 
+        /// <summary>
+        /// Event to enter row editing mode for specific rule in the Pending Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void PendingRulesGridView_RowEditing(object sender, GridViewEditEventArgs e)
         {
             // NewEditIndex property is used to determine the index of the row being edited.
@@ -70,6 +87,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to update the rows (rules) edited in the Pending Rules GridView to the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void PendingRulesGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             string oldquestion = PendingRulesGridView.DataKeys[e.RowIndex].Value.ToString();
@@ -81,6 +103,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to cancel row editing mode in the Pending Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void PendingRulesGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
             // Setting the EditIndex property to -1 to cancel the Edit mode in Gridview  
@@ -88,6 +115,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to delete a row (rule) in the Pending Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void PendingRulesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             string question = PendingRulesGridView.DataKeys[e.RowIndex].Value.ToString();
@@ -97,7 +129,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
-        // Only for approving or rejecting rule by Approver
+        /// <summary>
+        /// Event for Approver Role to approve or reject a specific rule.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void PendingRulesGridView_RowCommand(object sender, GridViewCommandEventArgs e)
         {
             if (e.CommandName.Equals("Approve") || e.CommandName.Equals("Reject"))
@@ -118,7 +154,12 @@ namespace BingVoiceSystem
             }
         }
 
-        // For Approved Rules GridView
+
+        /// <summary>
+        /// Event to enter row editing mode for specific rule in the Approved Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void ApprovedRulesGridView_RowEditing(object sender, GridViewEditEventArgs e)
         {
             // NewEditIndex property is used to determine the index of the row being edited.
@@ -126,6 +167,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to update the rows (rules) edited in the Approved Rules GridView to the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void ApprovedRulesGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             string oldquestion = ApprovedRulesGridView.DataKeys[e.RowIndex].Value.ToString();
@@ -137,6 +183,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to cancel row editing mode in the Approved Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void ApprovedRulesGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
             // Setting the EditIndex property to -1 to cancel the Edit mode in Gridview  
@@ -144,6 +195,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to delete a row (rule) in the Approved Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void ApprovedRulesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             string question = ApprovedRulesGridView.DataKeys[e.RowIndex].Value.ToString();
@@ -153,7 +209,12 @@ namespace BingVoiceSystem
             ShowData();
         }
 
-        // For Rejected Rules GridView
+
+        /// <summary>
+        /// Event to enter row editing mode for specific rule in the Rejected Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void RejectedRulesGridView_RowEditing(object sender, GridViewEditEventArgs e)
         {
             // NewEditIndex property is used to determine the index of the row being edited.
@@ -161,6 +222,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to update the rows (rules) edited in the Rejected Rules GridView to the database.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void RejectedRulesGridView_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
             string oldquestion = RejectedRulesGridView.DataKeys[e.RowIndex].Value.ToString();
@@ -172,6 +238,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to cancel row editing mode in the Rejected Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void RejectedRulesGridView_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
             // Setting the EditIndex property to -1 to cancel the Edit mode in Gridview  
@@ -179,6 +250,11 @@ namespace BingVoiceSystem
             ShowData();
         }
 
+        /// <summary>
+        /// Event to delete a row (rule) in the Rejected Rules GridView.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         protected void RejectedRulesGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             string question = RejectedRulesGridView.DataKeys[e.RowIndex].Value.ToString();
@@ -187,8 +263,5 @@ namespace BingVoiceSystem
             RejectedRulesGridView.EditIndex = -1;
             ShowData();
         }
-
-
-
     }
 }
