@@ -360,23 +360,61 @@ namespace BingVoiceSystem
                 {
                     conn.Open();
 
-                    //Query ignores case and punctuation when finding the answer
-                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
-                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower()));
+                    string dataDriven1 = "What will happen in week";
+                    string dataDriven2 = "What week will I learn";
 
-                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    if(question.ToLower().Equals(dataDriven1.ToLower()) || question.ToLower().Equals(dataDriven2.ToLower())) //if datadriven
                     {
-                        //If an answer was found return that
-                        if (rdr.Read())
+                        string answerPreamble;
+                        if(question.ToLower().Equals(dataDriven1.ToLower()))
                         {
-                            return rdr.GetString(0);
+                            answerPreamble = dataDriven1;
                         }
-                        //Otherwise give information to the user that no answer was found
                         else
                         {
-                            return "Sorry, no answer was found for that query.";
-                        }                    
-                    }                   
+                            answerPreamble = dataDriven2;
+                        }
+
+                        question = question.Substring(answerPreamble.Length, question.Length);
+
+                        //Query ignores case and punctuation when finding the answer
+                        SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
+                        cmd.Parameters.Add(new SqlParameter("q", question.ToLower()));
+
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+                            //If an answer was found return that
+                            if (rdr.Read())
+                            {
+                                return answerPreamble + " " + rdr.GetString(0);
+                            }
+                            //Otherwise give information to the user that no answer was found
+                            else
+                            {
+                                return "Sorry, no answer was found for that query.";
+                            }
+                        }
+                    }
+                    else //if not data driven
+                    {
+                        //Query ignores case and punctuation when finding the answer
+                        SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
+                        cmd.Parameters.Add(new SqlParameter("q", question.ToLower()));
+
+                        using (SqlDataReader rdr = cmd.ExecuteReader())
+                        {
+                            //If an answer was found return that
+                            if (rdr.Read())
+                            {
+                                return rdr.GetString(0);
+                            }
+                            //Otherwise give information to the user that no answer was found
+                            else
+                            {
+                                return "Sorry, no answer was found for that query.";
+                            }
+                        }
+                    }  
                 }
             }
             catch (Exception e)
