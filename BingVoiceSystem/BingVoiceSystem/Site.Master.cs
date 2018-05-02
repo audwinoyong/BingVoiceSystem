@@ -81,6 +81,10 @@ namespace BingVoiceSystem
             Context.GetOwinContext().Authentication.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
         }
 
+        /// <summary>
+        /// Function to show the roles of the current logged-in user.
+        /// </summary>
+        /// <returns>A list of the current logged-in user's roles</returns>
         protected string GetUserRoles()
         {
             List<string> rolesList = new List<string>();
