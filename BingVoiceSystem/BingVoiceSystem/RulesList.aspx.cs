@@ -17,37 +17,44 @@ namespace BingVoiceSystem
         {
             if (!IsPostBack)
             {
-                UserColumnVisibility();
                 ShowData();
+                UserColumnVisibility();
             }
         }
 
         protected void ShowData()
         {
-            string pendingRuleSqlCommand = "SELECT * FROM PendingRules";
-            string approvedRuleSqlCommand = "SELECT * FROM ApprovedRules";
-            string rejectedRuleSqlCommand = "SELECT * FROM RejectedRules";
+            PendingRulesGridView.DataSource = GlobalState.rules.PrintPendingRules();
+            PendingRulesGridView.DataBind();
 
-            BindRules(pendingRuleSqlCommand, PendingRulesGridView);
-            BindRules(approvedRuleSqlCommand, ApprovedRulesGridView);
-            BindRules(rejectedRuleSqlCommand, RejectedRulesGridView);
+            ApprovedRulesGridView.DataSource = GlobalState.rules.PrintApprovedRules();
+            ApprovedRulesGridView.DataBind();
+
+            RejectedRulesGridView.DataSource = GlobalState.rules.PrintRejectedRules();
+            RejectedRulesGridView.DataBind();
         }
 
-        protected void BindRules(string ruleSqlCommand, GridView gridView)
+        // Hides/shows columns depending on whether the user should have access to it
+        protected void UserColumnVisibility()
         {
-            string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\BingVoiceSystem.Data"));
-            AppDomain.CurrentDomain.SetData("DataDirectory", path);
-            path = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
-            using (SqlConnection conn = new SqlConnection(path))
+            // Hide the Edit and Delete columns, also hide AddRule button
+            if (!(User.IsInRole("Editor") || User.IsInRole("DataMaintainer")))
             {
-                conn.Open();
-                SqlCommand cmd = new SqlCommand(ruleSqlCommand, conn);
-                using (SqlDataReader rdr = cmd.ExecuteReader())
-                {
-                    gridView.DataSource = rdr;
-                    gridView.DataBind();
-                }
+                PendingRulesGridView.Columns[3].Visible = false;
+                PendingRulesGridView.Columns[4].Visible = false;
+
+                ApprovedRulesGridView.Columns[4].Visible = false;
+                ApprovedRulesGridView.Columns[5].Visible = false;
+
+                RejectedRulesGridView.Columns[4].Visible = false;
+                RejectedRulesGridView.Columns[5].Visible = false;
+
+                AddRule.Visible = false;
+            }
+            // Hide the Approve and Reject columns
+            if (!User.IsInRole("Approver"))
+            {
+                PendingRulesGridView.Columns[5].Visible = false;
             }
         }
 
@@ -181,25 +188,7 @@ namespace BingVoiceSystem
             ShowData();
         }
 
-        // Hides/shows columns depending on whether the user should have access to it
-        protected void UserColumnVisibility()
-        {
-            if (!(User.IsInRole("Editor") || User.IsInRole("DataMaintainer")))
-            {
-                PendingRulesGridView.Columns[3].Visible = false;
-                PendingRulesGridView.Columns[4].Visible = false;
 
-                ApprovedRulesGridView.Columns[4].Visible = false;
-                ApprovedRulesGridView.Columns[5].Visible = false;
-
-                RejectedRulesGridView.Columns[4].Visible = false;
-                RejectedRulesGridView.Columns[5].Visible = false;
-            }
-            if (!User.IsInRole("Approver"))
-            {
-                PendingRulesGridView.Columns[5].Visible = false;
-            }
-        }
 
     }
 }

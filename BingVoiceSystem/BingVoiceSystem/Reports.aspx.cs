@@ -15,11 +15,11 @@ namespace BingVoiceSystem
             {
                 permissionsLbl.Visible = true;
             }
-            else if (User.IsInRole("Editor"))
+            if (User.IsInRole("Editor"))
             {
                 editorReportBtn.Visible = true;
             }
-            else if (User.IsInRole("Approver"))
+            if (User.IsInRole("Approver"))
             {
                 rulesReportBtn.Visible = true;
                 approverReportBtn.Visible = true;

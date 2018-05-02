@@ -4,7 +4,7 @@
     <h2>Editor Report</h2>
 
     <h3>Your Approved Rules</h3>
-    <asp:GridView ID="MyRulesGridView" runat="server" AutoGenerateColumns="False">
+    <asp:GridView ID="MyRulesGridView" runat="server" AutoGenerateColumns="False" EmptyDataText="There are no approved rules to display">
         <Columns>
             <asp:BoundField DataField="Key" HeaderText="Question" />
             <asp:BoundField DataField="Value" HeaderText="Answer" />

@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
-
+using System.Data;
 
 namespace BingVoiceSystem
 {
@@ -197,42 +197,6 @@ namespace BingVoiceSystem
             }
         }
 
-        /*Rejects a rule from the pendingrules table, and adds it to
-         * the rejectedrules table. Takes in the question of the rule 
-         * to be rejected, and the user who rejected the rule*/
-        public void RejectRule(string question, string user)
-        {
-            string rejectedQuestion;
-            string rejectedAnswer;
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(path))
-                {
-                    conn.Open();
-                    string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
-                    SqlCommand cmd = new SqlCommand(query, conn);
-                    cmd.Parameters.Add(new SqlParameter("q", question));
-                    using (SqlDataReader rdr = cmd.ExecuteReader())
-                    {
-                        if (rdr.Read())
-                        {
-                            //Find the rule
-                            rejectedQuestion = rdr.GetString(0);
-                            rejectedAnswer = rdr.GetString(1);
-                            //Delete the rule from the pendingrules table
-                            DeleteRule(question, "PendingRules");
-                            //Add the rule to the rejectedrules table
-                            AddRule(rejectedQuestion, rejectedAnswer, user, "RejectedRules");
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
-        }
-
         /*Approves a rule from the pendingrules table, and adds it to
          * the approvedrules table. Takes in the question of the rule 
          * to be approved, and the user who approved the rule*/
@@ -269,25 +233,84 @@ namespace BingVoiceSystem
             }
         }
 
-        /*Finds all of the rules in the approvedrules table and adds 
-         *them to a dictionary so they can be printed to the screen.
-         Returns a dictionary conaining all of the rules*/
-        public Dictionary<string, string> PrintApprovedRules()
+        /*Rejects a rule from the pendingrules table, and adds it to
+         * the rejectedrules table. Takes in the question of the rule 
+         * to be rejected, and the user who rejected the rule*/
+        public void RejectRule(string question, string user)
         {
-            Dictionary<string, string> ruleslist = new Dictionary<string, string>();
+            string rejectedQuestion;
+            string rejectedAnswer;
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
                 {
                     conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT Question, Answer FROM ApprovedRules", conn);
+                    string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
+                    SqlCommand cmd = new SqlCommand(query, conn);
+                    cmd.Parameters.Add(new SqlParameter("q", question));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
-                        //Loop through all of the results and adds them to the ruleslist dictionary
-                        while (rdr.Read())
+                        if (rdr.Read())
                         {
-                            ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
+                            //Find the rule
+                            rejectedQuestion = rdr.GetString(0);
+                            rejectedAnswer = rdr.GetString(1);
+                            //Delete the rule from the pendingrules table
+                            DeleteRule(question, "PendingRules");
+                            //Add the rule to the rejectedrules table
+                            AddRule(rejectedQuestion, rejectedAnswer, user, "RejectedRules");
                         }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+        }
+
+        /*Finds all of the rules in the pendingrules table and adds 
+         *them to a DataTable so they can be printed to the screen
+         Returns a DataTable conaining all of the rules*/
+        public DataTable PrintPendingRules()
+        {
+            DataTable ruleslist = new DataTable();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT Question, Answer, LastEditedBy FROM PendingRules", conn);
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        //Load the results into to the ruleslist DataTable
+                        ruleslist.Load(rdr);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return ruleslist;
+        }
+
+        /*Finds all of the rules in the approvedrules table and adds 
+         *them to a DataTable so they can be printed to the screen
+         Returns a DataTable conaining all of the rules*/
+        public DataTable PrintApprovedRules()
+        {
+            DataTable ruleslist = new DataTable();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand("SELECT Question, Answer, ApprovedBy, LastEditedBy FROM ApprovedRules", conn);
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        //Load the results into to the ruleslist DataTable
+                        ruleslist.Load(rdr);
                     }
                 }
             }
@@ -299,53 +322,21 @@ namespace BingVoiceSystem
         }
 
         /*Finds all of the rules in the rejectedrules table and adds 
-         *them to a dictionary so they can be printed to the screen.
-         Returns a dictionary conaining all of the rules*/
-        public Dictionary<string, string> PrintRejectedRules()
+         *them to a DataTable so they can be printed to the screen
+        Returns a DataTable conaining all of the rules*/
+        public DataTable PrintRejectedRules()
         {
-            Dictionary<string, string> ruleslist = new Dictionary<string, string>();
+            DataTable ruleslist = new DataTable();
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
                 {
                     conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT Question, Answer FROM RejectedRules", conn);
+                    SqlCommand cmd = new SqlCommand("SELECT Question, Answer, RejectedBy, LastEditedBy FROM RejectedRules", conn);
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
-                        //Loops through all of the results and adds them to the ruleslist dictionary
-                        while (rdr.Read())
-                        {
-                            ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
-            return ruleslist;
-        }
-
-        /*Finds all of the rules in the pendingrules table and adds 
-         *them to a dictionary so they can be printed to the screen
-         Returns a dictionary conaining all of the rules*/
-        public Dictionary<string, string> PrintPendingRules()
-        {
-            Dictionary<string, string> ruleslist = new Dictionary<string, string>();
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(path))
-                {
-                    conn.Open();
-                    SqlCommand cmd = new SqlCommand("SELECT Question, Answer FROM PendingRules", conn);
-                    using (SqlDataReader rdr = cmd.ExecuteReader())
-                    {
-                        //Loop through the results and adds them to the ruleslist dictionary
-                        while (rdr.Read())
-                        {
-                            ruleslist.Add(rdr.GetString(0), rdr.GetString(1));
-                        }
+                        //Load the results into to the ruleslist DataTable
+                        ruleslist.Load(rdr);
                     }
                 }
             }
@@ -485,12 +476,13 @@ namespace BingVoiceSystem
 
         public int CountApproved()
         {
-            return PrintApprovedRules().Count();
+            return PrintApprovedRules().Rows.Count;
         }
 
         public int CountRejected()
         {
-            return PrintRejectedRules().Count();
+            return PrintRejectedRules().Rows.Count;
         }
+
     }
 }

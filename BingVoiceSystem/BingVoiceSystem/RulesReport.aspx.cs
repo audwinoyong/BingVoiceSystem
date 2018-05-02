@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -20,7 +21,7 @@ namespace BingVoiceSystem
             double approvedCount = GlobalState.rules.CountApproved();
             double rejectedCount = GlobalState.rules.CountRejected();
 
-            Dictionary<string, string> approvedRulesList = GlobalState.rules.PrintApprovedRules();
+            DataTable approvedRulesList = GlobalState.rules.PrintApprovedRules();
             Dictionary<string, string> ruleStatistics = new Dictionary<string, string>
             {
                 { "Count of Approved", approvedCount.ToString("N0") },
