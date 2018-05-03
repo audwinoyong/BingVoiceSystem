@@ -361,11 +361,11 @@ namespace BingVoiceSystem
             question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
             if (question.ToLower().StartsWith("what is a good movie in "))
             {
-                return GetMovie(question.Replace("what is a good movie in ", ""));
+                return GetMovie(question.ToLower().Replace("what is a good movie in ", ""));
             }
             else if (question.ToLower().StartsWith("what genre is "))
             {
-                return GetGenre(question.Replace("what genre is ", ""));
+                return GetGenre(question.ToLower().Replace("what genre is ", ""));
             }
             try
             {
