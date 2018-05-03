@@ -20,7 +20,7 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
-        public void DatabaseOpens()
+        public void DatabaseOpens_Successful ()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
@@ -62,7 +62,16 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
-        public void DeleteRule_True()
+        public void AddRule_DuplicateQuestion_False()
+        {
+            Assert.IsTrue(rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules"));
+            //adding duplicate question
+            Assert.IsFalse(rules.AddRule("Test Question?", "Test Different Answer", "User", "PendingRules"));
+            rules.DeleteRule("Test Question?", "PendingRules");
+        }
+
+        [TestMethod]
+        public void DeleteRule_DeleteSuccessful_True()
         {
             rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
             rules.DeleteRule("Test Question?", "PendingRules");
@@ -88,7 +97,7 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
-        public void EditQuestion_CantFindRule_True()
+        public void EditQuestion_CannotFindRule_True()
         {
             rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
             rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
@@ -97,7 +106,7 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
-        public void ApproveRule_True()
+        public void ApproveRule_ExistsInApprovedTable_True()
         {
             rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
             rules.ApproveRule("Test Question?", "User");
@@ -115,7 +124,7 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
-        public void RejectRule_True()
+        public void RejectRule_ExistsInRejectedTable_True()
         {
             rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
             rules.RejectRule("Test Question?", "User");
