@@ -352,74 +352,37 @@ namespace BingVoiceSystem
         public string GetAnswer(string question)
         {
             //Remove extra whitespace and punctuation from the question
-            question = Regex.Replace((Regex.Replace(question, "\\s+", " ").Trim()), "[^\\w\\s]", "");            
-            
+            question = Regex.Replace(question, "\\s+", " ").Trim();
+            question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
+            if (question.ToLower().StartsWith("what is a good movie in "))
+            {
+                return GetMovie(question.Replace("what is a good movie in ", ""));
+            }
+            else if (question.ToLower().StartsWith("what genre is "))
+            {
+                return GetGenre(question.Replace("what genre is ", ""));
+            }
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
                 {
                     conn.Open();
-
-                    string dataDriven1 = "What will happen in week";
-                    string dataDriven2 = "What week will I learn";                    
-                    string question1Preamble = question.Substring(0, dataDriven1.Length);
-                    string question2Preamble = question.Substring(0, dataDriven2.Length);
-
-                    if (question1Preamble.ToLower().Equals(dataDriven1.ToLower()) || question2Preamble.ToLower().Equals(dataDriven2.ToLower())) //if datadriven
+                    //Query ignores case and punctuation when finding the answer
+                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) LIKE @q", conn);
+                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
-                        string dataDriven1Answer = "The topic of that  week is";
-                        string dataDriven2Answer = "You will learn it in week";
-                        string answerPreamble;
-                        if(question1Preamble.ToLower().Equals(dataDriven1.ToLower()))
+                        //If an answer was found return that
+                        if (rdr.Read())
                         {
-                            question = question.Substring(question1Preamble.Length + 1, question.Length - question1Preamble.Length - 1);
-                            answerPreamble = dataDriven1Answer;
+                            return rdr.GetString(0);
                         }
+                        //Otherwise give information to the user that no answer was found
                         else
                         {
-                            question = question.Substring(question2Preamble.Length + 1, question.Length - question2Preamble.Length - 1);
-                            answerPreamble = dataDriven2Answer;
-                        }
-                        
-
-                        //Query ignores case and punctuation when finding the answer
-                        SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
-                        cmd.Parameters.Add(new SqlParameter("q", question.ToLower()));
-
-                        using (SqlDataReader rdr = cmd.ExecuteReader())
-                        {
-                            //If an answer was found return that
-                            if (rdr.Read())
-                            {
-                                return answerPreamble + " " + rdr.GetString(0);
-                            }
-                            //Otherwise give information to the user that no answer was found
-                            else
-                            {
-                                return "Sorry, no answer was found for that query.";
-                            }
+                            return "Sorry, no answer was found for that query.";
                         }
                     }
-                    else //if not data driven
-                    {
-                        //Query ignores case and punctuation when finding the answer
-                        SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
-                        cmd.Parameters.Add(new SqlParameter("q", question.ToLower()));
-
-                        using (SqlDataReader rdr = cmd.ExecuteReader())
-                        {
-                            //If an answer was found return that
-                            if (rdr.Read())
-                            {
-                                return rdr.GetString(0);
-                            }
-                            //Otherwise give information to the user that no answer was found
-                            else
-                            {
-                                return "Sorry, no answer was found for that query.";
-                            }
-                        }
-                    }  
                 }
             }
             catch (Exception e)
@@ -427,6 +390,70 @@ namespace BingVoiceSystem
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
             return "Sorry, no answer was found for that query.";
+        }
+
+        public string GetMovie(string question)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    //Query ignores case and punctuation when finding the answer
+                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) LIKE @q", conn);
+                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        //If an answer was found return that
+                        if (rdr.Read())
+                        {
+                            return "A good movie for that genre is " + rdr.GetString(0);
+                        }
+                        //Otherwise give information to the user that no answer was found
+                        else
+                        {
+                            return "Sorry, I couldn't find a recommendation for that genre.";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return "Sorry, I couldn't find a recommendation for that genre.";
+        }
+
+        public string GetGenre(string answer)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    //Query ignores case and punctuation when finding the answer
+                    SqlCommand cmd = new SqlCommand(@"SELECT Question FROM ApprovedRules WHERE LOWER(Answer) LIKE @a", conn);
+                    cmd.Parameters.Add(new SqlParameter("a", answer.ToLower() + "%"));
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        //If an answer was found return that
+                        if (rdr.Read())
+                        {
+                            return answer + " is a " + rdr.GetString(0);
+                        }
+                        //Otherwise give information to the user that no answer was found
+                        else
+                        {
+                            return "Sorry, I couldn't find a genre for that movie.";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return "Sorry, I couldn't find a genre for that movie.";
         }
 
         /*Finds all of the rules approved by a particular user and returns 

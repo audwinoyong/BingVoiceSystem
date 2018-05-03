@@ -1,77 +1,118 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Data.SqlClient;
+using System.Configuration;
+using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data;
 
-namespace BingVoiceSystem.Tests
+namespace BingVoiceSystem
 {
     [TestClass]
     public class RulesTest
     {
-        Rules rules = new Rules();
+        // private Rules rules = new Rules();
 
-        [TestInitialize]
-        public void Setup()
+
+        [TestMethod]
+        public void DatabaseOpens()
         {
-            rules.AddRule("Am I a question?", "Yes, and I'm a response", "0", "PendingRules");
+            string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\BingVoiceSystem.Data"));
+            AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
+            SqlConnection conn = new SqlConnection(connectionString);
+            conn.Open();
+            conn.Close();
         }
-
+        /*
         [TestMethod]
         public void GetAnswer_HappyResponse_True()
         {
-            Assert.IsTrue(rules.GetAnswer("Am I a question?").Contains("Yes, and I'm a response"));
+            Rules rules = new Rules();
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("Test Question?").Contains("Test Answer"));
+            rules.DeleteRule("Test Question?", "PendingRules");
         }
-
+        */
+        /*
         [TestMethod]
         public void GetAnswer_CaseDifferences_True()
         {
-            Assert.IsTrue(rules.GetAnswer("Am I A QuEstiOn?").Contains("Yes, and I'm a response"));
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("TEsT queTtioN?").Contains("Test Answer"));
+            rules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void GetAnswer_BadlyFormattedQuestion_True()
         {
-            Assert.IsTrue(rules.GetAnswer("Am  I A    QuEstiOn!!!?").Contains("Yes, and I'm a response"));
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("  teSt    qEestiOn??!?!?!?!").Contains("Test Answer"));
+            rules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void GetAnswer_WrongResponse_False()
         {
-            Assert.IsFalse(rules.GetAnswer("Am I a question?").Contains("Yes, and I am also a question"));
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("Not a Test Question?").Contains("Sorry, no answer was found for that query."));
+            rules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
-        public void GetAnswer_EmptyResponse_False()
+        public void DeleteRule_True()
         {
-            Rules emptyRules = new Rules();
-
-            Assert.IsFalse(emptyRules.GetAnswer("Am I a question?").Any());
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.DeleteRule("Test Question?", "PendingRules");
+            Assert.IsFalse(rules.GetAnswer("Test Question?").Contains("Test Answer"));
         }
 
-        /*Need to fix
         [TestMethod]
-        public void EditRule_EditSuccessful_True()
+        public void EditQuestion_EditSuccessful_True()
         {
-            rules.EditRule("Am I a question?", "Yes, and response has been edited", "0", "ApprovedRules");
-
-            Assert.IsTrue(rules.GetAnswer("Am I a question?").Contains("Yes, and response has been edited"));
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("New Test Question?").Contains("Test Answer"));
+            rules.DeleteRule("New Test Question?", "PendingRules");
         }
-        */
 
-        /*Need to fix GetRulesList
+        public void EditAnswer_EditSuccessful_True()
+        {
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.EditRule("Test Question?", "Test Question?", "New Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("Test Question?").Contains("New Test Answer"));
+            rules.DeleteRule("Test Question?", "PendingRules");
+        }
+
+        public void EditQuestion_CantFindRule_True()
+        {
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(rules.GetAnswer("Test Question?").Contains("Sorry, no answer was found for that query."));
+            rules.DeleteRule("New Test Question?", "PendingRules");
+        }
+
         [TestMethod]
-        public void DeleteRule_DeleteSuccessful_True()
+        public void ApproveRule_True()
         {
-            rules.DeleteRule("Am I a question?", "ApprovedRules");
-
-            Assert.IsTrue(rules.GetRulesList().Count == 0);
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.ApproveRule("Test Question?", "User");
+            string answer = "";
+            DataTable d = rules.PrintApprovedRules();
+            foreach (DataRow row in d.Rows)
+            {
+                if (row.ItemArray[0].Equals("Test Question?"))
+                {
+                    answer = (string)row.ItemArray[1];
+                }
+            }
+            Assert.IsTrue(answer.Contains("Test Answer"));
+            rules.DeleteRule("Test Question?", "ApprovedRules");
         }
-        */
 
         [TestMethod]
         public void UpdateLastModifiedUser_UpdateSuccessful_True()
         {
             //TODO
-        }
+        }*/
     }
 }
