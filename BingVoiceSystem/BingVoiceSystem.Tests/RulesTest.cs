@@ -20,7 +20,7 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
-        public void DatabaseOpens_Successful ()
+        public void DatabaseOpens_Successful()
         {
             string connectionString = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
             SqlConnection conn = new SqlConnection(connectionString);
