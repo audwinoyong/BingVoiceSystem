@@ -72,6 +72,16 @@ namespace BingVoiceSystem
         }
 
         /// <summary>
+        /// Redirect to Add Movie Rule screen.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected void AddMovieRuleButton_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("~/DataRulesListAdd.aspx");
+        }
+
+        /// <summary>
         /// Event to enter row editing mode for specific rule in the Pending Rules GridView.
         /// </summary>
         /// <param name="sender"></param>

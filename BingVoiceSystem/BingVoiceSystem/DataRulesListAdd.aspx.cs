@@ -7,11 +7,8 @@ using System.Web.UI.WebControls;
 
 namespace BingVoiceSystem
 {
-    public partial class DataRulesListAdd : System.Web.UI.Page
+    public partial class DataRulesListAdd : RulesListAdd
     {
-        protected void Page_Load(object sender, EventArgs e)
-        {
-
-        }
+       
     }
 }
