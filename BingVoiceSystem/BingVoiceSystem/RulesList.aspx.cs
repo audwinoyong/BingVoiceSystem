@@ -78,7 +78,7 @@ namespace BingVoiceSystem
         /// <param name="e"></param>
         protected void AddMovieRuleButton_Click(object sender, EventArgs e)
         {
-            Response.Redirect("~/DataRulesListAdd.aspx");
+            Response.Redirect("~/RulesListAdd.aspx");
         }
 
         /// <summary>
