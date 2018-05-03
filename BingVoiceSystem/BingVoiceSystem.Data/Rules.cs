@@ -361,21 +361,26 @@ namespace BingVoiceSystem
                     conn.Open();
 
                     string dataDriven1 = "What will happen in week";
-                    string dataDriven2 = "What week will I learn";
+                    string dataDriven2 = "What week will I learn";                    
+                    string question1Preamble = question.Substring(0, dataDriven1.Length);
+                    string question2Preamble = question.Substring(0, dataDriven2.Length);
 
-                    if(question.ToLower().Equals(dataDriven1.ToLower()) || question.ToLower().Equals(dataDriven2.ToLower())) //if datadriven
+                    if (question1Preamble.ToLower().Equals(dataDriven1.ToLower()) || question2Preamble.ToLower().Equals(dataDriven2.ToLower())) //if datadriven
                     {
+                        string dataDriven1Answer = "The topic of that  week is";
+                        string dataDriven2Answer = "You will learn it in week";
                         string answerPreamble;
-                        if(question.ToLower().Equals(dataDriven1.ToLower()))
+                        if(question1Preamble.ToLower().Equals(dataDriven1.ToLower()))
                         {
-                            answerPreamble = dataDriven1;
+                            question = question.Substring(question1Preamble.Length + 1, question.Length - question1Preamble.Length - 1);
+                            answerPreamble = dataDriven1Answer;
                         }
                         else
                         {
-                            answerPreamble = dataDriven2;
+                            question = question.Substring(question2Preamble.Length + 1, question.Length - question2Preamble.Length - 1);
+                            answerPreamble = dataDriven2Answer;
                         }
-
-                        question = question.Substring(answerPreamble.Length, question.Length);
+                        
 
                         //Query ignores case and punctuation when finding the answer
                         SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
