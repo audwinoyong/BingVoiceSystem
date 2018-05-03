@@ -211,6 +211,7 @@
     <Content Include="push_commands.txt" />
     <Content Include="Reports.aspx" />
     <Content Include="RulesList.aspx" />
+    <Content Include="MovieRulesList.aspx" />
     <Content Include="RulesListAdd.aspx" />
     <Content Include="EditorReport.aspx" />
     <Content Include="RulesReport.aspx" />
@@ -406,6 +407,13 @@
     </Compile>
     <Compile Include="RulesList.aspx.designer.cs">
       <DependentUpon>RulesList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="MovieRulesList.aspx.cs">
+      <DependentUpon>MovieRulesList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="MovieRulesList.aspx.designer.cs">
+      <DependentUpon>MovieRulesList.aspx</DependentUpon>
     </Compile>
     <Compile Include="RulesListAdd.aspx.cs">
       <DependentUpon>RulesListAdd.aspx</DependentUpon>

@@ -22,7 +22,7 @@ namespace BingVoiceSystem
         /// <param name="e"></param>
         protected void SaveButton_Click(object sender, EventArgs e)
         {
-            if (GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserName(), "PendingRules"))
+            if (GlobalState.rules.AddRule(QuestionTextBox.Text, AnswerTextBox.Text, User.Identity.GetUserName(), "PendingRules", false))
             {
                 RuleAdded.Text = "";
                 Response.Redirect("~/RulesList.aspx");

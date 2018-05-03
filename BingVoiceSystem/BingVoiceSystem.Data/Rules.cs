@@ -79,7 +79,7 @@ namespace BingVoiceSystem
 
         /*Adds a new rule to the appropriate table. Takes in a question and a response for the rule,
          * a user for who created the rule and the table that the rule is to be added to*/
-        public bool AddRule(string question, string response, string user, string table)
+        public bool AddRule(string question, string response, string user, string table, bool isDataDriven)
         {
             //Remove extra whitespace from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
@@ -94,17 +94,17 @@ namespace BingVoiceSystem
                     switch (table)
                     {
                         case "ApprovedRules":
-                            query = @"INSERT INTO ApprovedRules (Question, Answer, ApprovedBy) Values(@q, @a, @i)";
+                            query = @"INSERT INTO ApprovedRules (Question, Answer, ApprovedBy, DataDriven) Values(@q, @a, @i, @d)";
                             break;
                         case "RejectedRules":
-                            query = @"INSERT INTO RejectedRules (Question, Answer, RejectedBy) Values(@q, @a, @i)";
+                            query = @"INSERT INTO RejectedRules (Question, Answer, RejectedBy, DataDriven) Values(@q, @a, @i, @d)";
                             break;
                         case "PendingRules":
                             if (!CheckExisting(question))
                             {
                                 return false;
                             }
-                            query = @"INSERT INTO PendingRules (Question, Answer, LastEditedBy) Values(@q, @a, @i)";
+                            query = @"INSERT INTO PendingRules (Question, Answer, LastEditedBy, DataDriven) Values(@q, @a, @i, @d)";
                             break;
                         default:
                             System.Diagnostics.Debug.WriteLine("Unknown table");
@@ -114,6 +114,7 @@ namespace BingVoiceSystem
                     cmd.Parameters.Add(new SqlParameter("q", question));
                     cmd.Parameters.Add(new SqlParameter("a", response));
                     cmd.Parameters.Add(new SqlParameter("i", user));
+                    cmd.Parameters.Add(new SqlParameter("d", isDataDriven));
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -207,27 +208,20 @@ namespace BingVoiceSystem
          * to be approved, and the user who approved the rule*/
         public void ApproveRule(string question, string user)
         {
-            string approvedQuestion;
-            string approvedAnswer;
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
                 {
                     conn.Open();
-                    string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
+                    string query = @"SELECT Question, Answer, DataDriven FROM PendingRules WHERE Question = @q";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.Add(new SqlParameter("q", question));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         if (rdr.Read())
                         {
-                            //Find the rule
-                            approvedQuestion = rdr.GetString(0);
-                            approvedAnswer = rdr.GetString(1);
-                            //Dele the rule from the pendingrules table
                             DeleteRule(question, "PendingRules");
-                            //Add the rule to the approvedrules table
-                            AddRule(approvedQuestion, approvedAnswer, user, "ApprovedRules");
+                            AddRule(rdr.GetString(0), rdr.GetString(1), user, "ApprovedRules", rdr.GetBoolean(2));
                         }
                     }
                 }
@@ -243,27 +237,20 @@ namespace BingVoiceSystem
          * to be rejected, and the user who rejected the rule*/
         public void RejectRule(string question, string user)
         {
-            string rejectedQuestion;
-            string rejectedAnswer;
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
                 {
                     conn.Open();
-                    string query = @"SELECT Question, Answer FROM PendingRules WHERE Question = @q";
+                    string query = @"SELECT Question, Answer, DataDriven FROM PendingRules WHERE Question = @q";
                     SqlCommand cmd = new SqlCommand(query, conn);
                     cmd.Parameters.Add(new SqlParameter("q", question));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         if (rdr.Read())
                         {
-                            //Find the rule
-                            rejectedQuestion = rdr.GetString(0);
-                            rejectedAnswer = rdr.GetString(1);
-                            //Delete the rule from the pendingrules table
                             DeleteRule(question, "PendingRules");
-                            //Add the rule to the rejectedrules table
-                            AddRule(rejectedQuestion, rejectedAnswer, user, "RejectedRules");
+                            AddRule(rdr.GetString(0), rdr.GetString(1), user, "RejectedRules", Convert.ToBoolean(rdr.GetString(2)));
                         }
                     }
                 }
@@ -356,9 +343,16 @@ namespace BingVoiceSystem
          * from the approvedrules table*/
         public string GetAnswer(string question)
         {
+            string wildCard = "";
+            if ((wildCard = GetWildCardValue(question)) != null)
+            {
+                return "Wild card is working";
+            }
+
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
+
             if (question.ToLower().StartsWith("what is a good movie in "))
             {
                 return GetMovie(question.ToLower().Replace("what is a good movie in ", ""));
@@ -367,6 +361,7 @@ namespace BingVoiceSystem
             {
                 return GetGenre(question.ToLower().Replace("what genre is ", ""));
             }
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
@@ -377,7 +372,6 @@ namespace BingVoiceSystem
                     cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
-                        //If an answer was found return that
                         if (rdr.Read())
                         {
                             return rdr.GetString(0);
@@ -395,6 +389,66 @@ namespace BingVoiceSystem
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
             return "Sorry, no answer was found for that query.";
+        }
+
+        public string GetWildCardValue (string question)
+        {
+            string prefix = "";
+            string sufix = "";
+
+            foreach (String s in GetDataDrivenQuestions())
+            {
+                bool metWildCard = false;
+
+                foreach (Char c in s)
+                {
+                    if (c == '[' || c == '%' || c == ']')
+                    {
+                        metWildCard = true;
+                    }
+                    else if (!metWildCard)
+                    {
+                        prefix += c;
+                    }
+                    else if (metWildCard)
+                    {
+                        sufix += c;
+                    }
+                }
+            }
+
+            if (question.StartsWith(prefix) && question.EndsWith(sufix))
+            {
+                return question.Substring(prefix.Length, question.Length - prefix.Length - sufix.Length);
+            }
+
+            return null;
+        }
+
+        public List<string> GetDataDrivenQuestions()
+        {
+            List<string> dataRules = new List<string>();
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    SqlCommand cmd = new SqlCommand(@"SELECT Question FROM ApprovedRules WHERE DataDriven = 1", conn);
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        //If an answer was found return that
+                        while (rdr.Read())
+                        {
+                            dataRules.Add(rdr.GetString(0));
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return dataRules;
         }
 
         public string GetMovie(string question)

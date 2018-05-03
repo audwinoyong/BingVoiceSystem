@@ -31,7 +31,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void GetAnswer_HappyResponse_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             Assert.IsTrue(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
             rules.DeleteRule("Test Question?", "PendingRules");
         }
@@ -40,7 +40,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void GetAnswer_CaseDifferences_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             Assert.IsTrue(rules.GetAnswerFromPending("TEsT quesTioN?").Contains("Test Answer"));
             rules.DeleteRule("Test Question?", "PendingRules");
         }
@@ -48,7 +48,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void GetAnswer_BadlyFormattedQuestion_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             Assert.IsTrue(rules.GetAnswerFromPending("    teSt      quEstiOn??").Contains("Test Answer"));
             rules.DeleteRule("Test Question?", "PendingRules");
         }
@@ -56,7 +56,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void GetAnswer_WrongResponse_False()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             Assert.IsTrue(rules.GetAnswerFromPending("Not a Test Question?").Contains("Sorry, no answer was found for that query."));
             rules.DeleteRule("Test Question?", "PendingRules");
         }
@@ -64,16 +64,16 @@ namespace BingVoiceSystem
         [TestMethod]
         public void AddRule_DuplicateQuestion_False()
         {
-            Assert.IsTrue(rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules"));
+            Assert.IsTrue(rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false));
             //adding duplicate question
-            Assert.IsFalse(rules.AddRule("Test Question?", "Test Different Answer", "User", "PendingRules"));
+            Assert.IsFalse(rules.AddRule("Test Question?", "Test Different Answer", "User", "PendingRules", false));
             rules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void DeleteRule_DeleteSuccessful_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.DeleteRule("Test Question?", "PendingRules");
             Assert.IsFalse(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
         }
@@ -81,7 +81,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void EditQuestion_EditSuccessful_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
             Assert.IsTrue(rules.GetAnswerFromPending("New Test Question?").Contains("Test Answer"));
             rules.DeleteRule("New Test Question?", "PendingRules");
@@ -90,7 +90,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void EditAnswer_EditSuccessful_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.EditRule("Test Question?", "Test Question?", "New Test Answer", "User", "PendingRules");
             Assert.IsTrue(rules.GetAnswerFromPending("Test Question?").Contains("New Test Answer"));
             rules.DeleteRule("Test Question?", "PendingRules");
@@ -99,7 +99,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void EditQuestion_CannotFindRule_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
             Assert.IsTrue(rules.GetAnswerFromPending("Test Question?").Contains("Sorry, no answer was found for that query."));
             rules.DeleteRule("New Test Question?", "PendingRules");
@@ -108,7 +108,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void ApproveRule_ExistsInApprovedTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.ApproveRule("Test Question?", "User");
             string answer = "";
             DataTable d = rules.PrintApprovedRules();
@@ -126,7 +126,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void RejectRule_ExistsInRejectedTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.RejectRule("Test Question?", "User");
             string answer = "";
             DataTable d = rules.PrintRejectedRules();
@@ -144,7 +144,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void ApproveRule_NoLongerInPendingTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.ApproveRule("Test Question?", "User");
             Assert.IsFalse(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
             rules.DeleteRule("Test Question?", "ApprovedRules");
@@ -153,7 +153,7 @@ namespace BingVoiceSystem
         [TestMethod]
         public void RejectRule_NoLongerInPendingTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules", false);
             rules.RejectRule("Test Question?", "User");
             Assert.IsFalse(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
             rules.DeleteRule("Test Question?", "RejectedRules");

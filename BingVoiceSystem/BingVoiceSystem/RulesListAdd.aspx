@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesListAdd.aspx.cs" Inherits="BingVoiceSystem.RulesListAdd" %>
+﻿<%@ Page Title="Create Rule" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="RulesListAdd.aspx.cs" Inherits="BingVoiceSystem.RulesListAdd" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
     <h2>Add New Rule</h2>
@@ -19,9 +19,7 @@
         </tr>
     </table>
 
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     <asp:Label ID="RuleAdded" runat="server" ForeColor="Red"></asp:Label>
     <br />
 
