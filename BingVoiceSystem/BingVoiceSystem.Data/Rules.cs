@@ -13,7 +13,12 @@ namespace BingVoiceSystem
     public class Rules
     {
         //Path to database
-        private string path;
+        public string path;
+
+        public Rules(string path)
+        {
+            this.path = path;
+        }
 
         /*Constructor: creates and sets the path to the database*/
         public Rules()
@@ -556,6 +561,49 @@ namespace BingVoiceSystem
         public int CountRejected()
         {
             return PrintRejectedRules().Rows.Count;
+        }
+
+        public string GetAnswerFromPending(string question)
+        {
+            //Remove extra whitespace and punctuation from the question
+            question = Regex.Replace(question, "\\s+", " ").Trim();
+            question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
+            if (question.ToLower().StartsWith("what is a good movie in "))
+            {
+                return GetMovie(question.Replace("what is a good movie in ", ""));
+            }
+            else if (question.ToLower().StartsWith("what genre is "))
+            {
+                return GetGenre(question.Replace("what genre is ", ""));
+            }
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    //Query ignores case and punctuation when finding the answer
+                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM PendingRules WHERE LOWER(Question) LIKE @q", conn);
+                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        //If an answer was found return that
+                        if (rdr.Read())
+                        {
+                            return rdr.GetString(0);
+                        }
+                        //Otherwise give information to the user that no answer was found
+                        else
+                        {
+                            return "Sorry, no answer was found for that query.";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return "Sorry, no answer was found for that query.";
         }
 
     }
