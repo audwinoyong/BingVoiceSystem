@@ -23,7 +23,7 @@ namespace BingVoiceSystem
             conn.Open();
             conn.Close();
         }
-        /*
+        
         [TestMethod]
         public void GetAnswer_HappyResponse_True()
         {
@@ -32,7 +32,7 @@ namespace BingVoiceSystem
             Assert.IsTrue(rules.GetAnswer("Test Question?").Contains("Test Answer"));
             rules.DeleteRule("Test Question?", "PendingRules");
         }
-        */
+        
         /*
         [TestMethod]
         public void GetAnswer_CaseDifferences_True()
