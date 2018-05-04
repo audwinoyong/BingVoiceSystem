@@ -51,6 +51,7 @@
                 <div class="navbar-collapse collapse">
                     <ul class="nav navbar-nav">
                         <li id="rulesList" runat="server"><a runat="server" href="~/RulesList">Rules List</a></li>
+                        <li id="dataList" runat="server"><a runat="server" href="~/DataList">Data List</a></li>
                         <li id="reports" runat="server"><a runat="server" href="~/Reports">Reports</a></li>
                     </ul>
                     <asp:LoginView runat="server" ViewStateMode="Disabled">
