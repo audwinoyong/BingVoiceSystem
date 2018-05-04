@@ -250,7 +250,7 @@ namespace BingVoiceSystem
                         if (rdr.Read())
                         {
                             DeleteRule(question, "PendingRules");
-                            AddRule(rdr.GetString(0), rdr.GetString(1), user, "RejectedRules", Convert.ToBoolean(rdr.GetString(2)));
+                            AddRule(rdr.GetString(0), rdr.GetString(1), user, "RejectedRules", rdr.GetBoolean(2));
                         }
                     }
                 }
@@ -393,14 +393,15 @@ namespace BingVoiceSystem
                     conn.Open();
                     //Query ignores case and punctuation when finding the answer
                     SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
-                    cmd.Parameters.Add(new SqlParameter("q", splitQuestion["prefix"].ToLower() + "[%]" + splitQuestion["sufix"].ToLower()));
+                    string test = splitQuestion["prefix"].ToLower() + "[%]" + splitQuestion["sufix"].ToLower();
+                    cmd.Parameters.Add(new SqlParameter("q", test));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         if (rdr.Read())
                         {
                             Dictionary<string, string> splitResponse = SplitAnswerCol(rdr.GetString(0));
 
-                            return GetAnswer2(splitQuestion, splitResponse);
+                            GetAnswer2(splitQuestion, splitResponse);
                         }
                         //Otherwise give information to the user that no answer was found
                         else
@@ -426,15 +427,14 @@ namespace BingVoiceSystem
                     conn1.Open();
                     //Query ignores case and punctuation when finding the answer
                     SqlCommand cmd;
-                    if (splitResponse["lookup"] == "Genre") cmd = new SqlCommand(@"SELECT @a FROM DataDrivenData WHERE LOWER(Genre) = @q", conn1);
-                    cmd = new SqlCommand(@"SELECT * FROM DataDrivenData WHERE LOWER(MovieTitle) = 'room'", conn1);
-                    cmd.Parameters.Add(new SqlParameter("a", splitResponse["answer"]));
-                    cmd.Parameters.Add(new SqlParameter("q", "'room'"));
+                    if (splitResponse["lookup"] == "Genre") cmd = new SqlCommand(@"SELECT @a FROM DataDrivenRules WHERE LOWER(Genre) LIKE LOWER(@q)", conn1);
+                    else cmd = new SqlCommand(@"SELECT @a FROM DataDrivenRules WHERE LOWER(MovieTitle) LIKE LOWER(@q)", conn1);
+                    cmd.Parameters.Add(new SqlParameter("a", "Genre"));
+                    cmd.Parameters.Add(new SqlParameter("q", "Room" + "%"));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         if (rdr.Read())
                         {
-                            string text = rdr.GetString(0);
                             return rdr.GetString(0);
                         }
                         //Otherwise give information to the user that no answer was found
