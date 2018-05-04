@@ -4,7 +4,7 @@
     <h2>Add New Rule</h2>
     <table>
         <tr>
-            <td>Generic Question:</td>
+            <td>Question:</td>
             <td>
                 <asp:TextBox ID="QuestionTextBox" runat="server" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="QuestionTextBox" ErrorMessage="Question is required" Text="[Required]" Font-Bold="true" ForeColor="Red" />
@@ -16,6 +16,13 @@
                 <asp:DropDownList ID="LookupDropDown" runat="server" />
                 <asp:DropdownList ID="AnswerDropDown" runat="server" />
                 <asp:RequiredFieldValidator runat="server" ControlToValidate="LookupDropDown" ErrorMessage="Answer is required" Text="[Required]" Font-Bold="true" ForeColor="Red" />
+            </td>
+        </tr>
+        <tr>
+            <td>Response:</td>
+            <td>
+                <asp:TextBox ID="ResponseTextBox" runat="server" />
+                <asp:RequiredFieldValidator runat="server" ControlToValidate="QuestionTextBox" ErrorMessage="Question is required" Text="[Required]" Font-Bold="true" ForeColor="Red" />
             </td>
         </tr>
     </table>

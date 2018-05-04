@@ -26,6 +26,7 @@ namespace BingVoiceSystem
         protected void SaveButton_Click(object sender, EventArgs e)
         {
             string DataDrivenQuestion = "";
+            string DataDrivenResponse = "";
 
             if (QuestionTextBox.Text.Contains('%'))
             {
@@ -43,7 +44,23 @@ namespace BingVoiceSystem
                 RuleAdded.Text = "The question requies a wild-card (%)";
             }
 
-            if (GlobalState.rules.AddRule(DataDrivenQuestion, LookupDropDown.SelectedValue + "," + AnswerDropDown.SelectedValue, User.Identity.GetUserName(), "PendingRules", true))
+            if (ResponseTextBox.Text.Contains('%'))
+            {
+                foreach (Char c in QuestionTextBox.Text)
+                {
+                    if (c == '%')
+                    {
+                        DataDrivenResponse += "[%]";
+                    }
+                    else DataDrivenResponse += c;
+                }
+            }
+            else
+            {
+                RuleAdded.Text = "The question requies a wild-card (%)";
+            }
+
+            if (GlobalState.rules.AddRule(DataDrivenQuestion, DataDrivenResponse + "|" + LookupDropDown.SelectedValue + "|" + AnswerDropDown.SelectedValue, User.Identity.GetUserName(), "PendingRules", true))
             {
                 RuleAdded.Text = "";
                 Response.Redirect("~/RulesList.aspx");

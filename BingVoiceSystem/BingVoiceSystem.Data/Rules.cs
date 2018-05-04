@@ -343,23 +343,16 @@ namespace BingVoiceSystem
          * from the approvedrules table*/
         public string GetAnswer(string question)
         {
-            string wildCard = "";
-            if ((wildCard = GetWildCardValue(question)) != null)
-            {
-                return "Wild card is working";
-            }
-
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
 
-            if (question.ToLower().StartsWith("what is a good movie in "))
+            Dictionary<string, string> splitQuestion = SplitDataDrivenQuestion(question);
+
+            string wildCard = "";
+            if (splitQuestion != null && (wildCard = splitQuestion["wildCard"]) != null)
             {
-                return GetMovie(question.ToLower().Replace("what is a good movie in ", ""));
-            }
-            else if (question.ToLower().StartsWith("what genre is "))
-            {
-                return GetGenre(question.ToLower().Replace("what genre is ", ""));
+                return GetDataDrivenAnswer(splitQuestion);
             }
 
             try
@@ -391,10 +384,120 @@ namespace BingVoiceSystem
             return "Sorry, no answer was found for that query.";
         }
 
-        public string GetWildCardValue (string question)
+        public string GetDataDrivenAnswer(Dictionary<string, string> splitQuestion)
+        {
+            try
+            {
+                using (SqlConnection conn = new SqlConnection(path))
+                {
+                    conn.Open();
+                    //Query ignores case and punctuation when finding the answer
+                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
+                    string test = splitQuestion["prefix"].ToLower() + "[%]" + splitQuestion["sufix"].ToLower();
+                    cmd.Parameters.Add(new SqlParameter("q", "What is [%] Genre"));
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            Dictionary<string, string> splitResponse = SplitAnswerCol(rdr.GetString(0));
+
+                            GetAnswer2(splitQuestion, splitResponse);
+                        }
+                        //Otherwise give information to the user that no answer was found
+                        else
+                        {
+                            return "Sorry, no answer was found for that query.";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return "Sorry, no answer was found for that query.";
+        }
+
+        public string GetAnswer2(Dictionary<string, string> splitQuestion, Dictionary<string, string> splitResponse)
+        {
+            try
+            {
+                using (SqlConnection conn1 = new SqlConnection(path))
+                {
+                    conn1.Open();
+                    //Query ignores case and punctuation when finding the answer
+                    SqlCommand cmd;
+                    if (splitResponse["lookup"] == "Genre") cmd = new SqlCommand(@"SELECT @a FROM DataDrivenRules WHERE LOWER(Genre) LIKE LOWER(@q)", conn1);
+                    else cmd = new SqlCommand(@"SELECT @a FROM DataDrivenRules WHERE LOWER(MovieTitle) LIKE LOWER(@q)", conn1);
+                    cmd.Parameters.Add(new SqlParameter("a", "Genre"));
+                    cmd.Parameters.Add(new SqlParameter("q", "Room" + "%"));
+                    using (SqlDataReader rdr = cmd.ExecuteReader())
+                    {
+                        if (rdr.Read())
+                        {
+                            return rdr.GetString(0);
+                        }
+                        //Otherwise give information to the user that no answer was found
+                        else
+                        {
+                            return "Sorry, no answer was found for that query.";
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine(e.Message);
+            }
+            return "Sorry, no answer was found for that query.";
+        }
+
+        public Dictionary<string, string> SplitAnswerCol(string answerCol)
+        {
+            string response = "";
+            string lookup = "";
+            string answer = "";
+            int i = 0;
+
+            foreach (Char c in answerCol)
+            {
+                if (c != '|')
+                {
+                    switch (i)
+                    {
+                        case 0:
+                            response += c;
+                            break;
+                        case 1:
+                            lookup += c;
+                            break;
+                        case 2:
+                            answer += c;
+                            break;
+                    }
+                }
+                else i++;
+            }
+
+            return new Dictionary<string, string> {
+                {"response", response },
+                {"lookup", lookup },
+                {"answer", answer }
+            };
+        }
+
+        /* Gets the value of the wildcard. Grabs all DataDriven questions and converts them all into prefix/sufix.
+         * All matching prefix/sufixes get stored, the rest ignored. It then picks the longest prefix & sufix combo
+           to determine the best match. Remove this prefix and sufix from the original question and you have the wildcard. */
+        public Dictionary<string, string> SplitDataDrivenQuestion(string question)
         {
             string prefix = "";
             string sufix = "";
+            Dictionary<string, string> split = new Dictionary<string, string> {
+                { "prefix", "" },
+                { "wildCard","" },
+                { "sufix", ""}};
+            List<Tuple<string, string>> matchedWildCards = new List<Tuple<string, string>>();
 
             foreach (String s in GetDataDrivenQuestions())
             {
@@ -415,16 +518,54 @@ namespace BingVoiceSystem
                         sufix += c;
                     }
                 }
+
+                prefix = Regex.Replace(prefix, "\\s+", " ");
+                prefix = Regex.Replace(prefix, @"(\p{P}+)(?=\Z|\r\n)", "");
+                prefix = prefix.ToLower();
+                sufix = Regex.Replace(sufix, "\\s+", " ");
+                sufix = Regex.Replace(sufix, @"(\p{P}+)(?=\Z|\r\n)", "");
+                sufix = sufix.ToLower();
+                question = question.ToLower();
+
+                if (question.StartsWith(prefix) && question.EndsWith(sufix))
+                {
+                    matchedWildCards.Add(new Tuple<string, string>(prefix, sufix));
+                }
+                prefix = "";
+                sufix = "";
+            }
+
+            if (matchedWildCards.Count >= 1)
+            {
+
+                string longestPrefix = "";
+                string longestSufix = "";
+
+                foreach (Tuple<string, string> t in matchedWildCards)
+                {
+                    if (t.Item1.Length > longestPrefix.Length) longestPrefix = t.Item1;
+                    if (t.Item1.Length >= longestPrefix.Length && t.Item2.Length > longestSufix.Length) longestSufix = t.Item2; 
+                }
+
+                prefix = longestPrefix;
+                sufix = longestSufix;
+            }
+            else if (matchedWildCards.Count == 0)
+            {
+                return null;
             }
 
             if (question.StartsWith(prefix) && question.EndsWith(sufix))
             {
-                return question.Substring(prefix.Length, question.Length - prefix.Length - sufix.Length);
+                split["prefix"] = prefix;
+                split["wildCard"] = question.Substring(prefix.Length, question.Length - prefix.Length - sufix.Length);
+                split["sufix"] = sufix;
             }
 
-            return null;
+            return split;
         }
 
+        //Returns list of all data driven questions
         public List<string> GetDataDrivenQuestions()
         {
             List<string> dataRules = new List<string>();
@@ -449,70 +590,6 @@ namespace BingVoiceSystem
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
             return dataRules;
-        }
-
-        public string GetMovie(string question)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(path))
-                {
-                    conn.Open();
-                    //Query ignores case and punctuation when finding the answer
-                    SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) LIKE @q", conn);
-                    cmd.Parameters.Add(new SqlParameter("q", question.ToLower() + "%"));
-                    using (SqlDataReader rdr = cmd.ExecuteReader())
-                    {
-                        //If an answer was found return that
-                        if (rdr.Read())
-                        {
-                            return "A good movie for that genre is " + rdr.GetString(0);
-                        }
-                        //Otherwise give information to the user that no answer was found
-                        else
-                        {
-                            return "Sorry, I couldn't find a recommendation for that genre.";
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
-            return "Sorry, I couldn't find a recommendation for that genre.";
-        }
-
-        public string GetGenre(string answer)
-        {
-            try
-            {
-                using (SqlConnection conn = new SqlConnection(path))
-                {
-                    conn.Open();
-                    //Query ignores case and punctuation when finding the answer
-                    SqlCommand cmd = new SqlCommand(@"SELECT Question FROM ApprovedRules WHERE LOWER(Answer) LIKE @a", conn);
-                    cmd.Parameters.Add(new SqlParameter("a", answer.ToLower() + "%"));
-                    using (SqlDataReader rdr = cmd.ExecuteReader())
-                    {
-                        //If an answer was found return that
-                        if (rdr.Read())
-                        {
-                            return answer + " is a " + rdr.GetString(0);
-                        }
-                        //Otherwise give information to the user that no answer was found
-                        else
-                        {
-                            return "Sorry, I couldn't find a genre for that movie.";
-                        }
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine(e.Message);
-            }
-            return "Sorry, I couldn't find a genre for that movie.";
         }
 
         /*Finds all of the rules approved by a particular user and returns 
@@ -622,14 +699,7 @@ namespace BingVoiceSystem
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
-            if (question.ToLower().StartsWith("what is a good movie in "))
-            {
-                return GetMovie(question.Replace("what is a good movie in ", ""));
-            }
-            else if (question.ToLower().StartsWith("what genre is "))
-            {
-                return GetGenre(question.Replace("what genre is ", ""));
-            }
+
             try
             {
                 using (SqlConnection conn = new SqlConnection(path))
