@@ -10,42 +10,51 @@
 namespace BingVoiceSystem {
     
     
-    public partial class SiteMaster {
+    public partial class DataListAdd {
         
         /// <summary>
-        /// rulesList control.
+        /// MovieTextBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl rulesList;
+        protected global::System.Web.UI.WebControls.TextBox MovieTextBox;
         
         /// <summary>
-        /// dataList control.
+        /// GenreTextBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl dataList;
+        protected global::System.Web.UI.WebControls.TextBox GenreTextBox;
         
         /// <summary>
-        /// reports control.
+        /// DataAdded control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl reports;
+        protected global::System.Web.UI.WebControls.Label DataAdded;
         
         /// <summary>
-        /// MainContent control.
+        /// SaveButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.ContentPlaceHolder MainContent;
+        protected global::System.Web.UI.WebControls.Button SaveButton;
+        
+        /// <summary>
+        /// CancelButton control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button CancelButton;
     }
 }

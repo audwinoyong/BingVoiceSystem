@@ -210,9 +210,10 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="push_commands.txt" />
     <Content Include="Reports.aspx" />
-    <Content Include="RulesDataAdd.aspx" />
+    <Content Include="DataList.aspx" />
     <Content Include="RulesList.aspx" />
     <Content Include="MovieRulesList.aspx" />
+    <Content Include="DataListAdd.aspx" />
     <Content Include="RulesListAdd.aspx" />
     <Content Include="EditorReport.aspx" />
     <Content Include="RulesReport.aspx" />
@@ -402,12 +403,12 @@
     <Compile Include="Reports.aspx.designer.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
     </Compile>
-    <Compile Include="RulesDataAdd.aspx.cs">
-      <DependentUpon>RulesDataAdd.aspx</DependentUpon>
+    <Compile Include="DataList.aspx.cs">
+      <DependentUpon>DataList.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="RulesDataAdd.aspx.designer.cs">
-      <DependentUpon>RulesDataAdd.aspx</DependentUpon>
+    <Compile Include="DataList.aspx.designer.cs">
+      <DependentUpon>DataList.aspx</DependentUpon>
     </Compile>
     <Compile Include="RulesList.aspx.cs">
       <DependentUpon>RulesList.aspx</DependentUpon>
@@ -422,6 +423,13 @@
     </Compile>
     <Compile Include="MovieRulesList.aspx.designer.cs">
       <DependentUpon>MovieRulesList.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="DataListAdd.aspx.cs">
+      <DependentUpon>DataListAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="DataListAdd.aspx.designer.cs">
+      <DependentUpon>DataListAdd.aspx</DependentUpon>
     </Compile>
     <Compile Include="RulesListAdd.aspx.cs">
       <DependentUpon>RulesListAdd.aspx</DependentUpon>
