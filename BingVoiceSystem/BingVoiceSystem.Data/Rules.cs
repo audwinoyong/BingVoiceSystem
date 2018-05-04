@@ -394,7 +394,7 @@ namespace BingVoiceSystem
                     //Query ignores case and punctuation when finding the answer
                     SqlCommand cmd = new SqlCommand(@"SELECT Answer FROM ApprovedRules WHERE LOWER(Question) = @q", conn);
                     string test = splitQuestion["prefix"].ToLower() + "[%]" + splitQuestion["sufix"].ToLower();
-                    cmd.Parameters.Add(new SqlParameter("q", "What is [%] Genre"));
+                    cmd.Parameters.Add(new SqlParameter("q", test));
                     using (SqlDataReader rdr = cmd.ExecuteReader())
                     {
                         if (rdr.Read())
