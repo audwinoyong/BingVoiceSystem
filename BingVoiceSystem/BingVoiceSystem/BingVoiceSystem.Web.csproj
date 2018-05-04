@@ -210,6 +210,7 @@
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="push_commands.txt" />
     <Content Include="Reports.aspx" />
+    <Content Include="RulesDataAdd.aspx" />
     <Content Include="RulesList.aspx" />
     <Content Include="MovieRulesList.aspx" />
     <Content Include="RulesListAdd.aspx" />
@@ -400,6 +401,13 @@
     </Compile>
     <Compile Include="Reports.aspx.designer.cs">
       <DependentUpon>Reports.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RulesDataAdd.aspx.cs">
+      <DependentUpon>RulesDataAdd.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RulesDataAdd.aspx.designer.cs">
+      <DependentUpon>RulesDataAdd.aspx</DependentUpon>
     </Compile>
     <Compile Include="RulesList.aspx.cs">
       <DependentUpon>RulesList.aspx</DependentUpon>

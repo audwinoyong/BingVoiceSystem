@@ -10,60 +10,51 @@
 namespace BingVoiceSystem {
     
     
-    public partial class RulesList {
+    public partial class RulesDataAdd {
         
         /// <summary>
-        /// PendingRulesGridView control.
+        /// QuestionTextBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView PendingRulesGridView;
+        protected global::System.Web.UI.WebControls.TextBox QuestionTextBox;
         
         /// <summary>
-        /// AddRule control.
+        /// AnswerTextBox control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button AddRule;
+        protected global::System.Web.UI.WebControls.TextBox AnswerTextBox;
         
         /// <summary>
-        /// AddMovieRule control.
+        /// DataAdded control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button AddMovieRule;
+        protected global::System.Web.UI.WebControls.Label DataAdded;
         
         /// <summary>
-        /// AddMovieData control.
+        /// SaveButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.Button AddMovieData;
+        protected global::System.Web.UI.WebControls.Button SaveButton;
         
         /// <summary>
-        /// ApprovedRulesGridView control.
+        /// CancelButton control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView ApprovedRulesGridView;
-        
-        /// <summary>
-        /// RejectedRulesGridView control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView RejectedRulesGridView;
+        protected global::System.Web.UI.WebControls.Button CancelButton;
     }
 }
