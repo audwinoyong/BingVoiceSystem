@@ -224,7 +224,7 @@ namespace BingVoiceSystem
                             //Find the rule
                             approvedQuestion = rdr.GetString(0);
                             approvedAnswer = rdr.GetString(1);
-                            //Dele the rule from the pendingrules table
+                            //Delete the rule from the pendingrules table
                             DeleteRule(question, "PendingRules");
                             //Add the rule to the approvedrules table
                             AddRule(approvedQuestion, approvedAnswer, user, "ApprovedRules");
