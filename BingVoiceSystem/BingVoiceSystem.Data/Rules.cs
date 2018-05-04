@@ -81,6 +81,12 @@ namespace BingVoiceSystem
          * a user for who created the rule and the table that the rule is to be added to*/
         public bool AddRule(string question, string response, string user, string table)
         {
+            //Returns false if either question or response is empty
+            if (question.Equals("") || response.Equals(""))
+            {
+                return false;
+            }
+            
             //Remove extra whitespace from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             try

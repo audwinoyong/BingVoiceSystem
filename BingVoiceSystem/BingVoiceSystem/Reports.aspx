@@ -12,7 +12,7 @@
         <asp:Button ID="editorReportBtn" runat="server" Text="Editor Report" OnClick="EditorReportBtn_Click" Height="38px" Width="155px" Visible="False" />
         
         </br>
-        <asp:Button ID="approverReportBtn" runat="server" Text="Rules Report" OnClick="ApproverReportBtn_Click" Height="38px" Width="155px" Visible="False" />
+        <asp:Button ID="approverReportBtn" runat="server" Text="Approver Report" OnClick="ApproverReportBtn_Click" Height="38px" Width="155px" Visible="False" />
         
         </br>
         <asp:Label ID="permissionsLbl" runat="server" Text="No reports to generate" Visible="False" />

@@ -40,7 +40,7 @@ namespace BingVoiceSystem
         /// </summary>
         protected void UserColumnVisibility()
         {
-            // Hide the Edit and Delete columns, also hide AddRule button
+            // Hide the Edit and Delete columns, also hide AddRule and AddMovieRule buttons
             if (!(User.IsInRole("Editor") || User.IsInRole("DataMaintainer")))
             {
                 PendingRulesGridView.Columns[3].Visible = false;
@@ -53,6 +53,7 @@ namespace BingVoiceSystem
                 RejectedRulesGridView.Columns[5].Visible = false;
 
                 AddRule.Visible = false;
+                AddMovieRule.Visible = false;
             }
             // Hide the Approve and Reject columns
             if (!User.IsInRole("Approver"))

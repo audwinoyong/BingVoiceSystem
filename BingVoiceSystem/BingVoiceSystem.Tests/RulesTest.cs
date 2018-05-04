@@ -62,6 +62,20 @@ namespace BingVoiceSystem
         }
 
         [TestMethod]
+        public void AddRule_EmptyQuestion_False()
+        {
+            Assert.IsFalse(rules.AddRule("", "Test Answer", "User", "PendingRules"));
+            rules.DeleteRule("", "PendingRules");
+        }
+
+        [TestMethod]
+        public void AddRule_EmptyAnswer_False()
+        {
+            Assert.IsFalse(rules.AddRule("Test Question?", "", "User", "PendingRules"));
+            rules.DeleteRule("Test Question?", "PendingRules");
+        }
+
+        [TestMethod]
         public void AddRule_DuplicateQuestion_False()
         {
             Assert.IsTrue(rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules"));
