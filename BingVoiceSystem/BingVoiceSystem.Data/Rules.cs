@@ -250,7 +250,7 @@ namespace BingVoiceSystem
                         if (rdr.Read())
                         {
                             DeleteRule(question, "PendingRules");
-                            AddRule(rdr.GetString(0), rdr.GetString(1), user, "RejectedRules", Convert.ToBoolean(rdr.GetString(2)));
+                            AddRule(rdr.GetString(0), rdr.GetString(1), user, "RejectedRules", rdr.GetBoolean(2));
                         }
                     }
                 }
