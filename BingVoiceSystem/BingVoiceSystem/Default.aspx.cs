@@ -19,7 +19,7 @@ namespace BingVoiceSystem
         protected void SubmitBtn_Click(object sender, EventArgs e)
         {
             chat.InnerHtml += "<p align = 'right'> <font color='blue'> Question: </font>" + questionTb.Text + "</p>" + "<br />";
-            chat.InnerHtml += "<p align = 'left'> <font color='red'> Question: </font>" + rules.GetAnswer(questionTb.Text) + "\r\n";           
+            chat.InnerHtml += "<p align = 'left'> <font color='red'> Answer: </font>" + rules.GetAnswer(questionTb.Text) + "\r\n";           
         }
     }
 }
