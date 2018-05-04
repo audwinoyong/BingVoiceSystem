@@ -13,15 +13,6 @@ namespace BingVoiceSystem {
     public partial class Reports {
         
         /// <summary>
-        /// rulesReportBtn control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button rulesReportBtn;
-        
-        /// <summary>
         /// editorReportBtn control.
         /// </summary>
         /// <remarks>
@@ -29,6 +20,15 @@ namespace BingVoiceSystem {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button editorReportBtn;
+        
+        /// <summary>
+        /// rulesReportBtn control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button rulesReportBtn;
         
         /// <summary>
         /// approverReportBtn control.
