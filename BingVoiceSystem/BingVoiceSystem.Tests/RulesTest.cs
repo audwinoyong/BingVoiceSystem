@@ -173,5 +173,14 @@ namespace BingVoiceSystem
             rules.DeleteRule("Test Question?", "RejectedRules");
         }
 
+        [TestMethod]
+        public void EFRule_FindAnswer_True()
+        {
+            EFRules ef = new EFRules();
+            ef.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
+            Assert.IsTrue(ef.GetAnswer("Test Question?").Contains("Test Answer"));
+            ef.DeleteRule("Test Question?", "PendingRules");
+        }
+
     }
 }
