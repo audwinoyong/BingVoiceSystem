@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BingVoiceSystem.Business", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BingVoiceSystem.Tests", "BingVoiceSystem.Tests\BingVoiceSystem.Tests.csproj", "{C79CBA59-71B3-4131-970E-363C8B65E503}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BingVoiceSystem.WebMVC", "BingVoiceSystem.WebMVC\BingVoiceSystem.WebMVC.csproj", "{066C34DD-0FC4-4579-908C-D11E1F1D9147}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{C79CBA59-71B3-4131-970E-363C8B65E503}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C79CBA59-71B3-4131-970E-363C8B65E503}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C79CBA59-71B3-4131-970E-363C8B65E503}.Release|Any CPU.Build.0 = Release|Any CPU
+		{066C34DD-0FC4-4579-908C-D11E1F1D9147}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066C34DD-0FC4-4579-908C-D11E1F1D9147}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066C34DD-0FC4-4579-908C-D11E1F1D9147}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066C34DD-0FC4-4579-908C-D11E1F1D9147}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
