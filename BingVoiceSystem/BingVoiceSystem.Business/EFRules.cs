@@ -22,7 +22,6 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            //question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
             using (var db = new BingDatabaseEntities())
             {
                 var query = from r in db.ApprovedRules
@@ -179,6 +178,119 @@ namespace BingVoiceSystem
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }
+        }
+
+        public void EditRule(string question, string answer, string user, string table)
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                switch (table)
+                {
+                    case "ApprovedRules":
+                        var apprule = (from r in db.ApprovedRules
+                                       where r.Question == question
+                                       select r).First();
+                        apprule.Question = question;
+                        apprule.Answer = answer;
+                        apprule.LastEditedBy = user;
+                        break;
+                    case "RejectedRules":
+                        var rejrule = (from r in db.RejectedRules
+                                       where r.Question == question
+                                       select r).First();
+                        rejrule.Question = question;
+                        rejrule.Answer = answer;
+                        rejrule.LastEditedBy = user;
+                        break;
+                    case "PendingRules":
+                        var penrule = (from r in db.PendingRules
+                                       where r.Question == question
+                                       select r).First();
+                        penrule.Question = question;
+                        penrule.Answer = answer;
+                        penrule.LastEditedBy = user;
+                        break;
+                    default:
+                        System.Diagnostics.Debug.WriteLine("Unknown table");
+                        return;
+                }
+                db.SaveChanges();
+            }
+        }
+
+        public List<PendingRule> PrintPendingRules()
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                var rules = from r in db.PendingRules
+                            select r;
+                return rules.ToList();
+            }
+        }
+
+        public List<ApprovedRule> PrintApprovedRules()
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                var rules = from r in db.ApprovedRules
+                            select r;
+                return rules.ToList();
+            }
+        }
+
+        public List<RejectedRule> PrintRejectedRules()
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                var rules = from r in db.RejectedRules
+                            select r;
+                return rules.ToList();
+            }
+        }
+
+        public List<PendingRule> PrintUsersPendingRules(string user)
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                var rules = from r in db.PendingRules
+                            where r.LastEditedBy == user
+                            select r;
+                return rules.ToList();
+            }
+        }
+
+        public List<ApprovedRule> PrintUsersApprovedRules(string user)
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                var rules = from r in db.ApprovedRules
+                            where r.ApprovedBy == user
+                            select r;
+                return rules.ToList();
+            }
+        }
+
+        public List<RejectedRule> PrintUsersRejectedRules(string user)
+        {
+            using (var db = new BingDatabaseEntities())
+            {
+                var rules = from r in db.RejectedRules
+                            where r.RejectedBy == user
+                            select r;
+                return rules.ToList();
+            }
+        }
+
+        /*Returns the number of approved rules.*/
+        public int CountApproved()
+        {
+            return PrintApprovedRules().Count;
+        }
+
+        /*Returns the number of rejected rules.*/
+        public int CountRejected()
+        {
+            return PrintRejectedRules().Count;
         }
     }
 }
