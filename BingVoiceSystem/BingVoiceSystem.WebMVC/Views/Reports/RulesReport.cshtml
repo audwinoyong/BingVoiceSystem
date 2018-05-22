@@ -1,7 +1,47 @@
-﻿
-@{
-    ViewBag.Title = "RulesReport";
-}
+﻿@using BingVoiceSystem.WebMVC.Models
+@model ReportsModels
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Rules Report</title>
+</head>
+<body>
+    <h2>Rules List</h2>
+    <h3>Approved Rules</h3>
+    @if (Model.ApprovedRules.Count > 0)
+        {
+            <table>
+                <tr>
+                    <th>Question</th>
+                    <th>Answer</th>
+                </tr>
+                @foreach (var item in Model.ApprovedRules)
+                {
+                    <tr>
+                        <td>@item.Question</td>
+                        <td>@item.Answer</td>
+                    </tr>
+                }
+            </table>
+        }
+    <h3>Rules Statistics</h3>
+    @*@if (Model.Contacts.Count > 0)
+        {
+            <table>
+                <tr>
+                    <th>Statistic</th>
+                    <th>Value</th>
+                </tr>
+                @foreach (var item in Model.Contacts)
+                {
+                    <tr>
+                        <td>@item.Stat</td>
+                        <td>@item.Value</td>
+                    </tr>
+                }
+            </table>
+        }*@
 
-<h2>Rules Report</h2>
-
+</body>
+</html>
