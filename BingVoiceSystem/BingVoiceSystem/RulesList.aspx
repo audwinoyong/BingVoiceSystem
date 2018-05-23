@@ -37,6 +37,7 @@
     <div>
         <asp:Button ID="AddRule" runat="server" Text="Add New Rule" OnClick="AddRuleButton_Click" />
         <asp:Button ID="AddMovieRule" runat="server" Text="Add New Movie Rule" OnClick="AddMovieRuleButton_Click" />
+        <asp:Button ID="AddMovieData" runat="server" Text="Add New Movie Data" OnClick="AddMovieDataButton_Click" />
     </div>
 
     <h3>Approved</h3>
