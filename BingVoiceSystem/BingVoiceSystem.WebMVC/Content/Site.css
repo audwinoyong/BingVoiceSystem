@@ -22,3 +22,9 @@ select,
 textarea {
     max-width: 280px;
 }
+
+/* Set width of question textbox*/
+input[type="text"].question {
+    max-width: 500px;
+}
+

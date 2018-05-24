@@ -6,7 +6,7 @@ namespace BingVoiceSystem.WebMVC.Models
 {
     public class ReportsModels
     {
-        public List<string> ApprovedRules { get; set; }
+        public List<List<string>> ApprovedRules { get; set; }
 
         public string Question { get; set; }
 
