@@ -1,31 +1,40 @@
-﻿@{
-    ViewBag.Title = "Home Page";
+﻿@using BingVoiceSystem.Data
+@model string
+@{ 
+    var Name = "test";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
-</div>
+<!DOCTYPE html>
+<html>
+<head>
+    <Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="BingVoiceSystem._Default">
+</head>
+<body>    
+    <div class="row">
+            <div class="col-md-4">
+                <h2>Q&A</h2>
+                <p>
+                    Enter a question and get your answer below!
+                </p>
+                <div runat="server" ID="chat" style="overflow-y:auto; height:200px; width:500px; border: 1px solid black" />
+                <asp:TextBox CssClass="question" ID="questionTb" runat="server" style="width:500px"></asp:TextBox>
+                <br/>
+                <br/>
+                <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" Height="38px" Width="155px" />
+                <br/>
+                <br/>
+            </div>
+    </div>
+    <div class="row">
+        <script type="text/javascript">
+            window.onload = function () {
+                document.getElementById('<%=chat.ClientID%>').scrollTop = document.getElementById('<%=chat.ClientID%>').scrollHeight;
+            };
+        </script>
+    </div>
+</body>
+</html>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+
+
+
