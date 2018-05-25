@@ -282,6 +282,8 @@
     <Content Include="Views\Reports\EditorReport.cshtml" />
     <Content Include="Views\Reports\ApproverReport.cshtml" />
     <Content Include="Views\Reports\RulesReport.cshtml" />
+    <Content Include="Views\Rules\RulesList.cshtml" />
+    <Content Include="Views\Rules\Add.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

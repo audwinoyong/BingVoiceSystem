@@ -4,10 +4,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Mvc;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
-    public class RulesController : ApiController
+    public class RulesController : Controller
     {
         // GET api/<controller>
         public IEnumerable<string> Get()
@@ -34,6 +35,16 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // DELETE api/<controller>/5
         public void Delete(int id)
         {
+        }
+        
+        public ActionResult RulesList()
+        {
+            return View();
+        }
+
+        public ActionResult Add()
+        {
+            return View();
         }
     }
 }
