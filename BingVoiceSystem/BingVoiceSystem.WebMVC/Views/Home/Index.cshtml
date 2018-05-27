@@ -1,8 +1,7 @@
-﻿@using BingVoiceSystem.Data
-@model string
+﻿@using BingVoiceSystem.WebMVC.Models
+@model RulesModel
 @{ 
     ViewBag.Title = "Home Page";
-    var Name = "test";
 }
 
 <!DOCTYPE html>
@@ -11,28 +10,19 @@
     <Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="BingVoiceSystem._Default">
 </head>
 <body>    
+@using (Html.BeginForm())
+{
     <div class="row">
-            <div class="col-md-4">
-                <h2>Q&A</h2>
-                <p>
-                    Enter a question and get your answer below!
-                </p>
-                <div runat="server" ID="chat" style="overflow-y:auto; height:200px; width:500px; border: 1px solid black" />
-                <asp:TextBox CssClass="question" ID="questionTb" runat="server" style="width:500px"></asp:TextBox>
-                <br/>
-                <br/>
-                <asp:Button ID="submitBtn" runat="server" Text="Submit" OnClick="SubmitBtn_Click" Height="38px" Width="155px" />
-                <br/>
-                <br/>
-            </div>
+        <table>
+            <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextBoxFor(x => x.Question)</td></tr>
+            @if (Model.Answer != null)
+            {
+                <tr><td><p>Answer: @Model.Answer</p></td></tr>
+            }
+        </table>
+        <input type="submit" />
     </div>
-    <div class="row">
-        <script type="text/javascript">
-            window.onload = function () {
-                document.getElementById('<%=chat.ClientID%>').scrollTop = document.getElementById('<%=chat.ClientID%>').scrollHeight;
-            };
-        </script>
-    </div>
+}
 </body>
 </html>
 

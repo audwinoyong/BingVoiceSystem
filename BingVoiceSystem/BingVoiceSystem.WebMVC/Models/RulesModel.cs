@@ -8,14 +8,21 @@ namespace BingVoiceSystem.WebMVC.Models
 {
     public class RulesModel
     {        
-        /// <summary>
-        /// The name of a new personal contact
-        /// </summary>
-        public string Name { get; set; }
+        public EFRules EFRules { get; set; }
 
-        /// <summary>
-        /// The address for a new personal contact
-        /// </summary>
-        public string Address { get; set; }
+        public string Question { get; set; }
+
+        public string Answer { get; set; }
+
+        public RulesModel()
+        {
+            EFRules = new EFRules();
+            Answer = "";
+        }
+
+        public void SetAnswer(string question)
+        {
+            Answer = EFRules.GetAnswer(question);
+        }
     }
 }
