@@ -9,20 +9,22 @@
 <head>
     <Page Title="Home Page" Language="C#" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="BingVoiceSystem._Default">
 </head>
-<body>    
-@using (Html.BeginForm())
-{
-    <div class="row">
+<body>
+    <h2>Q&A</h2>
+    <p>
+        Enter a question and get your answer below!
+    </p>
+    @using (Html.BeginForm())
+    {
         <table>
-            <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextBoxFor(x => x.Question)</td></tr>
+            <tr><td>@Html.LabelFor(x => x.Question, "Question: ")</td><td>@Html.TextBoxFor(x => x.Question)</td></tr>
             @if (Model.Answer != null)
             {
-                <tr><td><p>Answer: @Model.Answer</p></td></tr>
+                <tr><td><p>Answer: </p></td><td><p>@Model.Answer</p></td></tr>
             }
         </table>
         <input type="submit" />
-    </div>
-}
+    }
 </body>
 </html>
 
