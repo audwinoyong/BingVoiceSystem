@@ -4,13 +4,14 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using BingVoiceSystem.Data;
 using BingVoiceSystem.WebMVC.Models;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
     public class ReportsController : Controller
     {
-        private BingDBEntities db = new BingDBEntities();
+        private BingDatabaseEntities db = new BingDatabaseEntities();
 
         public ActionResult Index()
         {
