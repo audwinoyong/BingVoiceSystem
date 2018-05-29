@@ -1,5 +1,13 @@
 ﻿@using BingVoiceSystem.WebMVC.Models
-@model ReportsModels
+@model ApprovedRule
+@{
+    var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
+    var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
+    int ApprovedCount = ViewBag.ApprovedCount;
+    int RejectedCount = ViewBag.RejectedCount;
+    string SuccessRate = ViewBag.SuccessRate;
+}
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -9,41 +17,42 @@
 <body>
     <h2>Rules List</h2>
     <h3>Approved Rules</h3>
-    @*
-    @if (Model.ApprovedRules.Count > 0)
-        {
-            <table>
-                <tr>
-                    <th>Question</th>
-                    <th>Answer</th>
-                </tr>
-                @foreach (var item in Model.ApprovedRules)
-                {
-                    <tr>
-                        <td>@item.Question</td>
-                        <td>@item.Answer</td>
-                    </tr>
-                }
-            </table>
-        }
-     *@
-    <h3>Rules Statistics</h3>
-    @*@if (Model.Contacts.Count > 0)
-        {
-            <table>
-                <tr>
-                    <th>Statistic</th>
-                    <th>Value</th>
-                </tr>
-                @foreach (var item in Model.Contacts)
-                {
-                    <tr>
-                        <td>@item.Stat</td>
-                        <td>@item.Value</td>
-                    </tr>
-                }
-            </table>
-        }*@
 
+    @if (ApprovedRules.Count > 0)
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+            </tr>
+            @foreach (var Item in (List<ApprovedRule>)ViewBag.ApprovedRules)
+            {
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                </tr>
+            }
+        </table>
+
+        <h3>Rules Statistics</h3>
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Approved Rule Count</td>
+                <td>@ApprovedCount</td>
+            </tr>
+            <tr>
+                <td>Rejected Rule Count</td>
+                <td>@RejectedCount</td>
+            </tr>
+            <tr>
+                <td>Success Rate</td>
+                <td>@SuccessRate</td>
+            </tr>
+        </table>
+    }
 </body>
 </html>

@@ -6,10 +6,10 @@ namespace BingVoiceSystem.WebMVC.Models
 {
     public class ReportsModels
     {
-        public List<List<string>> ApprovedRules { get; set; }
 
-        public string Question { get; set; }
+        //MUST ASK HOW TO INCORPORATE MODEL?
+        public List<ApprovedRule> ApprovedRules { get; set; }
 
-        public string Answer { get; set; }
+        public List<RejectedRule> RejectedRules { get; set; }
     }
 }

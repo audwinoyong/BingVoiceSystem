@@ -115,12 +115,12 @@
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="BingDatabase.mdf">
+    <Content Include="BingDatabase%28Redundant%29.mdf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="BingDatabase_log.ldf">
+    <Content Include="BingDatabase%28Redundant%29_log.ldf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <DependentUpon>BingDatabase.mdf</DependentUpon>
+      <DependentUpon>BingDatabase%28Redundant%29.mdf</DependentUpon>
     </Content>
     <Content Include="RulesModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
