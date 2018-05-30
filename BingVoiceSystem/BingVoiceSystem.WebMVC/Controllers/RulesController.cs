@@ -42,11 +42,11 @@ namespace BingVoiceSystem.WebMVC.Controllers
         
         public ActionResult RulesList()
         {
-            //List<PendingRule> PendingRulesList = db.PendingRules.ToList();
+            List<PendingRule> PendingRulesList = db.PendingRules.ToList();
             List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
             List<RejectedRule> RejectedRulesList = db.RejectedRules.ToList();
 
-            //ViewBag.PendingRulesList = PendingRulesList;
+            ViewBag.PendingRules = PendingRulesList;
             ViewBag.ApprovedRules = ApprovedRulesList;
             ViewBag.RejectedRules = RejectedRulesList;
 

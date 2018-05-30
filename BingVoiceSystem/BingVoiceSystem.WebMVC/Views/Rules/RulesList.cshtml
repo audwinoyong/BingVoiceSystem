@@ -6,7 +6,7 @@
     ViewBag.Title = "Rules List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    //var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
+    var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
     var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
     var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
 }
@@ -20,6 +20,26 @@
     <h2>Rules List</h2>
 
     <h3>Pending</h3>
+
+    @if (PendingRules.Count > 0)
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Last Edited By</th>
+            </tr>
+            @foreach (var Item in (List<PendingRule>)ViewBag.PendingRules)
+            {
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                    <td>@Item.LastEditedBy</td>
+                </tr>
+            }
+        </table>
+    }
+
 
     <p>@Html.ActionLink("Add New Rule", "Add")</p>
 
@@ -47,6 +67,27 @@
     }
 
     <h3>Rejected</h3>
+
+    @if (RejectedRules.Count > 0)
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Rejected By</th>
+                <th>Last Edited By</th>
+            </tr>
+            @foreach (var Item in (List<RejectedRule>)ViewBag.RejectedRules)
+            {
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                    <td>@Item.RejectedBy</td>
+                    <td>@Item.LastEditedBy</td>
+                </tr>
+            }
+        </table>
+    }
 
 </body>
 </html>
