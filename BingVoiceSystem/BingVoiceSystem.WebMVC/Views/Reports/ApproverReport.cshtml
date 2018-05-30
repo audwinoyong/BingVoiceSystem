@@ -1,7 +1,65 @@
-﻿
+﻿@using BingVoiceSystem.WebMVC.Models
+@using BingVoiceSystem.Data
+
+@model ReportsModels
 @{
-    ViewBag.Title = "ApproverReport";
+    var ReportData = ViewBag.ReportData;
+    var AvgSuccessRate = ViewBag.AvgSuccessRate;
 }
 
-<h2>Approver Report</h2>
-
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Approver Report</title>
+</head>
+<body>
+    <h2>Approver Report</h2>
+    <hr />
+    @if (ReportData.Count > 0)
+    {
+        foreach (var Item in ReportData)
+        {
+            <h4>Editor: @Item[0]</h4>
+            <table class="table table-bordered table-responsive table-hover">
+                <tr>
+                    <th>Statistic</th>
+                    <th>Value</th>
+                </tr>
+                <tr>
+                    <td>Approved Rule Count</td>
+                    <td>@Item[1]</td>
+                </tr>
+                <tr>
+                    <td>Rejected Rule Count</td>
+                    <td>@Item[2]</td>
+                </tr>
+                <tr>
+                    <td>Pending Rule Count</td>
+                    <td>@Item[3]</td>
+                </tr>
+                <tr>
+                    <td>Success Rate</td>
+                    <td>@Item[4]</td>
+                </tr>
+            </table>
+        }
+        <hr />
+        <h4>Average Success Rate</h4>
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Average Success Rate</td>
+                <td>@AvgSuccessRate</td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <h4>There is no data to display.</h4>
+    }
+</body>
+</html>
