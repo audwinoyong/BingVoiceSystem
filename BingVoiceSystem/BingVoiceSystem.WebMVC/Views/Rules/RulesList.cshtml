@@ -1,7 +1,14 @@
-﻿@using BingVoiceSystem
+﻿@using BingVoiceSystem.WebMVC.Models
+@using BingVoiceSystem.Data
+
+@model RulesModel
 @{
     ViewBag.Title = "Rules List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
+    var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
+    var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
 }
 <!DOCTYPE html>
 <html>
@@ -17,6 +24,27 @@
     <p>@Html.ActionLink("Add New Rule", "Add")</p>
 
     <h3>Approved</h3>
+
+    @if (ApprovedRules.Count > 0)
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+                <th>Approved By</th>
+                <th>Last Edited By</th>
+            </tr>
+            @foreach (var Item in (List<ApprovedRule>)ViewBag.ApprovedRules)
+            {
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                    <td>@Item.ApprovedBy</td>
+                    <td>@Item.LastEditedBy</td>
+                </tr>
+            }
+        </table>
+    }
 
     <h3>Rejected</h3>
 

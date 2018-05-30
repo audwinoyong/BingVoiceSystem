@@ -5,11 +5,14 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using System.Web.Mvc;
+using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
     public class RulesController : Controller
     {
+        private BingDBEntities db = new BingDBEntities();
+
         // GET api/<controller>
         public IEnumerable<string> Get()
         {
@@ -39,6 +42,14 @@ namespace BingVoiceSystem.WebMVC.Controllers
         
         public ActionResult RulesList()
         {
+            //List<PendingRule> PendingRulesList = db.PendingRules.ToList();
+            List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
+            List<RejectedRule> RejectedRulesList = db.RejectedRules.ToList();
+
+            //ViewBag.PendingRulesList = PendingRulesList;
+            ViewBag.ApprovedRules = ApprovedRulesList;
+            ViewBag.RejectedRules = RejectedRulesList;
+
             return View();
         }
 

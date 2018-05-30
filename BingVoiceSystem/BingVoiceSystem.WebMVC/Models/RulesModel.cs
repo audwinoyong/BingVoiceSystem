@@ -24,5 +24,11 @@ namespace BingVoiceSystem.WebMVC.Models
         {
             Answer = EFRules.GetAnswer(question);
         }
+
+        //public List<PendingRule> PendingRules { get; set; }
+
+        public List<ApprovedRule> ApprovedRules { get; set; }
+
+        public List<RejectedRule> RejectedRules { get; set; }
     }
 }
