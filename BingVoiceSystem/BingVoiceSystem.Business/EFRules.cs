@@ -22,7 +22,7 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var query = from r in db.ApprovedRules
                             where r.Question == question
@@ -41,7 +41,7 @@ namespace BingVoiceSystem
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             //question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var query = from r in db.PendingRules
                             where r.Question == question
@@ -65,7 +65,7 @@ namespace BingVoiceSystem
 
             //Remove extra whitespace from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 switch (table)
                 {
@@ -111,7 +111,7 @@ namespace BingVoiceSystem
 
         public void DeleteRule(string question, string table)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 switch (table)
                 {
@@ -156,7 +156,7 @@ namespace BingVoiceSystem
 
         public void ApproveRule(string question, string user)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
@@ -169,7 +169,7 @@ namespace BingVoiceSystem
 
         public void RejectRule(string question, string user)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
@@ -182,7 +182,7 @@ namespace BingVoiceSystem
 
         public void EditRule(string question, string answer, string user, string table)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 switch (table)
                 {
@@ -220,7 +220,7 @@ namespace BingVoiceSystem
 
         public List<PendingRule> PrintPendingRules()
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var rules = from r in db.PendingRules
                             select r;
@@ -230,7 +230,7 @@ namespace BingVoiceSystem
 
         public List<ApprovedRule> PrintApprovedRules()
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var rules = from r in db.ApprovedRules
                             select r;
@@ -240,7 +240,7 @@ namespace BingVoiceSystem
 
         public List<RejectedRule> PrintRejectedRules()
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var rules = from r in db.RejectedRules
                             select r;
@@ -250,7 +250,7 @@ namespace BingVoiceSystem
 
         public List<PendingRule> PrintUsersPendingRules(string user)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var rules = from r in db.PendingRules
                             where r.LastEditedBy == user
@@ -261,7 +261,7 @@ namespace BingVoiceSystem
 
         public List<ApprovedRule> PrintUsersApprovedRules(string user)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var rules = from r in db.ApprovedRules
                             where r.ApprovedBy == user
@@ -272,7 +272,7 @@ namespace BingVoiceSystem
 
         public List<RejectedRule> PrintUsersRejectedRules(string user)
         {
-            using (var db = new BingDatabaseEntities())
+            using (var db = new BingDBEntities())
             {
                 var rules = from r in db.RejectedRules
                             where r.RejectedBy == user

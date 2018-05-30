@@ -10,7 +10,7 @@ namespace BingVoiceSystem
     [TestClass]
     public class RulesTest
     {
-        private Rules rules = new Rules(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
+        private Rules rules = new Rules();
 
         [AssemblyInitialize]
         public static void SetupDataDirectory(TestContext context)

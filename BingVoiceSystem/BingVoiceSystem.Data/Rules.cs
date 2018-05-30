@@ -13,20 +13,12 @@ namespace BingVoiceSystem
     public class Rules
     {
         //Path to database
-        public string path;
-
-        public Rules(string path)
-        {
-            this.path = path;
-        }
+        string path;
 
         /*Constructor: creates and sets the path to the database*/
         public Rules()
         {
-            path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\BingVoiceSystem.Data"));
-            AppDomain.CurrentDomain.SetData("DataDirectory", path);
             path = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
-
         }
 
         /*Takes in a question as a string and checks if it already exists in the pending or

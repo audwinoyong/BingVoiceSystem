@@ -66,52 +66,52 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApprovedDataRuleQuestion.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="ApprovedRule.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="AspNetRole.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="AspNetUser.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="AspNetUserClaim.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="AspNetUserLogin.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BingDBEntities.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BingDBEntities.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BingDBEntities.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="BingDBEntities.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BingDBEntities.edmx</DependentUpon>
     </Compile>
     <Compile Include="C__MigrationHistory.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="DataDrivenRule.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="PendingRule.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RejectedRule.cs">
-      <DependentUpon>RulesModel.tt</DependentUpon>
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="Rules.cs" />
-    <Compile Include="RulesModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RulesModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RulesModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RulesModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="RulesModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>RulesModel.edmx</DependentUpon>
-    </Compile>
     <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -122,15 +122,15 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <DependentUpon>BingDatabase.mdf</DependentUpon>
     </Content>
-    <Content Include="RulesModel.Context.tt">
+    <Content Include="BingDBEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>RulesModel.Context.cs</LastGenOutput>
-      <DependentUpon>RulesModel.edmx</DependentUpon>
+      <DependentUpon>BingDBEntities.edmx</DependentUpon>
+      <LastGenOutput>BingDBEntities.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="RulesModel.tt">
+    <Content Include="BingDBEntities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>RulesModel.edmx</DependentUpon>
-      <LastGenOutput>RulesModel.cs</LastGenOutput>
+      <DependentUpon>BingDBEntities.edmx</DependentUpon>
+      <LastGenOutput>BingDBEntities.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -146,17 +146,15 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <EntityDeploy Include="RulesModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>RulesModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.Config" />
-    <None Include="packages.config" />
-    <None Include="RulesModel.edmx.diagram">
-      <DependentUpon>RulesModel.edmx</DependentUpon>
+    <EntityDeploy Include="BingDBEntities.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>BingDBEntities.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="BingDBEntities.edmx.diagram">
+      <DependentUpon>BingDBEntities.edmx</DependentUpon>
     </None>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

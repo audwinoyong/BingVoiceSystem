@@ -12,13 +12,10 @@ namespace BingVoiceSystem
 
     public class User
     {
-        List<Role> roles = new List<Role>();
         string path;
 
         public User()
         {
-            path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\BingVoiceSystem.Data"));
-            AppDomain.CurrentDomain.SetData("DataDirectory", path);
             path = ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString;
         }
 

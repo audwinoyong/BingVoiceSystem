@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using BingVoiceSystem.Data;
-using BingVoiceSystem.WebMVC.Models;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
     public class ReportsController : Controller
     {
-        private BingDatabaseEntities db = new BingDatabaseEntities();
+        private BingDBEntities db = new BingDBEntities();
 
         public ActionResult Index()
         {
