@@ -3,8 +3,7 @@
 
 @model ReportsModels
 @{
-    var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
-    var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
+    var ApprovedRules = ViewBag.ApprovedRules;
     int ApprovedCount = ViewBag.ApprovedCount;
     int RejectedCount = ViewBag.RejectedCount;
     string SuccessRate = ViewBag.SuccessRate;
@@ -17,9 +16,9 @@
     <title>Rules Report</title>
 </head>
 <body>
-    <h2>Rules List</h2>
+    <h2>Rules Report</h2>
+    <hr />
     <h3>Approved Rules</h3>
-
     @if (ApprovedRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
@@ -27,7 +26,7 @@
                 <th>Question</th>
                 <th>Answer</th>
             </tr>
-            @foreach (var Item in (List<ApprovedRule>)ViewBag.ApprovedRules)
+            @foreach (var Item in ApprovedRules)
             {
                 <tr>
                     <td>@Item.Question</td>
@@ -55,6 +54,11 @@
                 <td>@SuccessRate</td>
             </tr>
         </table>
+    }
+    else
+    {
+        <hr />
+        <h4>There is no data to display.</h4>
     }
 </body>
 </html>

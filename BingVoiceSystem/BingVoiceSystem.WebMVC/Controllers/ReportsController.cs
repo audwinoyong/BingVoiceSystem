@@ -52,19 +52,26 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         public ActionResult EditorReport()
         {
+            List<ApprovedRule> UsersApprovedRules = db.ApprovedRules.Where(q => q.CreatedBy == User.Identity.Name).ToList();
+
+            double UsersApprovedRulesCount = db.ApprovedRules.Where(q => q.ApprovedBy == User.Identity.Name).ToList().Count;
+            double UsersRejectedRulesCount = db.RejectedRules.Where(q => q.RejectedBy == User.Identity.Name).ToList().Count;
+
+            ViewBag.UsersApprovedRules = UsersApprovedRules;
+            ViewBag.UsersApprovedRulesCount = UsersApprovedRulesCount;
+            ViewBag.UsersRejectedRulesCount = UsersRejectedRulesCount;
+            ViewBag.ApprovalRate = (UsersApprovedRulesCount / (UsersApprovedRulesCount + UsersRejectedRulesCount) * 100).ToString("N0") + "%";
             return View();
         }
 
         public ActionResult RulesReport()
         {
             List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
-            List<RejectedRule> RejectedRulesList = db.RejectedRules.ToList();
 
             double ApprovedListCount = ApprovedRulesList.Count;
-            double RejectedListCount = RejectedRulesList.Count;
+            double RejectedListCount = db.RejectedRules.ToList().Count;
 
             ViewBag.ApprovedRules = ApprovedRulesList;
-            ViewBag.RejectedRules = RejectedRulesList;
             ViewBag.ApprovedCount = (int) ApprovedListCount;
             ViewBag.RejectedCount = (int) RejectedListCount;
             ViewBag.SuccessRate = (ApprovedListCount / (ApprovedListCount + RejectedListCount) * 100).ToString("N0") + "%";

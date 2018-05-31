@@ -1,6 +1,64 @@
-﻿
+﻿@using BingVoiceSystem.WebMVC.Models
+@using BingVoiceSystem.Data
+
+@model ReportsModels
 @{
-    ViewBag.Title = "EditorReport";
+    var UsersApprovedRules = ViewBag.UsersApprovedRules;
+    var UsersApprovedRulesCount = ViewBag.UsersApprovedRulesCount;
+    var UsersRejectedRulesCount = ViewBag.UsersRejectedRulesCount;
+    var ApprovalRate = ViewBag.ApprovalRate;
 }
 
-<h2>Editor Report</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>My Rules Report</title>
+</head>
+<body>
+    <h2>Editor Report</h2>
+    <hr />
+    <h3>Your Approved Rules</h3>
+    @if (UsersApprovedRules.Count > 0)
+    {
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Question</th>
+                <th>Answer</th>
+            </tr>
+            @foreach (var Item in UsersApprovedRules)
+            {
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                </tr>
+            }
+        </table>
+        <hr />
+        <h3>Your Rule Statistics</h3>
+        <table class="table table-bordered table-responsive table-hover">
+            <tr>
+                <th>Statistic</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Count of Rules You've Approved</td>
+                <td>@UsersApprovedRulesCount</td>
+            </tr>
+            <tr>
+                <td>Count of Rules You've Rejected</td>
+                <td>@UsersRejectedRulesCount</td>
+            </tr>
+            <tr>
+                <td>Your Success Rate</td>
+                <td>@ApprovalRate</td>
+            </tr>
+        </table>
+    }
+    else
+    {
+        <hr />
+        <h4>There is no data to display.</h4>
+    }
+</body>
+</html>
