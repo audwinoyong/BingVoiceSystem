@@ -39,8 +39,10 @@
             }
         </table>
     }
-
-
+    else
+    {
+        <p>There are no pending rules to display.</p>
+    }
     <p>@Html.ActionLink("Add New Rule", "Add")</p>
 
     <h3>Approved</h3>
@@ -65,6 +67,10 @@
             }
         </table>
     }
+    else
+    {
+        <p>There are no approved rules to display.</p>
+    }
 
     <h3>Rejected</h3>
 
@@ -87,6 +93,10 @@
                 </tr>
             }
         </table>
+    }
+    else
+    {
+        <p>There are no rejected rules to display.</p>
     }
 
 </body>
