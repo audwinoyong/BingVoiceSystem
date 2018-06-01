@@ -18,9 +18,8 @@
 </head>
 <body>
     <h2>Rules List</h2>
-
+    <hr />
     <h3>Pending</h3>
-
     @if (PendingRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
@@ -43,10 +42,13 @@
     {
         <p>There are no pending rules to display.</p>
     }
-    <p>@Html.ActionLink("Add New Rule", "Add")</p>
 
+    <form method="get" action="Add">
+        <input type="submit" class="btn btn-primary btn-sm" value="Add New Rule" />
+    </form>
+
+    <hr />
     <h3>Approved</h3>
-
     @if (ApprovedRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
@@ -72,8 +74,8 @@
         <p>There are no approved rules to display.</p>
     }
 
+    <hr />
     <h3>Rejected</h3>
-
     @if (RejectedRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
@@ -98,6 +100,5 @@
     {
         <p>There are no rejected rules to display.</p>
     }
-
 </body>
 </html>
