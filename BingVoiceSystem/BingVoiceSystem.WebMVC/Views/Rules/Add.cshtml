@@ -12,6 +12,7 @@
 </head>
 <body>
     <h2>Add New Rule</h2>
+    <hr />
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
@@ -21,9 +22,8 @@
         </table>
         @Html.ValidationSummary()
 
-        <input type="submit" value="Save" />
-        @Html.ActionLink("Cancel", "RulesList")
+        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px"/>
+        @Html.ActionLink("Cancel", "RulesList", null, new { @class="btn btn-danger" });
     }
-
 </body>
 </html>
