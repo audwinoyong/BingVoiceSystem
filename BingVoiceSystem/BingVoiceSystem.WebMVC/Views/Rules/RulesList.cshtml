@@ -18,8 +18,9 @@
 </head>
 <body>
     <h2>Rules List</h2>
-    <hr />
+
     <h3>Pending</h3>
+
     @if (PendingRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
@@ -27,7 +28,6 @@
                 <th>Question</th>
                 <th>Answer</th>
                 <th>Last Edited By</th>
-                <th>Action</th>
             </tr>
             @foreach (var Item in (List<PendingRule>)ViewBag.PendingRules)
             {
@@ -35,17 +35,16 @@
                     <td>@Item.Question</td>
                     <td>@Item.Answer</td>
                     <td>@Item.LastEditedBy</td>
-                    <td>@Html.ActionLink("Edit", "Edit"/*, new { id = Item.ID }*/) | @Html.ActionLink("Delete", "Delete"/*, new { id = Item.ID }*/)</td>
                 </tr>
             }
         </table>
     }
+    else
+    {
+        <p>There are no pending rules to display.</p>
+    }
+    <p>@Html.ActionLink("Add New Rule", "Add")</p>
 
-    <form method="get" action="Add">
-        <input type="submit" class="btn btn-primary btn-sm" value="Add New Rule" />
-    </form>
-
-    <hr />
     <h3>Approved</h3>
 
     @if (ApprovedRules.Count > 0)
@@ -68,9 +67,13 @@
             }
         </table>
     }
+    else
+    {
+        <p>There are no approved rules to display.</p>
+    }
 
-    <hr />
     <h3>Rejected</h3>
+
     @if (RejectedRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
@@ -90,6 +93,10 @@
                 </tr>
             }
         </table>
+    }
+    else
+    {
+        <p>There are no rejected rules to display.</p>
     }
 
 </body>

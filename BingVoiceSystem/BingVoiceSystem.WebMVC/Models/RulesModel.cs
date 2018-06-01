@@ -30,5 +30,10 @@ namespace BingVoiceSystem.WebMVC.Models
         public List<ApprovedRule> ApprovedRules { get; set; }
 
         public List<RejectedRule> RejectedRules { get; set; }
+
+        public void AddRule(string question, string response, string name)
+        {
+            EFRules.AddRule(question, response, name, "PendingRules");
+        }
     }
 }
