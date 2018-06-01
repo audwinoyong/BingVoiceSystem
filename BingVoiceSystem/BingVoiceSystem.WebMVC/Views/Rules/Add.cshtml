@@ -12,22 +12,17 @@
 </head>
 <body>
     <h2>Add New Rule</h2>
-    <hr />
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
         <table class="table table-bordered">
             <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextBoxFor(x => x.Question)</td></tr>
             <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.TextBoxFor(x => x.Answer)</td></tr>
         </table>
+        @Html.ValidationSummary()
 
-        <form method="get" action="Save">
-            <input type="submit" class="btn btn-primary btn-sm" value="Save" />
-        </form>
-
-        <form method="get" action="RulesList">
-            <input type="submit" class="btn btn-danger btn-sm" value="Cancel" />
-        </form>
-        <br />
+        <input type="submit" value="Save" />
+        @Html.ActionLink("Cancel", "RulesList")
     }
 
 </body>
