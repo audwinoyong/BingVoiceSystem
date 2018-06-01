@@ -14,10 +14,13 @@
     <h2>Add New Rule</h2>
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
         <table class="table table-bordered">
             <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextBoxFor(x => x.Question)</td></tr>
             <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.TextBoxFor(x => x.Answer)</td></tr>
         </table>
+        @Html.ValidationSummary()
+
         <input type="submit" value="Save" />
         @Html.ActionLink("Cancel", "RulesList")
     }

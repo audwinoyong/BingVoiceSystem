@@ -58,10 +58,18 @@ namespace BingVoiceSystem.WebMVC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Add([Bind(Include = "Question,Answer")] RulesModel model)
         {
-            model.AddRule(model.Question, model.Answer, User.Identity.Name);
-            return RedirectToAction("RulesList");
+            if (ModelState.IsValid)
+            {
+                model.AddRule(model.Question, model.Answer, User.Identity.Name);
+                return RedirectToAction("RulesList");
+            }
+            else
+            {
+                return View();
+            }
         }
     }
 }
