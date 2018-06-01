@@ -11,9 +11,15 @@
 </head>
 <body>
     <h2>Add New Rule</h2>
+    <hr />
 
-    <input type="submit" value="Save" />
-    <p class="btn">@Html.ActionLink("Cancel", "RulesList")</p>
+    <form method="get" action="Save" style="float: left; padding-right: 10px">
+        <input type="submit" class="btn btn-primary btn-sm" value="Save" />
+    </form>
 
+    <form method="get" action="RulesList" style="float: left">
+        <input type="submit" class="btn btn-danger btn-sm" value="Cancel" />
+    </form>
+    <br />
 </body>
 </html>
