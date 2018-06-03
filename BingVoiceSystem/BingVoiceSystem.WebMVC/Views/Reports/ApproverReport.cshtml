@@ -1,11 +1,7 @@
 ﻿@using BingVoiceSystem.WebMVC.Models
 @using BingVoiceSystem.Data
-
-@model ReportsModels
-@{
-    var ReportData = ViewBag.ReportData;
-    var AvgSuccessRate = ViewBag.AvgSuccessRate;
-}
+@using BingVoiceSystem.Business
+@model ApproverReport
 
 <!DOCTYPE html>
 <html>
@@ -16,9 +12,9 @@
 <body>
     <h2>Approver Report</h2>
     <hr />
-    @if (ReportData.Count > 0)
+    @if (Model.EditorData.Count > 0)
     {
-        foreach (var Item in ReportData)
+        foreach (var Item in Model.EditorData)
         {
             <h4>Editor: @Item[0]</h4>
             <table class="table table-bordered table-responsive table-hover">
@@ -53,7 +49,7 @@
             </tr>
             <tr>
                 <td>Average Success Rate</td>
-                <td>@AvgSuccessRate</td>
+                <td>@Model.GetAvgSuccessRate()</td>
             </tr>
         </table>
     }

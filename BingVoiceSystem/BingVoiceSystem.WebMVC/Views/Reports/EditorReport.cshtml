@@ -1,13 +1,8 @@
 ﻿@using BingVoiceSystem.WebMVC.Models
 @using BingVoiceSystem.Data
+@using BingVoiceSystem.Business
 
-@model ReportsModels
-@{
-    var UsersApprovedRules = ViewBag.UsersApprovedRules;
-    var UsersApprovedRulesCount = ViewBag.UsersApprovedRulesCount;
-    var UsersRejectedRulesCount = ViewBag.UsersRejectedRulesCount;
-    var ApprovalRate = ViewBag.ApprovalRate;
-}
+@model EditorReport
 
 <!DOCTYPE html>
 <html>
@@ -19,14 +14,14 @@
     <h2>Editor Report</h2>
     <hr />
     <h3>Your Approved Rules</h3>
-    @if (UsersApprovedRules.Count > 0)
+    @if (Model.UsersApprovedRules.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
             <tr>
                 <th>Question</th>
                 <th>Answer</th>
             </tr>
-            @foreach (var Item in UsersApprovedRules)
+            @foreach (var Item in Model.UsersApprovedRules)
             {
                 <tr>
                     <td>@Item.Question</td>
@@ -43,15 +38,15 @@
             </tr>
             <tr>
                 <td>Count of Rules You've Approved</td>
-                <td>@UsersApprovedRulesCount</td>
+                <td>@Model.UsersApprovedRulesCount</td>
             </tr>
             <tr>
                 <td>Count of Rules You've Rejected</td>
-                <td>@UsersRejectedRulesCount</td>
+                <td>@Model.UsersRejectedRulesCount</td>
             </tr>
             <tr>
                 <td>Your Success Rate</td>
-                <td>@ApprovalRate</td>
+                <td>@Model.ApprovalRate</td>
             </tr>
         </table>
     }

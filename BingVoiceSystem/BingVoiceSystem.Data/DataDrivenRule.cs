@@ -7,19 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BingVoiceSystem.Data
+using System;
+using System.Collections.Generic;
+
+public partial class DataDrivenRule
 {
-    using System;
-    using System.Collections.Generic;
-    
-    public partial class DataDrivenRule
-    {
-        public int QuestionId { get; set; }
-        public int DataId { get; set; }
-        public string Answer { get; set; }
-        public string ApprovedBy { get; set; }
-        public string LastEditedBy { get; set; }
-    
-        public virtual ApprovedDataRuleQuestion ApprovedDataRuleQuestion { get; set; }
-    }
+    public int QuestionId { get; set; }
+    public int DataId { get; set; }
+    public string Answer { get; set; }
+    public string ApprovedBy { get; set; }
+    public string LastEditedBy { get; set; }
+
+    public virtual ApprovedDataRuleQuestion ApprovedDataRuleQuestion { get; set; }
 }
