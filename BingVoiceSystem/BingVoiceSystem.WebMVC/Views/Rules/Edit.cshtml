@@ -1,7 +1,5 @@
-﻿@*@using BingVoiceSystem.WebMVC.Models*@
-@using BingVoiceSystem.Data
-@*@model RulesModel*@
-@model PendingRule
+﻿@using BingVoiceSystem.WebMVC.Models
+@model RulesModel
 @{
     ViewBag.Title = "Edit Rule";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -15,16 +13,47 @@
 <body>
     <h2>Edit Rule</h2>
     <hr />
-    @using (Html.BeginForm())
+    @if (Model.PendingRule.RuleID != 0)
     {
-        @Html.HiddenFor(x => x.RuleID)
-        <table class="table table-bordered">
-            <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextAreaFor(x => x.Question, new { @class = "form-control", @rows = 5 })</td></tr>
-            <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
-        </table>
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.PendingRule.RuleID)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.PendingRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.PendingRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
+                <tr><td>@Html.LabelFor(x => x.PendingRule.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.PendingRule.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
+            </table>
 
-        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
-        @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+            <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+        }
+    }
+    else if (Model.ApprovedRule.RuleID != 0)
+    {
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.ApprovedRule.RuleID)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.ApprovedRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.ApprovedRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
+                <tr><td>@Html.LabelFor(x => x.ApprovedRule.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.ApprovedRule.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
+            </table>
+
+            <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+        }
+    }
+    else if (Model.RejectedRule.RuleID != 0)
+    {
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.RejectedRule.RuleID)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.RejectedRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.RejectedRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
+                <tr><td>@Html.LabelFor(x => x.RejectedRule.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.RejectedRule.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
+            </table>
+
+            <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+        }
     }
 </body>
 </html>

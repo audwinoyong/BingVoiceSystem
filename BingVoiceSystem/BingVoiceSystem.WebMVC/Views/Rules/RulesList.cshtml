@@ -66,6 +66,7 @@
                 <th>Answer</th>
                 <th>Approved By</th>
                 <th>Last Edited By</th>
+                <th colspan="2"></th>
             </tr>
             @foreach (var Item in Model.ApprovedRulesList)
             {
@@ -74,6 +75,8 @@
                     <td>@Item.Answer</td>
                     <td>@Item.ApprovedBy</td>
                     <td>@Item.LastEditedBy</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "ApprovedRules" }, new { @class = "btn btn-primary" })</td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "ApprovedRules" }, new { @class = "btn btn-danger" })</td>
                 </tr>
             }
         </table>
@@ -93,6 +96,7 @@
                 <th>Answer</th>
                 <th>Rejected By</th>
                 <th>Last Edited By</th>
+                <th colspan="2"></th>
             </tr>
             @foreach (var Item in Model.RejectedRulesList)
             {
@@ -101,6 +105,8 @@
                     <td>@Item.Answer</td>
                     <td>@Item.RejectedBy</td>
                     <td>@Item.LastEditedBy</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "RejectedRules" }, new { @class = "btn btn-primary" })</td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "RejectedRules" }, new { @class = "btn btn-danger" })</td>
                 </tr>
             }
         </table>

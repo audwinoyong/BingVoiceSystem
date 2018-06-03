@@ -439,6 +439,28 @@ namespace BingVoiceSystem
             }
         }
 
+        public ApprovedRule SearchApprovedRule(int id)
+        {
+            using (var db = new BingDBEntities())
+            {
+                var apprule = (from r in db.ApprovedRules
+                               where r.RuleID == id
+                               select r).First();
+                return apprule;
+            }
+        }
+
+        public RejectedRule SearchRejectedRule(int id)
+        {
+            using (var db = new BingDBEntities())
+            {
+                var rejrule = (from r in db.RejectedRules
+                               where r.RuleID == id
+                               select r).First();
+                return rejrule;
+            }
+        }
+
         public bool AddDataDrivenRule(string question, string response, string type, string user, string table)
         {
             //Returns false if either question or response is empty

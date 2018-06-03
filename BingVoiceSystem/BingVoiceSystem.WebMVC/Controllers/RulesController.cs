@@ -11,36 +11,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 {
     public class RulesController : Controller
     {
-        private BingDBEntities db = new BingDBEntities();
-
         private EFRules rules = new EFRules();
-
-        //// GET api/<controller>
-        //public IEnumerable<string> Get()
-        //{
-        //    return new string[] { "value1", "value2" };
-        //}
-
-        //// GET api/<controller>/5
-        //public string Get(int id)
-        //{
-        //    return "value";
-        //}
-
-        //// POST api/<controller>
-        //public void Post([FromBody]string value)
-        //{
-        //}
-
-        //// PUT api/<controller>/5
-        //public void Put(int id, [FromBody]string value)
-        //{
-        //}
-
-        //// DELETE api/<controller>/5
-        //public void Delete(int id)
-        //{
-        //}
 
         // GET: Rules/RulesList
         // Show the list of all rules
@@ -89,20 +60,78 @@ namespace BingVoiceSystem.WebMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var rule = rules.SearchPendingRule((int)id);
-            if (rule == null)
+
+            switch (table)
             {
-                return HttpNotFound();
+                case "ApprovedRules":
+                    var apprule = rules.SearchApprovedRule((int)id);
+                    if (apprule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            ApprovedRule = apprule
+                        }
+                    );
+                case "RejectedRules":
+                    var rejrule = rules.SearchRejectedRule((int)id);
+                    if (rejrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            RejectedRule = rejrule
+                        }
+                    );
+                case "PendingRules":
+                    var penrule = rules.SearchPendingRule((int)id);
+                    if (penrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            PendingRule = penrule
+                        }
+                    );
+                default:
+                    System.Diagnostics.Debug.WriteLine("Unknown table");
+                    return View();
             }
-            return View(rule);
+
+            //var rule = rules.SearchPendingRule((int)id);
+            //if (rule == null)
+            //{
+            //    return HttpNotFound();
+            //}
+            //return View(rule);
         }
 
         // POST: Rules/Edit/243?table=PendingRules
         // Save changes to an edited rule
         [HttpPost]
-        public ActionResult Edit(RulesModel model)
+        public ActionResult Edit(RulesModel model, string table)
         {
-            rules.EditRule(model.RuleID, model.Question, model.Answer, User.Identity.Name, "PendingRules");
+            switch (table)
+            {
+                case "ApprovedRules":
+                    rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, "ApprovedRules");
+                    break;
+                case "RejectedRules":
+                    rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, "RejectedRules");
+                    break;
+                case "PendingRules":
+                    rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, "PendingRules");
+                    break;
+                default:
+                    System.Diagnostics.Debug.WriteLine("Unknown table");
+                    break;
+            }
             return RedirectToAction("RulesList");
         }
 

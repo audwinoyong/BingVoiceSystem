@@ -19,10 +19,20 @@ namespace BingVoiceSystem.WebMVC.Models
         [Required, MaxLength(100)]
         public string Answer { get; set; }
 
+        public ApprovedRule ApprovedRule { get; set; }
+
+        public RejectedRule RejectedRule { get; set; }
+
+        public PendingRule PendingRule { get; set; }
+
         public RulesModel()
         {
             EFRules = new EFRules();
             Answer = "";
+
+            ApprovedRule = new ApprovedRule();
+            RejectedRule = new RejectedRule();
+            PendingRule = new PendingRule();
         }
 
         public void SetAnswer(string question)
