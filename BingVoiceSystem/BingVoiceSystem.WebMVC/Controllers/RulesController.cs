@@ -40,7 +40,9 @@ namespace BingVoiceSystem.WebMVC.Controllers
         //public void Delete(int id)
         //{
         //}
-        
+
+        // GET: Rules/RulesList
+        // Show the list of all rules
         public ActionResult RulesList()
         {
             List<PendingRule> PendingRulesList = db.PendingRules.ToList();
@@ -54,20 +56,29 @@ namespace BingVoiceSystem.WebMVC.Controllers
             return View();
         }
 
+        // GET: Rules/Add
+        // Show an edit form to add a new rule
         public ActionResult Add()
         {
             return View();
         }
 
+        // POST: Rules/Add
+        // Add a Pending Rule based on the supplied data
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Add([Bind(Include = "Question,Answer")] RulesModel model)
         {
             if (ModelState.IsValid)
             {
-                //model.AddRule(model.Question, model.Answer, User.Identity.Name);
-                rules.AddRule(model.Question, model.Answer, User.Identity.Name, "PendingRules");
-                return RedirectToAction("RulesList");
+                if (rules.AddRule(model.Question, model.Answer, User.Identity.Name, "PendingRules"))
+                {
+                    return RedirectToAction("RulesList");
+                }
+                else
+                {
+                    return View();
+                }
             }
             else
             {
@@ -75,6 +86,8 @@ namespace BingVoiceSystem.WebMVC.Controllers
             }
         }
 
+        // GET: Rules/Edit/243?table=PendingRules
+        // Show an edit form to edit an existing rule
         public ActionResult Edit(int? id, string table)
         {
             if (id == null)
@@ -89,11 +102,44 @@ namespace BingVoiceSystem.WebMVC.Controllers
             return View(rule);
         }
 
+        // POST: Rules/Edit/243?table=PendingRules
+        // Save changes to an edited rule
         [HttpPost]
         public ActionResult Edit(RulesModel model)
         {
             rules.EditRule(model.RuleID, model.Question, model.Answer, User.Identity.Name, "PendingRules");
             return RedirectToAction("RulesList");
         }
+
+        // GET: Rules/Delete/243?table=PendingRules
+        // Retrieve details of a rule to confirm deletion
+        public ActionResult Delete(int? id, string table)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var rule = rules.SearchPendingRule((int)id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            return View(rule);
+        }
+
+        // POST: Rules/Delete/243?table=PendingRules
+        // Delete a rule
+        [HttpPost, ActionName("Delete")]
+        public ActionResult DeleteConfirmed(int id)
+        {
+            var rule = rules.SearchPendingRule(id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            rules.DeleteRule(rule.Question, "PendingRules");
+            return RedirectToAction("RulesList");
+        }
+
     }
 }
