@@ -32,8 +32,10 @@ namespace BingVoiceSystem.Data
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }
         public virtual DbSet<AspNetUserLogin> AspNetUserLogins { get; set; }
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
-        public virtual DbSet<DataDrivenRule> DataDrivenRules { get; set; }
         public virtual DbSet<PendingRule> PendingRules { get; set; }
         public virtual DbSet<RejectedRule> RejectedRules { get; set; }
+        public virtual DbSet<Actor> Actors { get; set; }
+        public virtual DbSet<Genre> Genres { get; set; }
+        public virtual DbSet<Movy> Movies { get; set; }
     }
 }

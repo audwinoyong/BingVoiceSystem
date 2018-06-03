@@ -15,6 +15,13 @@
           <Property Name="Model" Type="varbinary(max)" Nullable="false" />
           <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
         </EntityType>
+        <EntityType Name="Actors">
+          <Key>
+            <PropertyRef Name="Movie" />
+          </Key>
+          <Property Name="Movie" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Actor" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
         <EntityType Name="ApprovedDataRuleQuestions">
           <Key>
             <PropertyRef Name="QuestionID" />
@@ -87,16 +94,18 @@
           <Property Name="AccessFailedCount" Type="int" Nullable="false" />
           <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
-        <EntityType Name="DataDrivenRules">
+        <EntityType Name="Genres">
           <Key>
-            <PropertyRef Name="QuestionId" />
-            <PropertyRef Name="DataId" />
+            <PropertyRef Name="Movie" />
           </Key>
-          <Property Name="QuestionId" Type="int" Nullable="false" />
-          <Property Name="DataId" Type="int" Nullable="false" />
-          <Property Name="Answer" Type="varchar(max)" Nullable="false" />
-          <Property Name="ApprovedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
+          <Property Name="Movie" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Genre" Type="nvarchar" MaxLength="128" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Movies">
+          <Key>
+            <PropertyRef Name="Movie" />
+          </Key>
+          <Property Name="Movie" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="PendingRules">
           <Key>
@@ -177,20 +186,9 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_ruleId">
-          <End Role="ApprovedDataRuleQuestions" Type="Self.ApprovedDataRuleQuestions" Multiplicity="1" />
-          <End Role="DataDrivenRules" Type="Self.DataDrivenRules" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApprovedDataRuleQuestions">
-              <PropertyRef Name="QuestionID" />
-            </Principal>
-            <Dependent Role="DataDrivenRules">
-              <PropertyRef Name="QuestionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <EntityContainer Name="BingDBModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Actors" EntityType="Self.Actors" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApprovedDataRuleQuestions" EntityType="Self.ApprovedDataRuleQuestions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ApprovedRules" EntityType="Self.ApprovedRules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetRoles" EntityType="Self.AspNetRoles" Schema="dbo" store:Type="Tables" />
@@ -198,7 +196,8 @@
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogins" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUserRoles" EntityType="Self.AspNetUserRoles" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="DataDrivenRules" EntityType="Self.DataDrivenRules" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Genres" EntityType="Self.Genres" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Movies" EntityType="Self.Movies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="PendingRules" EntityType="Self.PendingRules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RejectedRules" EntityType="Self.RejectedRules" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
@@ -216,10 +215,6 @@
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
-          </AssociationSet>
-          <AssociationSet Name="FK_ruleId" Association="Self.FK_ruleId">
-            <End Role="ApprovedDataRuleQuestions" EntitySet="ApprovedDataRuleQuestions" />
-            <End Role="DataDrivenRules" EntitySet="DataDrivenRules" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -244,7 +239,6 @@
           <Property Name="Question" Type="String" MaxLength="1000" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ApprovedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LastEditedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="DataDrivenRules" Relationship="Self.FK_ruleId" FromRole="ApprovedDataRuleQuestions" ToRole="DataDrivenRules" />
         </EntityType>
         <EntityType Name="ApprovedRule">
           <Key>
@@ -307,18 +301,6 @@
           <NavigationProperty Name="AspNetUserLogins" Relationship="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" FromRole="AspNetUsers" ToRole="AspNetUserLogins" />
           <NavigationProperty Name="AspNetRoles" Relationship="Self.AspNetUserRoles" FromRole="AspNetUsers" ToRole="AspNetRoles" />
         </EntityType>
-        <EntityType Name="DataDrivenRule">
-          <Key>
-            <PropertyRef Name="QuestionId" />
-            <PropertyRef Name="DataId" />
-          </Key>
-          <Property Name="QuestionId" Type="Int32" Nullable="false" />
-          <Property Name="DataId" Type="Int32" Nullable="false" />
-          <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="ApprovedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="LastEditedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="ApprovedDataRuleQuestion" Relationship="Self.FK_ruleId" FromRole="DataDrivenRules" ToRole="ApprovedDataRuleQuestions" />
-        </EntityType>
         <EntityType Name="PendingRule">
           <Key>
             <PropertyRef Name="RuleID" />
@@ -342,18 +324,6 @@
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="DataDriven" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
-        <Association Name="FK_ruleId">
-          <End Role="ApprovedDataRuleQuestions" Type="Self.ApprovedDataRuleQuestion" Multiplicity="1" />
-          <End Role="DataDrivenRules" Type="Self.DataDrivenRule" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="ApprovedDataRuleQuestions">
-              <PropertyRef Name="QuestionID" />
-            </Principal>
-            <Dependent Role="DataDrivenRules">
-              <PropertyRef Name="QuestionId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUser" Multiplicity="1">
             <OnDelete Action="Cascade" />
@@ -394,13 +364,8 @@
           <EntitySet Name="AspNetUserClaims" EntityType="Self.AspNetUserClaim" />
           <EntitySet Name="AspNetUserLogins" EntityType="Self.AspNetUserLogin" />
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUser" />
-          <EntitySet Name="DataDrivenRules" EntityType="Self.DataDrivenRule" />
           <EntitySet Name="PendingRules" EntityType="Self.PendingRule" />
           <EntitySet Name="RejectedRules" EntityType="Self.RejectedRule" />
-          <AssociationSet Name="FK_ruleId" Association="Self.FK_ruleId">
-            <End Role="ApprovedDataRuleQuestions" EntitySet="ApprovedDataRuleQuestions" />
-            <End Role="DataDrivenRules" EntitySet="DataDrivenRules" />
-          </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
             <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
@@ -413,7 +378,30 @@
             <End Role="AspNetRoles" EntitySet="AspNetRoles" />
             <End Role="AspNetUsers" EntitySet="AspNetUsers" />
           </AssociationSet>
+          <EntitySet Name="Actors" EntityType="BingDBModel.Actor" />
+          <EntitySet Name="Genres" EntityType="BingDBModel.Genre" />
+          <EntitySet Name="Movies" EntityType="BingDBModel.Movy" />
         </EntityContainer>
+        <EntityType Name="Actor">
+          <Key>
+            <PropertyRef Name="Movie" />
+          </Key>
+          <Property Name="Movie" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Actor1" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Genre">
+          <Key>
+            <PropertyRef Name="Movie" />
+          </Key>
+          <Property Name="Movie" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="Genre1" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="Movy">
+          <Key>
+            <PropertyRef Name="Movie" />
+          </Key>
+          <Property Name="Movie" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -498,17 +486,6 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="DataDrivenRules">
-            <EntityTypeMapping TypeName="BingDBModel.DataDrivenRule">
-              <MappingFragment StoreEntitySet="DataDrivenRules">
-                <ScalarProperty Name="QuestionId" ColumnName="QuestionId" />
-                <ScalarProperty Name="DataId" ColumnName="DataId" />
-                <ScalarProperty Name="Answer" ColumnName="Answer" />
-                <ScalarProperty Name="ApprovedBy" ColumnName="ApprovedBy" />
-                <ScalarProperty Name="LastEditedBy" ColumnName="LastEditedBy" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="PendingRules">
             <EntityTypeMapping TypeName="BingDBModel.PendingRule">
               <MappingFragment StoreEntitySet="PendingRules">
@@ -542,6 +519,29 @@
               <ScalarProperty Name="Id" ColumnName="UserId" />
             </EndProperty>
           </AssociationSetMapping>
+          <EntitySetMapping Name="Actors">
+            <EntityTypeMapping TypeName="BingDBModel.Actor">
+              <MappingFragment StoreEntitySet="Actors">
+                <ScalarProperty Name="Actor1" ColumnName="Actor" />
+                <ScalarProperty Name="Movie" ColumnName="Movie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Genres">
+            <EntityTypeMapping TypeName="BingDBModel.Genre">
+              <MappingFragment StoreEntitySet="Genres">
+                <ScalarProperty Name="Genre1" ColumnName="Genre" />
+                <ScalarProperty Name="Movie" ColumnName="Movie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Movies">
+            <EntityTypeMapping TypeName="BingDBModel.Movy">
+              <MappingFragment StoreEntitySet="Movies">
+                <ScalarProperty Name="Movie" ColumnName="Movie" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

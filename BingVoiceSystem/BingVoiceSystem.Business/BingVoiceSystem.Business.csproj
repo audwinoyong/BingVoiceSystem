@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ApproverReport.cs" />
+    <Compile Include="Data.cs" />
     <Compile Include="EditorReport.cs" />
     <Compile Include="EFRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

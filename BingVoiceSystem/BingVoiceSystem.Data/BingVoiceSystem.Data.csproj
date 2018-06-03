@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Actor.cs">
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
+    </Compile>
     <Compile Include="ApprovedDataRuleQuestion.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
@@ -101,7 +104,10 @@
     <Compile Include="C__MigrationHistory.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="DataDrivenRule.cs">
+    <Compile Include="Genre.cs">
+      <DependentUpon>BingDBEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Movy.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="PendingRule.cs">
