@@ -1,9 +1,6 @@
 ﻿using BingVoiceSystem.Data;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BingVoiceSystem.Business
 {
@@ -21,7 +18,12 @@ namespace BingVoiceSystem.Business
             UsersApprovedRules = db.ApprovedRules.Where(q => q.CreatedBy == Email).ToList();
             UsersApprovedRulesCount = db.ApprovedRules.Where(q => q.ApprovedBy == Email).ToList().Count;
             UsersRejectedRulesCount = db.RejectedRules.Where(q => q.RejectedBy == Email).ToList().Count;
-            ApprovalRate = (UsersApprovedRulesCount / (UsersApprovedRulesCount + UsersRejectedRulesCount) * 100).ToString("N0") + "%";
+
+            if (UsersApprovedRulesCount == 0 && UsersRejectedRulesCount == 0)
+            {
+                ApprovalRate = "-";
+            }
+            else ApprovalRate = (UsersApprovedRulesCount / (UsersApprovedRulesCount + UsersRejectedRulesCount) * 100).ToString("N0") + "%";
         }
     }
 }

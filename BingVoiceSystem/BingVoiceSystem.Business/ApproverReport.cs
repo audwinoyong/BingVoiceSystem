@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem.Business
 {
     public class ApproverReport
     {
-        public List<List<string>> EditorData = new List<List<string>>();
+        public List<List<string>> EditorData;
         public string AvgSuccessRate; 
 
         public ApproverReport()
         {
             BingDBEntities db = new BingDBEntities();
+            EditorData = new List<List<string>>();
 
             List<string> EditorsList = db.Database.SqlQuery<string>("SELECT Email from AspNetUsers WHERE Id IN (SELECT UserId from AspNetUserRoles WHERE RoleId = 'Editor')").ToList();
             double AvgSuccessRate = 0;
@@ -43,12 +41,7 @@ namespace BingVoiceSystem.Business
                 });
             }
 
-            this.AvgSuccessRate = AvgSuccessRate / Count + "%";
-        }
-
-        public string GetAvgSuccessRate()
-        {
-            return AvgSuccessRate;
+            this.AvgSuccessRate = (AvgSuccessRate / Count).ToString("N0") + "%";
         }
     }
 }

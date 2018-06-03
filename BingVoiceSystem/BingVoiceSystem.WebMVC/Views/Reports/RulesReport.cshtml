@@ -1,13 +1,5 @@
-﻿@using BingVoiceSystem.WebMVC.Models
-@using BingVoiceSystem.Data
-
-@model ReportsModels
-@{
-    var ApprovedRules = ViewBag.ApprovedRules;
-    int ApprovedCount = ViewBag.ApprovedCount;
-    int RejectedCount = ViewBag.RejectedCount;
-    string SuccessRate = ViewBag.SuccessRate;
-}
+﻿@using BingVoiceSystem.Business
+@model RulesReport
 
 <!DOCTYPE html>
 <html>
@@ -19,14 +11,14 @@
     <h2>Rules Report</h2>
     <hr />
     <h3>Approved Rules</h3>
-    @if (ApprovedRules.Count > 0)
+    @if (Model.ApprovedRulesList.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
             <tr>
                 <th>Question</th>
                 <th>Answer</th>
             </tr>
-            @foreach (var Item in ApprovedRules)
+            @foreach (var Item in Model.ApprovedRulesList)
             {
                 <tr>
                     <td>@Item.Question</td>
@@ -43,15 +35,15 @@
             </tr>
             <tr>
                 <td>Approved Rule Count</td>
-                <td>@ApprovedCount</td>
+                <td>@Model.ApprovedCount</td>
             </tr>
             <tr>
                 <td>Rejected Rule Count</td>
-                <td>@RejectedCount</td>
+                <td>@Model.RejectedCount</td>
             </tr>
             <tr>
                 <td>Success Rate</td>
-                <td>@SuccessRate</td>
+                <td>@Model.SuccessRate</td>
             </tr>
         </table>
     }

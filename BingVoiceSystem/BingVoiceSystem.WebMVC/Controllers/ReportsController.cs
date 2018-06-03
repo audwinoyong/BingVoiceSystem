@@ -1,15 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Web.Mvc;
-using BingVoiceSystem.Data;
+﻿using System.Web.Mvc;
 using BingVoiceSystem.Business;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
     public class ReportsController : Controller
     {
-        private BingDBEntities db = new BingDBEntities();
-
         public ActionResult Index()
         {
             return View();
@@ -29,17 +24,8 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         public ActionResult RulesReport()
         {
-            List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
-
-            double ApprovedListCount = ApprovedRulesList.Count;
-            double RejectedListCount = db.RejectedRules.ToList().Count;
-
-            ViewBag.ApprovedRules = ApprovedRulesList;
-            ViewBag.ApprovedCount = (int) ApprovedListCount;
-            ViewBag.RejectedCount = (int) RejectedListCount;
-            ViewBag.SuccessRate = (ApprovedListCount / (ApprovedListCount + RejectedListCount) * 100).ToString("N0") + "%";
-
-            return View();
+            RulesReport report = new RulesReport();
+            return View(report);
         }
     }
 }
