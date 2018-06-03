@@ -77,6 +77,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
                 }
                 else
                 {
+                    ViewBag.DuplicateError = "That question already has an answer";
                     return View();
                 }
             }
