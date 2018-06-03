@@ -11,6 +11,8 @@ namespace BingVoiceSystem.WebMVC.Models
     {        
         public EFRules EFRules { get; set; }
 
+        public int RuleID { get; set; }
+
         [Required, MaxLength(100)]
         public string Question { get; set; }
 
@@ -28,15 +30,15 @@ namespace BingVoiceSystem.WebMVC.Models
             Answer = EFRules.GetAnswer(question);
         }
 
-        public List<PendingRule> PendingRules { get; set; }
+        //public List<PendingRule> PendingRules { get; set; }
 
-        public List<ApprovedRule> ApprovedRules { get; set; }
+        //public List<ApprovedRule> ApprovedRules { get; set; }
 
-        public List<RejectedRule> RejectedRules { get; set; }
+        //public List<RejectedRule> RejectedRules { get; set; }
 
-        public void AddRule(string question, string response, string name)
-        {
-            EFRules.AddRule(question, response, name, "PendingRules");
-        }
+        //public void AddRule(string question, string response, string name)
+        //{
+        //    EFRules.AddRule(question, response, name, "PendingRules");
+        //}
     }
 }

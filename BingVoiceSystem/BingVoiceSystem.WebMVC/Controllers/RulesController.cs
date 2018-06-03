@@ -12,6 +12,8 @@ namespace BingVoiceSystem.WebMVC.Controllers
     {
         private BingDBEntities db = new BingDBEntities();
 
+        private EFRules rules = new EFRules();
+
         //// GET api/<controller>
         //public IEnumerable<string> Get()
         //{
@@ -63,13 +65,35 @@ namespace BingVoiceSystem.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.AddRule(model.Question, model.Answer, User.Identity.Name);
+                //model.AddRule(model.Question, model.Answer, User.Identity.Name);
+                rules.AddRule(model.Question, model.Answer, User.Identity.Name, "PendingRules");
                 return RedirectToAction("RulesList");
             }
             else
             {
                 return View();
             }
+        }
+
+        public ActionResult Edit(int? id, string table)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var rule = rules.SearchPendingRule((int)id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            return View(rule);
+        }
+
+        [HttpPost]
+        public ActionResult Edit(RulesModel model)
+        {
+            rules.EditRule(model.RuleID, model.Question, model.Answer, User.Identity.Name, "PendingRules");
+            return RedirectToAction("RulesList");
         }
     }
 }

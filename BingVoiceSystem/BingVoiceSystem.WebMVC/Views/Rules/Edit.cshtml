@@ -1,29 +1,30 @@
-﻿@using BingVoiceSystem.WebMVC.Models
-@model RulesModel
+﻿@*@using BingVoiceSystem.WebMVC.Models*@
+@using BingVoiceSystem.Data
+@*@model RulesModel*@
+@model PendingRule
 @{
-    ViewBag.Title = "Add New Rule";
+    ViewBag.Title = "Edit Rule";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Add New Rule</title>
+    <title>Edit Rule</title>
 </head>
 <body>
-    <h2>Add New Rule</h2>
+    <h2>Edit Rule</h2>
     <hr />
     @using (Html.BeginForm())
     {
-        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.RuleID)
         <table class="table table-bordered">
             <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextAreaFor(x => x.Question, new { @class = "form-control", @rows = 5 })</td></tr>
             <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
         </table>
-        @Html.ValidationSummary()
 
-        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px"/>
-        @Html.ActionLink("Cancel", "RulesList", null, new { @class="btn btn-danger" });
+        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
+        @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-danger" });
     }
 </body>
 </html>

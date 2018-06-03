@@ -181,7 +181,7 @@ namespace BingVoiceSystem
             }
         }
 
-        public void EditRule(string question, string answer, string user, string table)
+        public void EditRule(int id, string question, string answer, string user, string table)
         {
             using (var db = new BingDBEntities())
             {
@@ -189,7 +189,7 @@ namespace BingVoiceSystem
                 {
                     case "ApprovedRules":
                         var apprule = (from r in db.ApprovedRules
-                                       where r.Question == question
+                                       where r.RuleID == id
                                        select r).First();
                         apprule.Question = question;
                         apprule.Answer = answer;
@@ -197,7 +197,7 @@ namespace BingVoiceSystem
                         break;
                     case "RejectedRules":
                         var rejrule = (from r in db.RejectedRules
-                                       where r.Question == question
+                                       where r.RuleID == id
                                        select r).First();
                         rejrule.Question = question;
                         rejrule.Answer = answer;
@@ -205,7 +205,7 @@ namespace BingVoiceSystem
                         break;
                     case "PendingRules":
                         var penrule = (from r in db.PendingRules
-                                       where r.Question == question
+                                       where r.RuleID == id
                                        select r).First();
                         penrule.Question = question;
                         penrule.Answer = answer;
@@ -292,6 +292,17 @@ namespace BingVoiceSystem
         public int CountRejected()
         {
             return PrintRejectedRules().Count;
+        }
+
+        public PendingRule SearchPendingRule(int id)
+        {
+            using (var db = new BingDBEntities())
+            {
+                var penrule = (from r in db.PendingRules
+                               where r.RuleID == id
+                               select r).First();
+                return penrule;
+            }
         }
     }
 }

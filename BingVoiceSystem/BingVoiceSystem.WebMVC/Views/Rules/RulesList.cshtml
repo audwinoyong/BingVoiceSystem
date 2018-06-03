@@ -27,7 +27,9 @@
                 <th>Question</th>
                 <th>Answer</th>
                 <th>Last Edited By</th>
-                <th>Action</th>
+                <th>Created By</th>
+                <th></th>
+                <th></th>
             </tr>
             @foreach (var Item in (List<PendingRule>)ViewBag.PendingRules)
             {
@@ -35,7 +37,9 @@
                     <td>@Item.Question</td>
                     <td>@Item.Answer</td>
                     <td>@Item.LastEditedBy</td>
-                    <td>@Html.ActionLink("Edit", "Edit") | @Html.ActionLink("Delete", "Delete")</td>
+                    <td>@Item.CreatedBy</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" })</td>
+                    <td>@Html.ActionLink("Delete", "Delete")</td>
                 </tr>
             }
         </table>
