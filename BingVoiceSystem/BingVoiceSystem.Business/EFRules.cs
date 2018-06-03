@@ -22,15 +22,72 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            using (var db = new BingDBEntities())
+            question = removePuncForQuery(question);
+            if (question.ToLower().StartsWith("what movies star "))
             {
-                var query = from r in db.ApprovedRules
-                            where r.Question.ToLower() == question.ToLower()
-                            select r.Answer;
-                string result = query.FirstOrDefault();
-                if (result != null)
+                question = question.Remove(0, 17);
+                using (var db = new BingDBEntities())
                 {
-                    return result;
+                    var query = from r in db.ApprovedRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower() && r.DataDriven == "Actor"
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            else if (question.ToLower().StartsWith("who stars in "))
+            {
+                question = question.Remove(0, 13);
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.ApprovedRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower() && r.DataDriven == "Movie"
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            else if (question.ToLower().StartsWith("what are some movies in "))
+            {
+                question = question.Remove(0, 24);
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.ApprovedRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower() && r.DataDriven == "Genre"
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            else
+            {
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.ApprovedRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower()
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
                 }
             }
             return "Sorry, no result was found for that query";
@@ -40,19 +97,81 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            //question = Regex.Replace(question, @"(\p{P}+)(?=\Z|\r\n)", "");
-            using (var db = new BingDBEntities())
+            question = removePuncForQuery(question);
+            if (question.ToLower().StartsWith("what movies star "))
             {
-                var query = from r in db.PendingRules
-                            where r.Question.ToLower() == question.ToLower()
-                            select r.Answer;
-                string result = query.FirstOrDefault();
-                if (result != null)
+                question = question.Remove(0, 17);
+                using (var db = new BingDBEntities())
                 {
-                    return result;
+                    var query = from r in db.PendingRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower() && r.DataDriven == "Actor"
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            else if (question.ToLower().StartsWith("who stars in "))
+            {
+                question = question.Remove(0, 13);
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.PendingRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower() && r.DataDriven == "Movie"
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            else if (question.ToLower().StartsWith("what are some movies in "))
+            {
+                question = question.Remove(0, 24);
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.PendingRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower() && r.DataDriven == "Genre"
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            else
+            {
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.PendingRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower()
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
                 }
             }
             return "Sorry, no result was found for that query";
+        }
+
+        public string removePuncForQuery(string question)
+        {
+            return question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
         }
 
         public bool AddRule(string question, string response, string user, string table)
@@ -162,7 +281,15 @@ namespace BingVoiceSystem
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                AddRule(penrule.Question, penrule.Answer, user, "ApprovedRules");
+                if (penrule.DataDriven.Equals("Actor") || penrule.DataDriven.Equals("Movie") ||
+                    penrule.DataDriven.Equals("Genre"))
+                {
+                    AddDataDrivenRule(penrule.Question, penrule.Answer, penrule.DataDriven, user, "ApprovedRules");
+                }
+                else
+                {
+                    AddRule(penrule.Question, penrule.Answer, user, "ApprovedRules");
+                }
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }
@@ -302,6 +429,88 @@ namespace BingVoiceSystem
                                where r.RuleID == id
                                select r).First();
                 return penrule;
+            }
+        }
+
+        public bool AddDataDrivenRule(string question, string response, string type, string user, string table)
+        {
+            //Returns false if either question or response is empty
+            if (question.Equals("") || response.Equals(""))
+            {
+                return false;
+            }
+
+            //Remove extra whitespace from the question
+            question = Regex.Replace(question, "\\s+", " ").Trim();
+            using (var db = new BingDBEntities())
+            {
+                switch (table)
+                {
+                    case "ApprovedRules":
+                        if (GetAnswer(question).Equals("Sorry, no result was found for that query"))
+                        {
+                            var apprule = new ApprovedRule
+                            {
+                                Question = question,
+                                Answer = response,
+                                ApprovedBy = user,
+                                DataDriven = type
+                            };
+                            db.ApprovedRules.Add(apprule);
+                        }
+                        else
+                        {
+                            var apprule = new ApprovedRule
+                            {
+                                Question = question,
+                                Answer = GetAnswer(question) + ", " + response,
+                                ApprovedBy = user,
+                                DataDriven = type
+                            };
+                            db.ApprovedRules.Add(apprule);
+                        }
+                        break;
+                    case "RejectedRules":
+                        var rejrule = new RejectedRule
+                        {
+                            Question = question,
+                            Answer = response,
+                            RejectedBy = user
+                        };
+                        db.RejectedRules.Add(rejrule);
+                        break;
+                    case "PendingRules":
+                        if (GetAnswerFromPending(question).Equals("Sorry, no result was found for that query"))
+                        {
+                            var penrule = new PendingRule
+                            {
+                                Question = question,
+                                Answer = response,
+                                LastEditedBy = user,
+                                CreatedBy = user,
+                                DataDriven = type
+                            };
+                            db.PendingRules.Add(penrule);
+                        }
+                        else
+                        {
+                            var penrule = new PendingRule
+                            {
+                                Question = question,
+                                Answer = GetAnswerFromPending(question) + ", " + response,
+                                LastEditedBy = user,
+                                CreatedBy = user,
+                                DataDriven = type
+                            };
+                            db.PendingRules.Add(penrule);
+                        }
+                        break;
+                    default:
+                        System.Diagnostics.Debug.WriteLine("Unknown table");
+                        return false;
+                }
+                db.SaveChanges();
+                return true;
             }
         }
 
