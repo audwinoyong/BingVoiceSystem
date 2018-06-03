@@ -284,6 +284,7 @@
     <Content Include="Views\Rules\RulesList.cshtml" />
     <Content Include="Views\Rules\Add.cshtml" />
     <Content Include="Views\Rules\Edit.cshtml" />
+    <Content Include="Views\Rules\Delete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

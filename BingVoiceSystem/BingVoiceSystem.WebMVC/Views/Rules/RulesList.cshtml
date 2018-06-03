@@ -39,7 +39,7 @@
                     <td>@Item.LastEditedBy</td>
                     <td>@Item.CreatedBy</td>
                     <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" })</td>
-                    <td>@Html.ActionLink("Delete", "Delete")</td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "PendingRules" })</td>
                 </tr>
             }
         </table>
