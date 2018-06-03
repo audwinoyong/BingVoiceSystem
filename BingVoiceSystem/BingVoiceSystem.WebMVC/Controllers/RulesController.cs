@@ -48,16 +48,6 @@ namespace BingVoiceSystem.WebMVC.Controllers
         {
             RulesList rulesList = new RulesList();
             return View(rulesList);
-
-            //List<PendingRule> PendingRulesList = db.PendingRules.ToList();
-            //List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
-            //List<RejectedRule> RejectedRulesList = db.RejectedRules.ToList();
-
-            //ViewBag.PendingRules = PendingRulesList;
-            //ViewBag.ApprovedRules = ApprovedRulesList;
-            //ViewBag.RejectedRules = RejectedRulesList;
-
-            //return View();
         }
 
         // GET: Rules/Add
