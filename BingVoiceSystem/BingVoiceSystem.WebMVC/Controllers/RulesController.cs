@@ -5,6 +5,7 @@ using System.Net;
 using System.Web.Mvc;
 using BingVoiceSystem.Data;
 using BingVoiceSystem.WebMVC.Models;
+using BingVoiceSystem.Business;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
@@ -45,15 +46,18 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // Show the list of all rules
         public ActionResult RulesList()
         {
-            List<PendingRule> PendingRulesList = db.PendingRules.ToList();
-            List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
-            List<RejectedRule> RejectedRulesList = db.RejectedRules.ToList();
+            RulesList rulesList = new RulesList();
+            return View(rulesList);
 
-            ViewBag.PendingRules = PendingRulesList;
-            ViewBag.ApprovedRules = ApprovedRulesList;
-            ViewBag.RejectedRules = RejectedRulesList;
+            //List<PendingRule> PendingRulesList = db.PendingRules.ToList();
+            //List<ApprovedRule> ApprovedRulesList = db.ApprovedRules.ToList();
+            //List<RejectedRule> RejectedRulesList = db.RejectedRules.ToList();
 
-            return View();
+            //ViewBag.PendingRules = PendingRulesList;
+            //ViewBag.ApprovedRules = ApprovedRulesList;
+            //ViewBag.RejectedRules = RejectedRulesList;
+
+            //return View();
         }
 
         // GET: Rules/Add

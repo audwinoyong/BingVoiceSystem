@@ -1,14 +1,15 @@
-﻿@using BingVoiceSystem.WebMVC.Models
-@using BingVoiceSystem.Data
-
-@model RulesModel
+﻿@using BingVoiceSystem.Business
+@model RulesList
+@*@using BingVoiceSystem.WebMVC.Models*@
+@*@using BingVoiceSystem.Data*@
+@*@model RulesModel*@
 @{
     ViewBag.Title = "Rules List";
     Layout = "~/Views/Shared/_Layout.cshtml";
 
-    var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
-    var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
-    var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
+    //var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
+    //var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
+    //var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
 }
 <!DOCTYPE html>
 <html>
@@ -20,7 +21,7 @@
     <h2>Rules List</h2>
     <hr />
     <h3>Pending</h3>
-    @if (PendingRules.Count > 0)
+    @if (Model.PendingRulesList.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
             <tr>
@@ -31,7 +32,7 @@
                 <th></th>
                 <th></th>
             </tr>
-            @foreach (var Item in (List<PendingRule>)ViewBag.PendingRules)
+            @foreach (var Item in Model.PendingRulesList)
             {
                 <tr>
                     <td>@Item.Question</td>
@@ -55,7 +56,7 @@
 
     <hr />
     <h3>Approved</h3>
-    @if (ApprovedRules.Count > 0)
+    @if (Model.ApprovedRulesList.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
             <tr>
@@ -64,7 +65,7 @@
                 <th>Approved By</th>
                 <th>Last Edited By</th>
             </tr>
-            @foreach (var Item in (List<ApprovedRule>)ViewBag.ApprovedRules)
+            @foreach (var Item in Model.ApprovedRulesList)
             {
                 <tr>
                     <td>@Item.Question</td>
@@ -82,7 +83,7 @@
 
     <hr />
     <h3>Rejected</h3>
-    @if (RejectedRules.Count > 0)
+    @if (Model.RejectedRulesList.Count > 0)
     {
         <table class="table table-bordered table-responsive table-hover">
             <tr>
@@ -91,7 +92,7 @@
                 <th>Rejected By</th>
                 <th>Last Edited By</th>
             </tr>
-            @foreach (var Item in (List<RejectedRule>)ViewBag.RejectedRules)
+            @foreach (var Item in Model.RejectedRulesList)
             {
                 <tr>
                     <td>@Item.Question</td>
