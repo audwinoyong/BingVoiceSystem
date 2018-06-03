@@ -88,7 +88,7 @@ namespace BingVoiceSystem
                         db.RejectedRules.Add(rejrule);
                         break;
                     case "PendingRules":
-                        if (!CheckExisting(question))
+                        if (CheckExisting(question))
                         {
                             return false;
                         }
@@ -304,5 +304,6 @@ namespace BingVoiceSystem
                 return penrule;
             }
         }
+
     }
 }

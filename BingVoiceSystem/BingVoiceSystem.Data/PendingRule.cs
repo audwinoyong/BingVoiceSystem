@@ -7,14 +7,18 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-
-public partial class PendingRule
+namespace BingVoiceSystem.Data
 {
-    public int RuleID { get; set; }
-    public string Question { get; set; }
-    public string Answer { get; set; }
-    public string LastEditedBy { get; set; }
-    public string CreatedBy { get; set; }
+    using System;
+    using System.Collections.Generic;
+    
+    public partial class PendingRule
+    {
+        public int RuleID { get; set; }
+        public string Question { get; set; }
+        public string Answer { get; set; }
+        public string LastEditedBy { get; set; }
+        public string CreatedBy { get; set; }
+        public string DataDriven { get; set; }
+    }
 }

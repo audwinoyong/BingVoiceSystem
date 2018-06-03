@@ -34,6 +34,7 @@
           <Property Name="ApprovedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DataDriven" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
@@ -106,6 +107,7 @@
           <Property Name="Answer" Type="varchar(max)" Nullable="false" />
           <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DataDriven" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RejectedRules">
           <Key>
@@ -117,6 +119,7 @@
           <Property Name="RejectedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DataDriven" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
           <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
@@ -252,7 +255,8 @@
           <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ApprovedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LastEditedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="String" Nullable="false" />
+          <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
+          <Property Name="DataDriven" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="AspNetRole">
           <Key>
@@ -324,6 +328,7 @@
           <Property Name="Answer" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="LastEditedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DataDriven" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="RejectedRule">
           <Key>
@@ -335,6 +340,7 @@
           <Property Name="RejectedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="LastEditedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreatedBy" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="DataDriven" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <Association Name="FK_ruleId">
           <End Role="ApprovedDataRuleQuestions" Type="Self.ApprovedDataRuleQuestion" Multiplicity="1" />
@@ -437,6 +443,7 @@
           <EntitySetMapping Name="ApprovedRules">
             <EntityTypeMapping TypeName="BingDBModel.ApprovedRule">
               <MappingFragment StoreEntitySet="ApprovedRules">
+                <ScalarProperty Name="DataDriven" ColumnName="DataDriven" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="RuleID" ColumnName="RuleID" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
@@ -505,6 +512,7 @@
           <EntitySetMapping Name="PendingRules">
             <EntityTypeMapping TypeName="BingDBModel.PendingRule">
               <MappingFragment StoreEntitySet="PendingRules">
+                <ScalarProperty Name="DataDriven" ColumnName="DataDriven" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="RuleID" ColumnName="RuleID" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
@@ -516,6 +524,7 @@
           <EntitySetMapping Name="RejectedRules">
             <EntityTypeMapping TypeName="BingDBModel.RejectedRule">
               <MappingFragment StoreEntitySet="RejectedRules">
+                <ScalarProperty Name="DataDriven" ColumnName="DataDriven" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="RuleID" ColumnName="RuleID" />
                 <ScalarProperty Name="Question" ColumnName="Question" />
