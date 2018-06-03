@@ -18,16 +18,36 @@
                 <th>Movie</th>
                 <th>Genre</th>
                 <th>Actor</th>
+                <th colspan="2">Action</th>
             </tr>
             @foreach (var Item in Model.DataList)
             {
-                <tr>
-                    <td>@Item[0]</td>
-                    <td>@Item[1]</td>
-                    <td>@Item[2]</td>
-                </tr>
+                for (int i = 0; i < Item.Actors.Count; i++)
+                {
+                    <tr>
+                        @if (i == 0)
+                        {
+                            <td rowspan="@Item.Actors.Count">@Item.Movie</td>
+                            <td rowspan="@Item.Actors.Count">@Item.Genre</td>
+
+                        }
+                        @if (Item.Actors.Count > i)
+                        {
+                            <td>@Item.Actors[i]</td>
+                        }
+                        @if (i == 0)
+                        {
+                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { id = Item.MovieId, table = "PendingRules" })</td>
+                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "Delete", new { id = Item.MovieId, table = "PendingRules" })</td>
+                        }
+                    </tr>
+                }
             }
         </table>
+
+        <form method="get" action="DataAdd">
+            <input type="submit" class="btn btn-primary" value="Add New Rule" />
+        </form>
     }
     else
     {

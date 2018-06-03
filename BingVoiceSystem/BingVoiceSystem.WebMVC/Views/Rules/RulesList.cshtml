@@ -1,15 +1,9 @@
 ﻿@using BingVoiceSystem.Business
 @model RulesList
-@*@using BingVoiceSystem.WebMVC.Models*@
-@*@using BingVoiceSystem.Data*@
-@*@model RulesModel*@
+
 @{
     ViewBag.Title = "Rules List";
     Layout = "~/Views/Shared/_Layout.cshtml";
-
-    //var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
-    //var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
-    //var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
 }
 <!DOCTYPE html>
 <html>
@@ -29,8 +23,7 @@
                 <th>Answer</th>
                 <th>Last Edited By</th>
                 <th>Created By</th>
-                <th></th>
-                <th></th>
+                <th colspan="2">Action</th>
             </tr>
             @foreach (var Item in Model.PendingRulesList)
             {
