@@ -29,8 +29,8 @@
                 <th>Answer</th>
                 <th>Last Edited By</th>
                 <th>Created By</th>
-                <th></th>
-                <th></th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
             </tr>
             @foreach (var Item in Model.PendingRulesList)
             {
@@ -39,8 +39,10 @@
                     <td>@Item.Answer</td>
                     <td>@Item.LastEditedBy</td>
                     <td>@Item.CreatedBy</td>
-                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" })</td>
-                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "PendingRules" })</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" }, new { @class = "btn btn-primary" })</td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "PendingRules" }, new { @class = "btn btn-danger" })</td>
+                    <td>@Html.ActionLink("Approve", "Approve", new { id = Item.RuleID }, new { @class = "btn btn-success" })</td>
+                    <td>@Html.ActionLink("Reject", "Reject", new { id = Item.RuleID }, new { @class = "btn btn-danger" })</td>
                 </tr>
             }
         </table>

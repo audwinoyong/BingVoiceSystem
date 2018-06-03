@@ -65,7 +65,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (rules.AddRule(model.Question, model.Answer, User.Identity.Name, "PendingRules"))
+                if (rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, "PendingRules"))
                 {
                     return RedirectToAction("RulesList");
                 }
@@ -136,5 +136,64 @@ namespace BingVoiceSystem.WebMVC.Controllers
             return RedirectToAction("RulesList");
         }
 
+        // GET: Rules/Approve/243
+        // Retrieve details of a rule to confirm approval
+        public ActionResult Approve(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var rule = rules.SearchPendingRule((int)id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            return View(rule);
+        }
+
+        // POST: Rules/Approve/243
+        // Approve a rule
+        [HttpPost, ActionName("Approve")]
+        public ActionResult ApproveConfirmed(int id)
+        {
+            var rule = rules.SearchPendingRule(id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            rules.ApproveRule(rule.Question, User.Identity.Name, rule.CreatedBy, rule.LastEditedBy);
+            return RedirectToAction("RulesList");
+        }
+
+        // GET: Rules/Reject/243
+        // Retrieve details of a rule to confirm rejection
+        public ActionResult Reject(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            var rule = rules.SearchPendingRule((int)id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            return View(rule);
+        }
+
+        // POST: Rules/Reject/243
+        // Reject a rule
+        [HttpPost, ActionName("Reject")]
+        public ActionResult RejectConfirmed(int id)
+        {
+            var rule = rules.SearchPendingRule(id);
+            if (rule == null)
+            {
+                return HttpNotFound();
+            }
+            rules.RejectRule(rule.Question, User.Identity.Name, rule.CreatedBy, rule.LastEditedBy);
+            return RedirectToAction("RulesList");
+        }
     }
 }

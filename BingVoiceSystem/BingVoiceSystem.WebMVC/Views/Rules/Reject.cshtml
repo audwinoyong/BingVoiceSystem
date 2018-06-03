@@ -1,0 +1,29 @@
+﻿@using BingVoiceSystem.Data
+@model PendingRule
+@{
+    ViewBag.Title = "Reject Rule";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Reject Rule</title>
+</head>
+<body>
+    <h2>Reject Rule</h2>
+    <h3>Confirm to reject this rule?</h3>
+    <hr />
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(x => x.RuleID)
+        <table class="table table-bordered">
+            <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.DisplayFor(x => x.Question)</td></tr>
+            <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.DisplayFor(x => x.Answer)</td></tr>
+        </table>
+
+        <input type="submit" class="btn btn-danger" value="Reject" style="padding-right: 10px" />
+        @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+    }
+</body>
+</html>
