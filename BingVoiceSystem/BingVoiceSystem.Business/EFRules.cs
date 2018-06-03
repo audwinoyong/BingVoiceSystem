@@ -25,7 +25,7 @@ namespace BingVoiceSystem
             using (var db = new BingDBEntities())
             {
                 var query = from r in db.ApprovedRules
-                            where r.Question == question
+                            where r.Question.ToLower() == question.ToLower()
                             select r.Answer;
                 string result = query.FirstOrDefault();
                 if (result != null)
@@ -44,7 +44,7 @@ namespace BingVoiceSystem
             using (var db = new BingDBEntities())
             {
                 var query = from r in db.PendingRules
-                            where r.Question == question
+                            where r.Question.ToLower() == question.ToLower()
                             select r.Answer;
                 string result = query.FirstOrDefault();
                 if (result != null)
@@ -88,7 +88,7 @@ namespace BingVoiceSystem
                         db.RejectedRules.Add(rejrule);
                         break;
                     case "PendingRules":
-                        if (CheckExisting(question))
+                        if (!CheckExisting(question))
                         {
                             return false;
                         }
@@ -144,7 +144,7 @@ namespace BingVoiceSystem
 
         public bool CheckExisting(string question)
         {
-            if (GetAnswer(question).Equals("Sorry, no result was found for that query") ||
+            if (GetAnswer(question).Equals("Sorry, no result was found for that query") &&
                 GetAnswerFromPending(question).Equals("Sorry, no result was found for that query"))
             {
                 return true;
