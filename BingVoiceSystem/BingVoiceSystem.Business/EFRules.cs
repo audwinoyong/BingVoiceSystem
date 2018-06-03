@@ -174,7 +174,7 @@ namespace BingVoiceSystem
                 Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
         }
 
-        public bool AddRule(string question, string response, string user, string table)
+        public bool AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string table)
         {
             //Returns false if either question or response is empty
             if (question.Equals("") || response.Equals(""))
@@ -193,7 +193,9 @@ namespace BingVoiceSystem
                         {
                             Question = question,
                             Answer = response,
-                            ApprovedBy = user
+                            ApprovedBy = user,
+                            LastEditedBy = lastEditedBy,
+                            CreatedBy = createdBy
                         };
                         db.ApprovedRules.Add(apprule);
                         break;
@@ -202,7 +204,9 @@ namespace BingVoiceSystem
                         {
                             Question = question,
                             Answer = response,
-                            RejectedBy = user
+                            RejectedBy = user,
+                            LastEditedBy = lastEditedBy,
+                            CreatedBy = createdBy
                         };
                         db.RejectedRules.Add(rejrule);
                         break;
@@ -274,35 +278,38 @@ namespace BingVoiceSystem
             }
         }
 
-        public void ApproveRule(string question, string user)
+        public void ApproveRule(string question, string user, string createdBy, string lastEditedBy)
         {
             using (var db = new BingDBEntities())
             {
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                if (penrule.DataDriven.Equals("Actor") || penrule.DataDriven.Equals("Movie") ||
-                    penrule.DataDriven.Equals("Genre"))
+                if (penrule.DataDriven != null)
                 {
-                    AddDataDrivenRule(penrule.Question, penrule.Answer, penrule.DataDriven, user, "ApprovedRules");
+                    if (penrule.DataDriven.Equals("Actor") || penrule.DataDriven.Equals("Movie") ||
+                    penrule.DataDriven.Equals("Genre"))
+                    {
+                        AddDataDrivenRule(penrule.Question, penrule.Answer, penrule.DataDriven, user, "ApprovedRules");
+                    }
                 }
                 else
                 {
-                    AddRule(penrule.Question, penrule.Answer, user, "ApprovedRules");
+                    AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, "ApprovedRules");
                 }
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }
         }
 
-        public void RejectRule(string question, string user)
+        public void RejectRule(string question, string user, string createdBy, string lastEditedBy)
         {
             using (var db = new BingDBEntities())
             {
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                AddRule(penrule.Question, penrule.Answer, user, "RejectedRules");
+                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, "RejectedRules");
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }

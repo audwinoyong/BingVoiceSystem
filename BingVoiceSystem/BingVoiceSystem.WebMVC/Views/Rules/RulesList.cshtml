@@ -1,9 +1,15 @@
 ﻿@using BingVoiceSystem.Business
 @model RulesList
-
+@*@using BingVoiceSystem.WebMVC.Models*@
+@*@using BingVoiceSystem.Data*@
+@*@model RulesModel*@
 @{
     ViewBag.Title = "Rules List";
     Layout = "~/Views/Shared/_Layout.cshtml";
+
+    //var PendingRules = (List<PendingRule>)ViewBag.PendingRules;
+    //var ApprovedRules = (List<ApprovedRule>)ViewBag.ApprovedRules;
+    //var RejectedRules = (List<RejectedRule>)ViewBag.RejectedRules;
 }
 <!DOCTYPE html>
 <html>
@@ -23,7 +29,8 @@
                 <th>Answer</th>
                 <th>Last Edited By</th>
                 <th>Created By</th>
-                <th colspan="2">Action</th>
+                <th colspan="2"></th>
+                <th colspan="2"></th>
             </tr>
             @foreach (var Item in Model.PendingRulesList)
             {
@@ -32,8 +39,10 @@
                     <td>@Item.Answer</td>
                     <td>@Item.LastEditedBy</td>
                     <td>@Item.CreatedBy</td>
-                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" })</td>
-                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "PendingRules" })</td>
+                    <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" }, new { @class = "btn btn-primary" })</td>
+                    <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "PendingRules" }, new { @class = "btn btn-danger" })</td>
+                    <td>@Html.ActionLink("Approve", "Approve", new { id = Item.RuleID }, new { @class = "btn btn-success" })</td>
+                    <td>@Html.ActionLink("Reject", "Reject", new { id = Item.RuleID }, new { @class = "btn btn-danger" })</td>
                 </tr>
             }
         </table>

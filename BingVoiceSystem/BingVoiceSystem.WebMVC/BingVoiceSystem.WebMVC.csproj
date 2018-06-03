@@ -216,7 +216,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\DataModel.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\RulesModel.cs" />
@@ -288,8 +287,8 @@
     <Content Include="Views\Rules\Edit.cshtml" />
     <Content Include="Views\Rules\Delete.cshtml" />
     <Content Include="Views\Data\DataList.cshtml" />
-    <Content Include="Views\Data\DataEdit.cshtml" />
-    <Content Include="Views\Data\DataAdd.cshtml" />
+    <Content Include="Views\Rules\Approve.cshtml" />
+    <Content Include="Views\Rules\Reject.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
