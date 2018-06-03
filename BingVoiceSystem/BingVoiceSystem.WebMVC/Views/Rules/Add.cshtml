@@ -21,9 +21,10 @@
             <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
         </table>
         @Html.ValidationSummary()
+        <p class="text-danger">@ViewBag.DuplicateError</p>
 
-        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px"/>
-        @Html.ActionLink("Cancel", "RulesList", null, new { @class="btn btn-danger" });
+        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
+        @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-danger" });
     }
 </body>
 </html>

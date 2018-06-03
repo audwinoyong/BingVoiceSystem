@@ -52,6 +52,7 @@
     <Compile Include="EditorReport.cs" />
     <Compile Include="EFRules.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RulesList.cs" />
     <Compile Include="RulesReport.cs" />
   </ItemGroup>
   <ItemGroup>
