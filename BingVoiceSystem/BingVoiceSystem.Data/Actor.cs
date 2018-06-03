@@ -14,7 +14,8 @@ namespace BingVoiceSystem.Data
     
     public partial class Actor
     {
-        public string Movie { get; set; }
-        public string Actor1 { get; set; }
+        public string ActorName { get; set; }
+        public int ActorID { get; set; }
+        public string MovieName { get; set; }
     }
 }

@@ -14,7 +14,8 @@ namespace BingVoiceSystem.Data
     
     public partial class Genre
     {
-        public string Movie { get; set; }
-        public string Genre1 { get; set; }
+        public int GenreID { get; set; }
+        public string GenreType { get; set; }
+        public string MovieName { get; set; }
     }
 }

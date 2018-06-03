@@ -36,6 +36,6 @@ namespace BingVoiceSystem.Data
         public virtual DbSet<RejectedRule> RejectedRules { get; set; }
         public virtual DbSet<Actor> Actors { get; set; }
         public virtual DbSet<Genre> Genres { get; set; }
-        public virtual DbSet<Movy> Movies { get; set; }
+        public virtual DbSet<Movies> Movies { get; set; }
     }
 }

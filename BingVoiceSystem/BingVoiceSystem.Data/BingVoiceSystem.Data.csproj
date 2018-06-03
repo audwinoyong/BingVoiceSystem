@@ -107,7 +107,7 @@
     <Compile Include="Genre.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Movy.cs">
+    <Compile Include="Movies.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="PendingRule.cs">
