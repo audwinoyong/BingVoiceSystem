@@ -2,7 +2,7 @@
 //using BingVoiceSystem.WebMVC.Models;
 using System.Linq;
 using System.Collections.Generic;
-
+using System;
 
 namespace BingVoiceSystem.Business
 {
@@ -46,6 +46,31 @@ namespace BingVoiceSystem.Business
 
                 return true;
             }
+        }
+
+        //Splits a string into a List of values. Determines item by separation of ';'.
+        public List<string> ActorsFromString(string actors)
+        {
+            List<string> Actors = new List<string>();
+            string actor = "";
+            for(int i = 0; i < actors.Length; i++)
+            {
+                if (i == actors.Length - 1 && !actors[i].Equals(';'))
+                {
+                    actor += actors[i];
+                    Actors.Add(actor);
+                }
+                else if (!actors[i].Equals(';'))
+                {
+                    actor += actors[i];
+                }
+                else
+                {
+                    Actors.Add(actor);
+                    actor = "";
+                }
+            }
+            return Actors;
         }
     }
 }

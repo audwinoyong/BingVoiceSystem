@@ -16,7 +16,7 @@
         <table class="table table-bordered">
             <tr><td>@Html.LabelFor(x => x.MovieName, "Movie Name")</td><td>@Html.TextAreaFor(x => x.MovieName, new { @class = "form-control" })</td></tr>
             <tr><td>@Html.LabelFor(x => x.Genre, "Genre")</td><td>@Html.TextAreaFor(x => x.Genre, new { @class = "form-control" })</td></tr>
-            <tr><td>@Html.LabelFor(x => x.Actors, "Actors")</td><td>@Html.TextAreaFor(x => x.Actors, new { @class = "form-control", @rows = 5 })</td></tr>
+            <tr><td>@Html.LabelFor(x => x.Actors, "Actors (Separate each actor by ';')")</td><td>@Html.TextAreaFor(x => x.Actors, new { @class = "form-control", @rows = 5 })</td></tr>
         </table>
 
         @Html.ValidationSummary()

@@ -7,8 +7,6 @@ namespace BingVoiceSystem.WebMVC.Controllers
 {
     public class DataController : Controller
     {
-        private Business.Data data = new Business.Data();
-
         public ActionResult Index()
         {
             return View();
@@ -36,11 +34,12 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult AddData([Bind(Include = "MovieName,Genre,Actors")] DataModel model)
         {
+            Business.Data data = new Business.Data();
             if (ModelState.IsValid)
             {
-                if (data.AddData(model.MovieName, model.Genre, GetActors(), User.Identity.Name))
+                if (data.AddData(model.MovieName, model.Genre, data.ActorsFromString(model.Actors), User.Identity.Name))
                 {
-                    return RedirectToAction("RulesList");
+                    return RedirectToAction("DataList");
                 }
                 else
                 {
