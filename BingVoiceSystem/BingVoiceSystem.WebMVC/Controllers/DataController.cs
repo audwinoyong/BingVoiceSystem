@@ -2,6 +2,7 @@
 using BingVoiceSystem.WebMVC.Models;
 using BingVoiceSystem.Business;
 using System.Collections.Generic;
+using System.Net;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
@@ -53,11 +54,58 @@ namespace BingVoiceSystem.WebMVC.Controllers
             }
         }
 
-        public List<string> GetActors()
+        // GET: Rules/Edit/243?table=PendingRules
+        // Show an edit form to edit an existing rule
+        public ActionResult Edit(int? id, string table)
         {
-            List<string> actors = new List<string>();
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
 
-            return actors;
+            var data = data.S
+            switch (table)
+            {
+                case "ApprovedRules":
+                    var apprule = rules.SearchApprovedRule((int)id);
+                    if (apprule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            ApprovedRule = apprule
+                        }
+                    );
+                case "RejectedRules":
+                    var rejrule = rules.SearchRejectedRule((int)id);
+                    if (rejrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            RejectedRule = rejrule
+                        }
+                    );
+                case "PendingRules":
+                    var penrule = rules.SearchPendingRule((int)id);
+                    if (penrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            PendingRule = penrule
+                        }
+                    );
+                default:
+                    System.Diagnostics.Debug.WriteLine("Unknown table");
+                    return View();
+            }
         }
     }
 }

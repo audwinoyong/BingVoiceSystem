@@ -72,5 +72,16 @@ namespace BingVoiceSystem.Business
             }
             return Actors;
         }
+
+        public DataList SearchData(int id)
+        {
+            using (var db = new BingDBEntities())
+            {
+                return new DataList
+                {
+                    Movie
+                }
+            }
+        }
     }
 }
