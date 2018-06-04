@@ -1,5 +1,5 @@
-﻿@using BingVoiceSystem.Data
-@model PendingRule
+﻿@using BingVoiceSystem.WebMVC.Models
+@model RulesModel
 @{
     ViewBag.Title = "Delete Rule";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -14,16 +14,47 @@
     <h2>Delete Rule</h2>
     <h3>Confirm to delete this rule?</h3>
     <hr />
-    @using (Html.BeginForm())
+    @if (Model.PendingRule.RuleID != 0)
     {
-        @Html.HiddenFor(x => x.RuleID)
-        <table class="table table-bordered">
-            <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.DisplayFor(x => x.Question)</td></tr>
-            <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Html.DisplayFor(x => x.Answer)</td></tr>
-        </table>
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.PendingRule.RuleID)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.PendingRule.Question, "Question")</td><td>@Html.DisplayFor(x => x.PendingRule.Question)</td></tr>
+                <tr><td>@Html.LabelFor(x => x.PendingRule.Answer, "Answer")</td><td>@Html.DisplayFor(x => x.PendingRule.Answer)</td></tr>
+            </table>
 
-        <input type="submit" class="btn btn-danger" value="Delete" style="padding-right: 10px" />
-        @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+            <input type="submit" class="btn btn-danger" value="Delete" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+        }
+    }
+    else if (Model.ApprovedRule.RuleID != 0)
+    {
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.ApprovedRule.RuleID)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.ApprovedRule.Question, "Question")</td><td>@Html.DisplayFor(x => x.ApprovedRule.Question)</td></tr>
+                <tr><td>@Html.LabelFor(x => x.ApprovedRule.Answer, "Answer")</td><td>@Html.DisplayFor(x => x.ApprovedRule.Answer)</td></tr>
+            </table>
+
+            <input type="submit" class="btn btn-danger" value="Delete" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+        }
+    }
+    else if (Model.RejectedRule.RuleID != 0)
+    {
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.RejectedRule.RuleID)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.RejectedRule.Question, "Question")</td><td>@Html.DisplayFor(x => x.RejectedRule.Question)</td></tr>
+                <tr><td>@Html.LabelFor(x => x.RejectedRule.Answer, "Answer")</td><td>@Html.DisplayFor(x => x.RejectedRule.Answer)</td></tr>
+            </table>
+
+            <input type="submit" class="btn btn-danger" value="Delete" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
+        }
     }
 </body>
 </html>

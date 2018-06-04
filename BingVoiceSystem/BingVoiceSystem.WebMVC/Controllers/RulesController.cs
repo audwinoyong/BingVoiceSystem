@@ -143,25 +143,86 @@ namespace BingVoiceSystem.WebMVC.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            var rule = rules.SearchPendingRule((int)id);
-            if (rule == null)
+
+            switch (table)
             {
-                return HttpNotFound();
+                case "ApprovedRules":
+                    var apprule = rules.SearchApprovedRule((int)id);
+                    if (apprule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            ApprovedRule = apprule
+                        }
+                    );
+                case "RejectedRules":
+                    var rejrule = rules.SearchRejectedRule((int)id);
+                    if (rejrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            RejectedRule = rejrule
+                        }
+                    );
+                case "PendingRules":
+                    var penrule = rules.SearchPendingRule((int)id);
+                    if (penrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    return View(
+                        new RulesModel
+                        {
+                            PendingRule = penrule
+                        }
+                    );
+                default:
+                    System.Diagnostics.Debug.WriteLine("Unknown table");
+                    return View();
             }
-            return View(rule);
         }
 
         // POST: Rules/Delete/243?table=PendingRules
         // Delete a rule
         [HttpPost, ActionName("Delete")]
-        public ActionResult DeleteConfirmed(int id)
+        public ActionResult DeleteConfirmed(int id, string table)
         {
-            var rule = rules.SearchPendingRule(id);
-            if (rule == null)
+            switch (table)
             {
-                return HttpNotFound();
+                case "ApprovedRules":
+                    var apprule = rules.SearchApprovedRule(id);
+                    if (apprule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    rules.DeleteRule(apprule.Question, "ApprovedRules");
+                    break;
+                case "RejectedRules":
+                    var rejrule = rules.SearchRejectedRule(id);
+                    if (rejrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    rules.DeleteRule(rejrule.Question, "RejectedRules");
+                    break;
+                case "PendingRules":
+                    var penrule = rules.SearchPendingRule(id);
+                    if (penrule == null)
+                    {
+                        return HttpNotFound();
+                    }
+                    rules.DeleteRule(penrule.Question, "PendingRules");
+                    break;
+                default:
+                    System.Diagnostics.Debug.WriteLine("Unknown table");
+                    return RedirectToAction("RulesList");
             }
-            rules.DeleteRule(rule.Question, "PendingRules");
             return RedirectToAction("RulesList");
         }
 
