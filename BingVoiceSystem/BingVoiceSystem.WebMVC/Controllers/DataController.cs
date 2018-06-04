@@ -24,11 +24,6 @@ namespace BingVoiceSystem.WebMVC.Controllers
             return View();
         }
 
-        public ActionResult ActorAdd()
-        {
-            return View();
-        }
-
         // POST: Data/DataAdd
         // Add a Pending Rule based on the supplied data
         [HttpPost]
@@ -54,57 +49,18 @@ namespace BingVoiceSystem.WebMVC.Controllers
             }
         }
 
-        // GET: Rules/Edit/243?table=PendingRules
-        // Show an edit form to edit an existing rule
-        public ActionResult Edit(int? id, string table)
+        // GET: Data/DataEdit
+        // Show an edit form to edit an existing data
+        public ActionResult DataEdit(string MovieName)
         {
-            if (id == null)
+            if (MovieName == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            var data = data.S
-            switch (table)
+            else
             {
-                case "ApprovedRules":
-                    var apprule = rules.SearchApprovedRule((int)id);
-                    if (apprule == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    return View(
-                        new RulesModel
-                        {
-                            ApprovedRule = apprule
-                        }
-                    );
-                case "RejectedRules":
-                    var rejrule = rules.SearchRejectedRule((int)id);
-                    if (rejrule == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    return View(
-                        new RulesModel
-                        {
-                            RejectedRule = rejrule
-                        }
-                    );
-                case "PendingRules":
-                    var penrule = rules.SearchPendingRule((int)id);
-                    if (penrule == null)
-                    {
-                        return HttpNotFound();
-                    }
-                    return View(
-                        new RulesModel
-                        {
-                            PendingRule = penrule
-                        }
-                    );
-                default:
-                    System.Diagnostics.Debug.WriteLine("Unknown table");
-                    return View();
+                Business.Data data = new Business.Data();
+                return View(new DataModel { DataList = data.SearchData(MovieName) });
             }
         }
     }

@@ -10,21 +10,24 @@
 <body>
     <h2>Edit Data</h2>
     <hr />
-    @using (Html.BeginForm())
+    @if (Model.MovieName != null)
     {
-        @Html.HiddenFor(x => x.MovieId)
-        <table class="table table-bordered">
-            <tr><td>@Html.LabelFor(x => x.MovieName, "Movie Name")</td><td>@Html.TextAreaFor(x => x.MovieName, new { @class = "form-control" })</td></tr>
-            <tr><td>@Html.LabelFor(x => x.Genre, "Genre")</td><td>@Html.TextAreaFor(x => x.Genre, new { @class = "form-control" })</td></tr>
-            <tr><td>@Html.LabelFor(x => x.Actors, "Actors (Separate each actor by ';')")</td><td>@Html.TextAreaFor(x => x.Actors, new { @class = "form-control", @rows = 5 })</td></tr>
-        </table>
+        using (Html.BeginForm())
+        {
+            @Html.HiddenFor(x => x.MovieId)
+            <table class="table table-bordered">
+                <tr><td>@Html.LabelFor(x => x.MovieName, "Movie Name")</td><td>@Html.TextAreaFor(x => x.MovieName, new { @class = "form-control" })</td></tr>
+                <tr><td>@Html.LabelFor(x => x.Genre, "Genre")</td><td>@Html.TextAreaFor(x => x.Genre, new { @class = "form-control" })</td></tr>
+                <tr><td>@Html.LabelFor(x => x.Actors, "Actors (Separate each actor by ';')")</td><td>@Html.TextAreaFor(x => x.Actors, new { @class = "form-control", @rows = 5 })</td></tr>
+            </table>
 
-        <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
-        @Html.ActionLink("Cancel", "DataList", null, new { @class = "btn btn-danger" });
+            <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
+            @Html.ActionLink("Cancel", "DataList", null, new { @class = "btn btn-danger" });
+        }
     }
-
-    <form method="get" action="Add">
-        <input type="submit" class="btn btn-primary" value="Add New Rule" />
-    </form>
+    else
+    { 
+            <h4>There is no data to display.</h4>
+    }
 </body>
 </html>

@@ -37,8 +37,8 @@
                         }
                         @if (i == 0)
                         {
-                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { id = Item.MovieId, table = "PendingRules" })</td>
-                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "Delete", new { id = Item.MovieId, table = "PendingRules" })</td>
+                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { MovieName = Item.Movie }, new { @class = "btn btn-primary" })</td>
+                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "Delete", new { MovieName = Item.Movie }, new { @class = "btn btn-danger" })</td>
                         }
                     </tr>
                 }

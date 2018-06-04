@@ -53,7 +53,7 @@ namespace BingVoiceSystem.Business
         {
             List<string> Actors = new List<string>();
             string actor = "";
-            for(int i = 0; i < actors.Length; i++)
+            for (int i = 0; i < actors.Length; i++)
             {
                 if (i == actors.Length - 1 && !actors[i].Equals(';'))
                 {
@@ -73,15 +73,18 @@ namespace BingVoiceSystem.Business
             return Actors;
         }
 
-        public DataList SearchData(int id)
+        public DataList SearchData(string MovieName)
         {
+            string Genre;
+            List<string> Actors;
+
             using (var db = new BingDBEntities())
             {
-                return new DataList
-                {
-                    Movie
-                }
+                Genre = db.Genres.Where(q => q.MovieName == MovieName).Select(q => q.GenreType).ToList()[0];
+                Actors = db.Actors.Where(q => q.MovieName == MovieName).Select(q => q.ActorName).ToList();
             }
+
+            return new DataList { Movie = MovieName, Genre = Genre, Actors = Actors };
         }
     }
 }
