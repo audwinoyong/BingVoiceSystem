@@ -19,7 +19,7 @@
         <AssociationConnector Association="BingDBModel.AspNetUserRoles" ManuallyRouted="false" />
         <EntityTypeShape EntityType="BingDBModel.Actor" Width="1.5" PointX="10.75" PointY="0.75" />
         <EntityTypeShape EntityType="BingDBModel.Genre" Width="1.5" PointX="0.75" PointY="10.75" />
-        <EntityTypeShape EntityType="BingDBModel.Movies" Width="1.5" PointX="2.75" PointY="10.75" />
+        <EntityTypeShape EntityType="BingDBModel.Movies" Width="1.5" PointX="2.75" PointY="10.75" IsExpanded="true" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

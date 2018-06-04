@@ -8,7 +8,7 @@ namespace BingVoiceSystem.WebMVC.Models
 {
     public class DataModel
     {
-        public int MovieId { get; set; }
+        public int MovieID { get; set; }
 
         public string MovieName { get; set; }
 
@@ -17,5 +17,7 @@ namespace BingVoiceSystem.WebMVC.Models
         public string Actors { get; set; }
 
         public DataList DataList { get; set; }
+
+        public string ActorString { get; set; }
     }
 }

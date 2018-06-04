@@ -15,8 +15,8 @@ namespace BingVoiceSystem.Data
     public partial class Movies
     {
         public string MovieName { get; set; }
-        public int MovieId { get; set; }
         public string LastEditedBy { get; set; }
         public string CreatedBy { get; set; }
+        public int MovieID { get; set; }
     }
 }

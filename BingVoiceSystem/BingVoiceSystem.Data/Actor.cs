@@ -16,6 +16,6 @@ namespace BingVoiceSystem.Data
     {
         public string ActorName { get; set; }
         public int ActorID { get; set; }
-        public string MovieName { get; set; }
+        public int MovieID { get; set; }
     }
 }

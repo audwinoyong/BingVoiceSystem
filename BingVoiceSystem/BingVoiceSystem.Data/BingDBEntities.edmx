@@ -4,59 +4,59 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl" Alias="Self" Namespace="BingDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012">
+    <Schema Namespace="BingDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="__MigrationHistory">
           <Key>
             <PropertyRef Name="MigrationId" />
             <PropertyRef Name="ContextKey" />
           </Key>
-          <Property Name="MigrationId" Nullable="false" MaxLength="150" Type="nvarchar" />
-          <Property Name="ContextKey" Nullable="false" MaxLength="300" Type="nvarchar" />
-          <Property Name="Model" Nullable="false" Type="varbinary(max)" />
-          <Property Name="ProductVersion" Nullable="false" MaxLength="32" Type="nvarchar" />
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ContextKey" Type="nvarchar" MaxLength="300" Nullable="false" />
+          <Property Name="Model" Type="varbinary(max)" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
         </EntityType>
         <EntityType Name="Actors">
           <Key>
             <PropertyRef Name="ActorID" />
           </Key>
-          <Property Name="ActorID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="MovieName" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="ActorName" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="ActorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieID" Type="int" Nullable="false" />
+          <Property Name="ActorName" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="ApprovedDataRuleQuestions">
           <Key>
             <PropertyRef Name="QuestionID" />
           </Key>
-          <Property Name="QuestionID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="Question" Nullable="false" MaxLength="1000" Type="varchar" />
-          <Property Name="ApprovedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="LastEditedBy" MaxLength="128" Type="nvarchar" />
+          <Property Name="QuestionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="ApprovedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
         </EntityType>
         <EntityType Name="ApprovedRules">
           <Key>
             <PropertyRef Name="RuleID" />
           </Key>
-          <Property Name="RuleID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="Question" Nullable="false" MaxLength="1000" Type="varchar" />
-          <Property Name="Answer" Nullable="false" Type="varchar(max)" />
-          <Property Name="ApprovedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="LastEditedBy" MaxLength="128" Type="nvarchar" />
-          <Property Name="CreatedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="DataDriven" MaxLength="50" Type="varchar" />
+          <Property Name="RuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Answer" Type="varchar(max)" Nullable="false" />
+          <Property Name="ApprovedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DataDriven" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="AspNetRoles">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="Name" Nullable="false" MaxLength="256" Type="nvarchar" />
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityType Name="AspNetUserClaims">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
           <Property Name="ClaimType" Type="nvarchar(max)" />
           <Property Name="ClaimValue" Type="nvarchar(max)" />
         </EntityType>
@@ -66,80 +66,80 @@
             <PropertyRef Name="ProviderKey" />
             <PropertyRef Name="UserId" />
           </Key>
-          <Property Name="LoginProvider" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="ProviderKey" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="LoginProvider" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="ProviderKey" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="AspNetUserRoles">
           <Key>
             <PropertyRef Name="UserId" />
             <PropertyRef Name="RoleId" />
           </Key>
-          <Property Name="UserId" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="RoleId" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="UserId" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="RoleId" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="Email" MaxLength="256" Type="nvarchar" />
-          <Property Name="EmailConfirmed" Nullable="false" Type="bit" />
+          <Property Name="Id" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="256" />
+          <Property Name="EmailConfirmed" Type="bit" Nullable="false" />
           <Property Name="PasswordHash" Type="nvarchar(max)" />
           <Property Name="SecurityStamp" Type="nvarchar(max)" />
           <Property Name="PhoneNumber" Type="nvarchar(max)" />
-          <Property Name="PhoneNumberConfirmed" Nullable="false" Type="bit" />
-          <Property Name="TwoFactorEnabled" Nullable="false" Type="bit" />
+          <Property Name="PhoneNumberConfirmed" Type="bit" Nullable="false" />
+          <Property Name="TwoFactorEnabled" Type="bit" Nullable="false" />
           <Property Name="LockoutEndDateUtc" Type="datetime" />
-          <Property Name="LockoutEnabled" Nullable="false" Type="bit" />
-          <Property Name="AccessFailedCount" Nullable="false" Type="int" />
-          <Property Name="UserName" Nullable="false" MaxLength="256" Type="nvarchar" />
+          <Property Name="LockoutEnabled" Type="bit" Nullable="false" />
+          <Property Name="AccessFailedCount" Type="int" Nullable="false" />
+          <Property Name="UserName" Type="nvarchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityType Name="Genres">
           <Key>
             <PropertyRef Name="GenreID" />
           </Key>
-          <Property Name="GenreID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="MovieName" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="GenreType" Nullable="false" MaxLength="128" Type="nvarchar" />
+          <Property Name="GenreID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieID" Type="int" Nullable="false" />
+          <Property Name="GenreType" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="Movies">
           <Key>
-            <PropertyRef Name="MovieId" />
+            <PropertyRef Name="MovieID" />
           </Key>
-          <Property Name="MovieId" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="MovieName" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="LastEditedBy" MaxLength="128" Type="nvarchar" />
-          <Property Name="CreatedBy" MaxLength="128" Type="nvarchar" />
+          <Property Name="MovieID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MovieName" Type="nvarchar" MaxLength="128" Nullable="false" StoreGeneratedPattern="None" />
+          <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
         </EntityType>
         <EntityType Name="PendingRules">
           <Key>
             <PropertyRef Name="RuleID" />
           </Key>
-          <Property Name="RuleID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="Question" Nullable="false" MaxLength="1000" Type="varchar" />
-          <Property Name="Answer" Nullable="false" Type="varchar(max)" />
-          <Property Name="LastEditedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="CreatedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="DataDriven" MaxLength="50" Type="nvarchar" />
+          <Property Name="RuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Answer" Type="varchar(max)" Nullable="false" />
+          <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DataDriven" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="RejectedRules">
           <Key>
             <PropertyRef Name="RuleID" />
           </Key>
-          <Property Name="RuleID" Nullable="false" StoreGeneratedPattern="Identity" Type="int" />
-          <Property Name="Question" Nullable="false" MaxLength="1000" Type="varchar" />
-          <Property Name="Answer" Nullable="false" Type="varchar(max)" />
-          <Property Name="RejectedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="LastEditedBy" MaxLength="128" Type="nvarchar" />
-          <Property Name="CreatedBy" Nullable="false" MaxLength="128" Type="nvarchar" />
-          <Property Name="DataDriven" MaxLength="50" Type="nvarchar" />
+          <Property Name="RuleID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Question" Type="varchar" MaxLength="1000" Nullable="false" />
+          <Property Name="Answer" Type="varchar(max)" Nullable="false" />
+          <Property Name="RejectedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="LastEditedBy" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="DataDriven" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <Association Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-          <End Type="Self.AspNetUsers" Multiplicity="1" Role="AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Self.AspNetUserClaims" Multiplicity="*" Role="AspNetUserClaims" />
+          <End Role="AspNetUserClaims" Type="Self.AspNetUserClaims" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -150,10 +150,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-          <End Type="Self.AspNetUsers" Multiplicity="1" Role="AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Self.AspNetUserLogins" Multiplicity="*" Role="AspNetUserLogins" />
+          <End Role="AspNetUserLogins" Type="Self.AspNetUserLogins" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -164,10 +164,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
-          <End Type="Self.AspNetRoles" Multiplicity="1" Role="AspNetRoles">
+          <End Role="AspNetRoles" Type="Self.AspNetRoles" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Self.AspNetUserRoles" Multiplicity="*" Role="AspNetUserRoles" />
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetRoles">
               <PropertyRef Name="Id" />
@@ -178,10 +178,10 @@
           </ReferentialConstraint>
         </Association>
         <Association Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-          <End Type="Self.AspNetUsers" Multiplicity="1" Role="AspNetUsers">
+          <End Role="AspNetUsers" Type="Self.AspNetUsers" Multiplicity="1">
             <OnDelete Action="Cascade" />
           </End>
-          <End Type="Self.AspNetUserRoles" Multiplicity="*" Role="AspNetUserRoles" />
+          <End Role="AspNetUserRoles" Type="Self.AspNetUserRoles" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="AspNetUsers">
               <PropertyRef Name="Id" />
@@ -206,20 +206,20 @@
           <EntitySet Name="PendingRules" EntityType="Self.PendingRules" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RejectedRules" EntityType="Self.RejectedRules" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserClaims_dbo_AspNetUsers_UserId">
-            <End EntitySet="AspNetUsers" Role="AspNetUsers" />
-            <End EntitySet="AspNetUserClaims" Role="AspNetUserClaims" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserClaims" EntitySet="AspNetUserClaims" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserLogins_dbo_AspNetUsers_UserId">
-            <End EntitySet="AspNetUsers" Role="AspNetUsers" />
-            <End EntitySet="AspNetUserLogins" Role="AspNetUserLogins" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserLogins" EntitySet="AspNetUserLogins" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetRoles_RoleId">
-            <End EntitySet="AspNetRoles" Role="AspNetRoles" />
-            <End EntitySet="AspNetUserRoles" Role="AspNetUserRoles" />
+            <End Role="AspNetRoles" EntitySet="AspNetRoles" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
           <AssociationSet Name="FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId" Association="Self.FK_dbo_AspNetUserRoles_dbo_AspNetUsers_UserId">
-            <End EntitySet="AspNetUsers" Role="AspNetUsers" />
-            <End EntitySet="AspNetUserRoles" Role="AspNetUserRoles" />
+            <End Role="AspNetUsers" EntitySet="AspNetUsers" />
+            <End Role="AspNetUserRoles" EntitySet="AspNetUserRoles" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -393,7 +393,7 @@
           </Key>
           <Property Name="ActorName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="ActorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MovieName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="MovieID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Genre">
           <Key>
@@ -401,16 +401,16 @@
           </Key>
           <Property Name="GenreID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="GenreType" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="MovieName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="MovieID" Type="Int32" Nullable="false" />
         </EntityType>
         <EntityType Name="Movies">
           <Key>
-            <PropertyRef Name="MovieId" />
+            <PropertyRef Name="MovieID" />
           </Key>
-          <Property Name="MovieName" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="MovieId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MovieName" Type="String" Nullable="false" annotation:StoreGeneratedPattern="None" FixedLength="false" MaxLength="128" Unicode="true" />
           <Property Name="LastEditedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="CreatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MovieID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -532,7 +532,7 @@
           <EntitySetMapping Name="Actors">
             <EntityTypeMapping TypeName="BingDBModel.Actor">
               <MappingFragment StoreEntitySet="Actors">
-                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
                 <ScalarProperty Name="ActorName" ColumnName="ActorName" />
                 <ScalarProperty Name="ActorID" ColumnName="ActorID" />
               </MappingFragment>
@@ -541,7 +541,7 @@
           <EntitySetMapping Name="Genres">
             <EntityTypeMapping TypeName="BingDBModel.Genre">
               <MappingFragment StoreEntitySet="Genres">
-                <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
                 <ScalarProperty Name="GenreType" ColumnName="GenreType" />
                 <ScalarProperty Name="GenreID" ColumnName="GenreID" />
               </MappingFragment>
@@ -550,10 +550,10 @@
           <EntitySetMapping Name="Movies">
             <EntityTypeMapping TypeName="BingDBModel.Movies">
               <MappingFragment StoreEntitySet="Movies">
-              <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="LastEditedBy" ColumnName="LastEditedBy" />
-                <ScalarProperty Name="MovieId" ColumnName="MovieId" />
                 <ScalarProperty Name="MovieName" ColumnName="MovieName" />
+                <ScalarProperty Name="MovieID" ColumnName="MovieID" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="LastEditedBy" ColumnName="LastEditedBy" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

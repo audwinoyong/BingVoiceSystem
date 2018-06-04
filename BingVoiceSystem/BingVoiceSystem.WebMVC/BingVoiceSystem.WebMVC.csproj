@@ -292,6 +292,7 @@
     <Content Include="Views\Rules\Reject.cshtml" />
     <Content Include="Views\Data\DataAdd.cshtml" />
     <Content Include="Views\Data\DataEdit.cshtml" />
+    <Content Include="Views\Data\DataDelete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -18,6 +18,8 @@
                 <th>Movie</th>
                 <th>Genre</th>
                 <th>Actor</th>
+                <th>Last Edited By</th>
+                <th>Created By</th>
                 <th colspan="2">Action</th>
             </tr>
             @foreach (var Item in Model.DataList)
@@ -27,7 +29,7 @@
                     <tr>
                         @if (i == 0)
                         {
-                            <td rowspan="@Item.Actors.Count">@Item.Movie</td>
+                            <td rowspan="@Item.Actors.Count">@Item.MovieName</td>
                             <td rowspan="@Item.Actors.Count">@Item.Genre</td>
 
                         }
@@ -37,21 +39,22 @@
                         }
                         @if (i == 0)
                         {
-                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { MovieName = Item.Movie }, new { @class = "btn btn-primary" })</td>
-                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "Delete", new { MovieName = Item.Movie }, new { @class = "btn btn-danger" })</td>
+                            <td rowspan="@Item.Actors.Count">@Item.LastEditedBy</td>
+                            <td rowspan="@Item.Actors.Count">@Item.CreatedBy</td>
+                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { MovieID = Item.MovieID }, new { @class = "btn btn-primary" })</td>
+                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "DataDelete", new { MovieID = Item.MovieID }, new { @class = "btn btn-danger" })</td>
                         }
                     </tr>
                 }
             }
         </table>
-
-        <form method="get" action="DataAdd">
-            <input type="submit" class="btn btn-primary" value="Add New Rule" />
-        </form>
     }
     else
     {
         <h4>There is no data to display.</h4>
     }
+    <form method="get" action="DataAdd">
+        <input type="submit" class="btn btn-primary" value="Add Data" />
+    </form>
 </body>
 </html>

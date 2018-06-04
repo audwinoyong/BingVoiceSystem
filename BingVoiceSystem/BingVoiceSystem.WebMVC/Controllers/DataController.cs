@@ -1,7 +1,5 @@
 ﻿using System.Web.Mvc;
 using BingVoiceSystem.WebMVC.Models;
-using BingVoiceSystem.Business;
-using System.Collections.Generic;
 using System.Net;
 
 namespace BingVoiceSystem.WebMVC.Controllers
@@ -51,16 +49,66 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Data/DataEdit
         // Show an edit form to edit an existing data
-        public ActionResult DataEdit(string MovieName)
+        public ActionResult DataEdit(int MovieID)
         {
-            if (MovieName == null)
+            if (MovieID == 0)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             else
             {
                 Business.Data data = new Business.Data();
-                return View(new DataModel { DataList = data.SearchData(MovieName) });
+                DataModel model = new DataModel();
+                model.DataList = data.CreateDataList(MovieID);
+                model.ActorString = data.ActorsToString(model.DataList.Actors);
+
+                return View(model);
+            }
+        }
+
+        [HttpPost]
+        public ActionResult DataEdit(DataModel model)
+        {
+            Business.Data data = new Business.Data();
+            data.EditData(model.DataList.MovieID, model.DataList.MovieName, model.DataList.Genre, data.ActorsFromString(model.ActorString), User.Identity.Name);
+            return RedirectToAction("DataList");
+        }
+
+        // GET: Data/DataDelete
+        // Show an edit form to edit an existing data
+        public ActionResult DataDelete(int MovieID)
+        {
+            if (MovieID == 0)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            else
+            {
+                Business.Data data = new Business.Data();
+                DataModel model = new DataModel();
+                model.DataList = data.CreateDataList(MovieID);
+                model.ActorString = data.ActorsToString(model.DataList.Actors);
+
+                return View(model);
+            }
+        }
+
+        // POST: Data/Delete/243?MovieID=7
+        // Delete data
+        [HttpPost, ActionName("DataDelete")]
+        public ActionResult DeleteConfirmed(int MovieId)
+        {
+            Business.Data data = new Business.Data();
+            var DataList = data.CreateDataList(MovieId);
+
+            if (DataList == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                data.DeleteData(MovieId);
+                return RedirectToAction("DataList");
             }
         }
     }

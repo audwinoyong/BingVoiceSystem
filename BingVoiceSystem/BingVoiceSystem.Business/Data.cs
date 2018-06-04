@@ -15,17 +15,19 @@ namespace BingVoiceSystem.Business
             BingDBEntities db = new BingDBEntities();
             DataList = new List<DataList>();
 
-            List<string> Movies = db.Movies.Select(q => q.MovieName).ToList();
+            List<int> Movies = db.Movies.Select(q => q.MovieID).ToList();
 
-            foreach (string Movie in Movies)
+            foreach (int Movie in Movies)
             {
-                string Genre = db.Genres.Where(q => q.MovieName == Movie).Select(q => q.GenreType).ToList()[0];
-                List<string> Actors = db.Actors.Where(q => q.MovieName == Movie).Select(q => q.ActorName).ToList();
+                var MovieData = db.Movies.Where(q => q.MovieID == Movie).First();
+                string Genre = db.Genres.Where(q => q.MovieID == Movie).Select(q => q.GenreType).ToList().First();
+                List<string> Actors = db.Actors.Where(q => q.MovieID == Movie).Select(q => q.ActorName).ToList();
 
-                DataList.Add(new DataList { Movie = Movie, Genre = Genre, Actors = Actors });
+                DataList.Add(new DataList { MovieID = Movie, MovieName = MovieData.MovieName, Genre = Genre, Actors = Actors, LastEditedBy = MovieData.LastEditedBy, CreatedBy = MovieData.CreatedBy });
             }
         }
 
+        //Add data to the relevant tables in the database.
         public bool AddData(string MovieName, string Genre, List<string> Actors, string CreatedBy)
         {
             if (MovieName.Equals("") || Genre.Equals("") || Actors.Count == 0)
@@ -37,15 +39,65 @@ namespace BingVoiceSystem.Business
                 BingDBEntities db = new BingDBEntities();
 
                 db.Movies.Add(new Movies { MovieName = MovieName, CreatedBy = CreatedBy });
-                db.Genres.Add(new Genre { GenreType = Genre, MovieName = MovieName });
+                db.SaveChanges();
+
+                db.Genres.Add(new Genre { GenreType = Genre, MovieID = MovieNameToID(MovieName) });
                 foreach (string Actor in Actors)
                 {
-                    db.Actors.Add(new Actor { MovieName = MovieName, ActorName = Actor });
+                    db.Actors.Add(new Actor { MovieID = MovieNameToID(MovieName), ActorName = Actor });
                 }
                 db.SaveChanges();
 
                 return true;
             }
+        }
+
+        //Handles data edits. Updates movie and genre details, deletes all existing actors and adds a new list of actors.
+        public bool EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
+        {
+            //ADD CHECK TO SEE IF MOVIE NAME ALREADY EXISTS
+
+            using (var db = new BingDBEntities())
+            {
+                var MovieDB = db.Movies.Where(q => q.MovieID == MovieID).First();
+                var GenreDB = db.Genres.Where(q => q.MovieID == MovieID).First();
+                var ActorDB = db.Actors.Where(q => q.MovieID == MovieID).ToList();
+
+                MovieDB.MovieName = MovieName;
+                MovieDB.LastEditedBy = LastEditedBy;
+                GenreDB.GenreType = Genre;
+
+                foreach (Actor Actor in ActorDB)
+                {
+                    db.Actors.Remove(Actor);
+                }
+                db.SaveChanges();
+
+                foreach (string Actor in Actors)
+                {
+                    db.Actors.Add(new Actor { MovieID = MovieID, ActorName = Actor });
+                }
+                db.SaveChanges();
+            }
+
+            return true;
+        }
+
+        public void DeleteData(int MovieID)
+        {
+            BingDBEntities db = new BingDBEntities();
+
+            var MovieDB = db.Movies.Where(q => q.MovieID == MovieID).First();
+            var GenreDB = db.Genres.Where(q => q.MovieID == MovieID).First();
+            var ActorDB = db.Actors.Where(q => q.MovieID == MovieID).ToList();
+
+            db.Movies.Remove(MovieDB);
+            db.Genres.Remove(GenreDB);
+            foreach (Actor Actor in ActorDB)
+            {
+                db.Actors.Remove(Actor);
+            }
+            db.SaveChanges();
         }
 
         //Splits a string into a List of values. Determines item by separation of ';'.
@@ -73,18 +125,44 @@ namespace BingVoiceSystem.Business
             return Actors;
         }
 
-        public DataList SearchData(string MovieName)
+        //Create a complete DataList from a MovieID.
+        public DataList CreateDataList(int MovieID)
         {
+            string MovieName;
             string Genre;
             List<string> Actors;
 
             using (var db = new BingDBEntities())
             {
-                Genre = db.Genres.Where(q => q.MovieName == MovieName).Select(q => q.GenreType).ToList()[0];
-                Actors = db.Actors.Where(q => q.MovieName == MovieName).Select(q => q.ActorName).ToList();
+                MovieName = db.Movies.Where(q => q.MovieID == MovieID).Select(q => q.MovieName).First();
+                Genre = db.Genres.Where(q => q.MovieID == MovieID).Select(q => q.GenreType).ToList()[0];
+                Actors = db.Actors.Where(q => q.MovieID == MovieID).Select(q => q.ActorName).ToList();
             }
 
-            return new DataList { Movie = MovieName, Genre = Genre, Actors = Actors };
+            return new DataList { MovieID = MovieID, MovieName = MovieName, Genre = Genre, Actors = Actors };
+        }
+
+        //Get MovieID from the name of a movie.
+        public int MovieNameToID(string MovieName)
+        {
+            using (var db = new BingDBEntities())
+            {
+                int Movie = db.Movies.Where(q => q.MovieName == MovieName).Select(q => q.MovieID).First();
+                return Movie;
+            }
+        }
+
+        //Convert actor list to a string for view.
+        public string ActorsToString(List<string> Actors)
+        {
+            string ActorText = "";
+
+            foreach (string Actor in Actors)
+            {
+                ActorText += Actor + ";";
+            }
+
+            return ActorText;
         }
     }
 }
