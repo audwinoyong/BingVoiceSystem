@@ -27,7 +27,8 @@ namespace BingVoiceSystem.Business
             }
         }
 
-        //Uses LookupTable is what to compare Value to, AnswerTable is the table to get the relevant answers.
+        //Gets desired data from the data tables.
+        //LookupTable is what to compare Value to, AnswerTable is the table to get the relevant answers.
         public List<string> GetData(string LookupTable, string Value, string AnswerTable)
         {
             using (var db = new BingDBEntities())
