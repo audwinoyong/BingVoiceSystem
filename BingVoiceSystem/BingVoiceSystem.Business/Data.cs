@@ -29,7 +29,7 @@ namespace BingVoiceSystem.Business
 
         //Gets desired data from the data tables.
         //LookupTable is what to compare Value to, AnswerTable is the table to get the relevant answers.
-        public List<string> GetData(string LookupTable, string Value, string AnswerTable)
+        public string GetData(string LookupTable, string Value, string AnswerTable)
         {
             using (var db = new BingDBEntities())
             {
@@ -45,7 +45,7 @@ namespace BingVoiceSystem.Business
                         Matches = db.Genres.Where(q => q.GenreType == Value).Select(q => q.MovieID).ToList();
                         break;
                     case "Actors":
-                        Matches = db.Actors.Where(q => q.ActorName == Value).Select(q => q.MovieID).ToList();
+                        Matches = db.Actors.Where(q => q.ActorName.ToLower() == Value).Select(q => q.MovieID).ToList();
                         break;
                 }
 
@@ -75,7 +75,14 @@ namespace BingVoiceSystem.Business
                 {
                     return null;
                 }
-                else return Answers;
+                else
+                {
+                    string answer = "";
+                    foreach (string ans in Answers){
+                        answer = answer + ans + ", ";
+                    }
+                    return answer.Substring(0, answer.Length-2);
+                }
             }
         }
 

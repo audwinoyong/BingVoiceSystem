@@ -26,18 +26,11 @@ namespace BingVoiceSystem
             if (question.ToLower().StartsWith("what movies star "))
             {
                 question = question.Remove(0, 17);
-                using (var db = new BingDBEntities())
+                Business.Data d = new Business.Data();
+                string result = d.GetData("Actors", question, "Movies");
+                if (result != null)
                 {
-                    var query = from r in db.ApprovedRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower() && r.DataDriven == "Actor"
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    return result;
                 }
             }
             else if (question.ToLower().StartsWith("who stars in "))
