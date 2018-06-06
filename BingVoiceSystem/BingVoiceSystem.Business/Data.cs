@@ -78,18 +78,18 @@ namespace BingVoiceSystem.Business
                 else
                 {
                     string answer = "";
-                    foreach (string ans in Answers){
+                    foreach (string ans in Answers) {
                         answer = answer + ans + ", ";
                     }
-                    return answer.Substring(0, answer.Length-2);
+                    return answer.Substring(0, answer.Length - 2);
                 }
             }
         }
 
         //Add data to the relevant tables in the database.
-        public bool AddData(string MovieName, string Genre, List<string> Actors, string CreatedBy)
+        public bool DataAdd(string MovieName, string Genre, List<string> Actors, string CreatedBy)
         {
-            if (MovieName.Equals("") || Genre.Equals("") || Actors.Count == 0)
+            if (MovieName.Equals("") || Genre.Equals("") || Actors.Count == 0 || CheckDuplicate(MovieName))
             {
                 return false;
             }
@@ -111,8 +111,25 @@ namespace BingVoiceSystem.Business
             }
         }
 
-        //Handles data edits. Updates movie and genre details, deletes all existing actors and adds a new list of actors.
-        public bool EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
+        //Returns true if the movie data trying to be added is a duplicate movie.
+        public bool CheckDuplicate(string Movie)
+        {
+            List<int> Matches = new List<int>();
+            using (var db = new BingDBEntities())
+            {
+                          
+                Matches = db.Movies.Where(q => q.MovieName == Movie).Select(q => q.MovieID).ToList();
+            }
+            if (Matches.Count > 0)
+            {
+                return true;
+            }
+            return false;
+        }
+
+
+    //Handles data edits. Updates movie and genre details, deletes all existing actors and adds a new list of actors.
+    public bool EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
         {
             //ADD CHECK TO SEE IF MOVIE NAME ALREADY EXISTS
 

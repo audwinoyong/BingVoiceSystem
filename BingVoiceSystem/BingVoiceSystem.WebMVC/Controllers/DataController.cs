@@ -26,18 +26,18 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // Add a Pending Rule based on the supplied data
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult AddData([Bind(Include = "MovieName,Genre,Actors")] DataModel model)
+        public ActionResult DataAdd([Bind(Include = "MovieName,Genre,Actors")] DataModel model)
         {
             Business.Data data = new Business.Data();
             if (ModelState.IsValid)
             {
-                if (data.AddData(model.MovieName, model.Genre, data.ActorsFromString(model.Actors), User.Identity.Name))
+                if (data.DataAdd(model.MovieName, model.Genre, data.ActorsFromString(model.Actors), User.Identity.Name))
                 {
                     return RedirectToAction("DataList");
                 }
                 else
                 {
-                    ViewBag.DuplicateError = "That question already has an answer";
+                    ViewBag.DuplicateError = "That movie already exists. Please edit the movie on the Data List screen.";
                     return View();
                 }
             }
