@@ -112,6 +112,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // POST: Rules/Edit/243?table=PendingRules
         // Save changes to an edited rule
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Edit(RulesModel model, string table)
         {

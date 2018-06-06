@@ -8,9 +8,11 @@ using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem
 {
+    // Enum for rules tables
+    public enum Table { ApprovedRules, RejectedRules, PendingRules }
+
     public class EFRules
     {
-
         public EFRules()
         {
         }

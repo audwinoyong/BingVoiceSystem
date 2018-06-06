@@ -16,6 +16,7 @@
     {
         using (Html.BeginForm())
         {
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(x => x.DataList.MovieID)
             <table class="table table-bordered">
                 <tr><td>@Html.LabelFor(x => x.DataList.MovieName, "Movie Name")</td><td>@Html.TextAreaFor(x => x.DataList.MovieName, new { @class = "form-control" })</td></tr>
