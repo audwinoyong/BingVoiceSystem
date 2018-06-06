@@ -39,10 +39,10 @@ namespace BingVoiceSystem.Business
                 switch (LookupTable)
                 {
                     case "Movies":
-                        Matches = db.Movies.Where(q => q.MovieName == Value).Select(q => q.MovieID).ToList();
+                        Matches = db.Movies.Where(q => q.MovieName.ToLower() == Value).Select(q => q.MovieID).ToList();
                         break;
                     case "Genres":
-                        Matches = db.Genres.Where(q => q.GenreType == Value).Select(q => q.MovieID).ToList();
+                        Matches = db.Genres.Where(q => q.GenreType.ToLower() == Value).Select(q => q.MovieID).ToList();
                         break;
                     case "Actors":
                         Matches = db.Actors.Where(q => q.ActorName.ToLower() == Value).Select(q => q.MovieID).ToList();

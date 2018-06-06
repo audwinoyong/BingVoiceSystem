@@ -83,7 +83,7 @@ namespace BingVoiceSystem
                     }
                 }
             }
-            return "Sorry, no result was found for that query";
+            return "Sorry, no answer was found for that query.";
         }
 
         public string GetAnswerFromPending(string question)
@@ -158,7 +158,7 @@ namespace BingVoiceSystem
                     }
                 }
             }
-            return "Sorry, no result was found for that query";
+            return "Sorry, no answer was found for that query.";
         }
 
         public string removePuncForQuery(string question)
@@ -260,8 +260,8 @@ namespace BingVoiceSystem
 
         public bool CheckExisting(string question)
         {
-            if (GetAnswer(question).Equals("Sorry, no result was found for that query") &&
-                GetAnswerFromPending(question).Equals("Sorry, no result was found for that query"))
+            if (GetAnswer(question).Equals("Sorry, no answer was found for that query.") &&
+                GetAnswerFromPending(question).Equals("Sorry, no answer was found for that query."))
             {
                 return true;
             }
@@ -278,18 +278,7 @@ namespace BingVoiceSystem
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                if (penrule.DataDriven != null)
-                {
-                    if (penrule.DataDriven.Equals("Actor") || penrule.DataDriven.Equals("Movie") ||
-                    penrule.DataDriven.Equals("Genre"))
-                    {
-                        AddDataDrivenRule(penrule.Question, penrule.Answer, penrule.DataDriven, user, "ApprovedRules");
-                    }
-                }
-                else
-                {
-                    AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, "ApprovedRules");
-                }
+                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, "ApprovedRules");
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }

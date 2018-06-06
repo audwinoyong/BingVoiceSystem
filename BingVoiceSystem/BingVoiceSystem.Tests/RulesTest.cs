@@ -4,13 +4,28 @@ using System.Configuration;
 using System.IO;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Data;
+using System.Collections.Generic;
+using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem
 {
     [TestClass]
     public class RulesTest
     {
-        private Rules rules = new Rules();
+        private TestContext testContextInstance;
+
+        /// <summary>
+        ///  Gets or sets the test context which provides
+        ///  information about and functionality for the current test run.
+        ///</summary>
+        public TestContext TestContext
+        {
+            get { return testContextInstance; }
+            set { testContextInstance = value; }
+        }
+
+        // private Rules rules = new Rules();
+        private EFRules efrules = new EFRules();
 
         [AssemblyInitialize]
         public static void SetupDataDirectory(TestContext context)
@@ -27,76 +42,75 @@ namespace BingVoiceSystem
             conn.Open();
             conn.Close();
         }
-        
+
         [TestMethod]
-        public void GetAnswer_HappyResponse_True()
+        public void EFRule_FindAnswer_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            Assert.IsTrue(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "PendingRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "CreatedBy", "LastEditedBy", "PendingRules");
+            TestContext.WriteLine(efrules.GetAnswerFromPending("Test Question?"));
+            Assert.IsTrue(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
+          //  efrules.DeleteRule("Test Question?", "PendingRules");
         }
         
         
         [TestMethod]
         public void GetAnswer_CaseDifferences_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            Assert.IsTrue(rules.GetAnswerFromPending("TEsT quesTioN?").Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "PendingRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User","User", "User", "PendingRules");
+            Assert.IsTrue(efrules.GetAnswerFromPending("TEsT quesTioN?").Contains("Test Answer"));
+            efrules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void GetAnswer_BadlyFormattedQuestion_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            Assert.IsTrue(rules.GetAnswerFromPending("    teSt      quEstiOn??").Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "PendingRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            Assert.IsTrue(efrules.GetAnswerFromPending("    teSt      quEstiOn??").Contains("Test Answer"));
+            efrules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void GetAnswer_WrongResponse_False()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            Assert.IsTrue(rules.GetAnswerFromPending("Not a Test Question?").Contains("Sorry, no answer was found for that query."));
-            rules.DeleteRule("Test Question?", "PendingRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            Assert.IsTrue(efrules.GetAnswerFromPending("Not a Test Question?").Contains("Sorry, no answer was found for that query."));
+            efrules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void AddRule_EmptyQuestion_False()
         {
-            Assert.IsFalse(rules.AddRule("", "Test Answer", "User", "PendingRules"));
-            rules.DeleteRule("", "PendingRules");
+            Assert.IsFalse(efrules.AddRule("", "Test Answer", "User", "User", "User", "PendingRules"));
         }
 
         [TestMethod]
         public void AddRule_EmptyAnswer_False()
         {
-            Assert.IsFalse(rules.AddRule("Test Question?", "", "User", "PendingRules"));
-            rules.DeleteRule("Test Question?", "PendingRules");
+            Assert.IsFalse(efrules.AddRule("Test Question?", "", "User", "User", "User", "PendingRules"));
         }
 
         [TestMethod]
         public void AddRule_DuplicateQuestion_False()
         {
-            Assert.IsTrue(rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules"));
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
             //adding duplicate question
-            Assert.IsFalse(rules.AddRule("Test Question?", "Test Different Answer", "User", "PendingRules"));
-            rules.DeleteRule("Test Question?", "PendingRules");
+            Assert.IsFalse(efrules.AddRule("Test Question?", "Test Different Answer", "User", "User", "User", "PendingRules"));
+            efrules.DeleteRule("Test Question?", "PendingRules");
         }
 
         [TestMethod]
         public void DeleteRule_DeleteSuccessful_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            rules.DeleteRule("Test Question?", "PendingRules");
-            Assert.IsFalse(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            efrules.DeleteRule("Test Question?", "PendingRules");
+            Assert.IsFalse(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
         }
 
-        [TestMethod]
+       /* [TestMethod]
         public void EditQuestion_EditSuccessful_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            efrules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
             Assert.IsTrue(rules.GetAnswerFromPending("New Test Question?").Contains("Test Answer"));
             rules.DeleteRule("New Test Question?", "PendingRules");
         }
@@ -117,70 +131,63 @@ namespace BingVoiceSystem
             rules.EditRule("Test Question?", "New Test Question?", "Test Answer", "User", "PendingRules");
             Assert.IsTrue(rules.GetAnswerFromPending("Test Question?").Contains("Sorry, no answer was found for that query."));
             rules.DeleteRule("New Test Question?", "PendingRules");
-        }
+        }*/
 
         [TestMethod]
         public void ApproveRule_ExistsInApprovedTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            rules.ApproveRule("Test Question?", "User");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            efrules.ApproveRule("Test Question?", "User", "User", "User");
             string answer = "";
-            DataTable d = rules.PrintApprovedRules();
-            foreach (DataRow row in d.Rows)
+            List<ApprovedRule> d = efrules.PrintApprovedRules();
+            foreach (ApprovedRule row in d)
             {
-                if (row.ItemArray[0].Equals("Test Question?"))
+                if (row.Question.Equals("Test Question?"))
                 {
-                    answer = (string)row.ItemArray[1];
+                    answer = row.Answer;
                 }
             }
             Assert.IsTrue(answer.Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "ApprovedRules");
+            efrules.DeleteRule("Test Question?", "ApprovedRules");
         }
 
         [TestMethod]
         public void RejectRule_ExistsInRejectedTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            rules.RejectRule("Test Question?", "User");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            efrules.RejectRule("Test Question?", "User", "User", "User");
             string answer = "";
-            DataTable d = rules.PrintRejectedRules();
-            foreach (DataRow row in d.Rows)
+            List<RejectedRule> d = efrules.PrintRejectedRules();
+            foreach (RejectedRule row in d)
             {
-                if (row.ItemArray[0].Equals("Test Question?"))
+                if (row.Question.Equals("Test Question?"))
                 {
-                    answer = (string)row.ItemArray[1];
+                    answer = row.Answer;
                 }
             }
             Assert.IsTrue(answer.Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "RejectedRules");
+            efrules.DeleteRule("Test Question?", "RejectedRules");
         }
 
         [TestMethod]
         public void ApproveRule_NoLongerInPendingTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            rules.ApproveRule("Test Question?", "User");
-            Assert.IsFalse(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "ApprovedRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            efrules.ApproveRule("Test Question?", "User", "User", "User");
+            Assert.IsFalse(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
+            efrules.DeleteRule("Test Question?", "ApprovedRules");
         }
 
         [TestMethod]
         public void RejectRule_NoLongerInPendingTable_True()
         {
-            rules.AddRule("Test Question?", "Test Answer", "User", "PendingRules");
-            rules.RejectRule("Test Question?", "User");
-            Assert.IsFalse(rules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
-            rules.DeleteRule("Test Question?", "RejectedRules");
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", "PendingRules");
+            efrules.RejectRule("Test Question?", "User", "User", "User");
+            Assert.IsFalse(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
+            efrules.DeleteRule("Test Question?", "RejectedRules");
         }
 
-        [TestMethod]
-        public void EFRule_FindAnswer_True()
-        {
-            EFRules ef = new EFRules();
-            ef.AddRule("Test Question?", "Test Answer", "User", "CreatedBy", "LastEditedBy", "PendingRules");
-            Assert.IsTrue(ef.GetAnswer("Test Question?").Contains("Test Answer"));
-            ef.DeleteRule("Test Question?", "PendingRules");
-        }
+
 
     }
 }
