@@ -177,7 +177,7 @@ namespace BingVoiceSystem
         public void EFRule_FindAnswer_True()
         {
             EFRules ef = new EFRules();
-            ef.AddRule("Test Question?", "Test Answer", "User", "CreatedBy", "LastEditedBy", "PendingRules");
+            ef.AddRule("Test Question?", "Test Answer", "User", "CreatedBy", "LastEditedBy", null, "PendingRules");
             Assert.IsTrue(ef.GetAnswer("Test Question?").Contains("Test Answer"));
             ef.DeleteRule("Test Question?", "PendingRules");
         }

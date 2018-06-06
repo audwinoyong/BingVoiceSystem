@@ -35,17 +35,17 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "DataMaintainer, Editor")]
-        public ActionResult Add([Bind(Include = "Question,Answer")] RulesModel model)
+        public ActionResult Add([Bind(Include = "Question,Answer,Lookup")] RulesModel model)
         {
             if (ModelState.IsValid)
             {
-                if (rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, "PendingRules"))
+                if (rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, model.Lookup, "PendingRules"))
                 {
                     return RedirectToAction("RulesList");
                 }
                 else
                 {
-                    ViewBag.DuplicateError = "That question already has an answer";
+                    ViewBag.DuplicateError = "You are attempting to make a data driven rule. Ensure your question contains {%} and your answer is either {Movie}, {Genre} or {Actors}.";
                     return View();
                 }
             }
@@ -115,22 +115,41 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Edit(RulesModel model, string table)
         {
+            bool valid = false;
             switch (table)
             {
                 case "ApprovedRules":
-                    rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, "ApprovedRules");
+                    valid = rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, model.ApprovedRule.Lookup, "ApprovedRules");
                     break;
                 case "RejectedRules":
-                    rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, "RejectedRules");
+                    valid = rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, model.RejectedRule.Lookup, "RejectedRules");
                     break;
                 case "PendingRules":
-                    rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, "PendingRules");
+                    valid = rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, model.PendingRule.Lookup, "PendingRules");
                     break;
                 default:
                     System.Diagnostics.Debug.WriteLine("Unknown table");
                     break;
             }
-            return RedirectToAction("RulesList");
+
+            if (valid)
+            {
+                return RedirectToAction("RulesList");
+            }
+            else
+            {
+                if (model.PendingRule.Question == null || model.PendingRule.Answer == null)
+                {
+                    ViewBag.DuplicateError = "Question and answer fields are required.";
+                    return View(model);
+                }
+                else
+                {
+                    ViewBag.DuplicateError = "You are attempting to make a data driven rule. Ensure your question contains {%} and your answer is either {Movie}, {Genre} or {Actors}.";
+                    return View(model);
+                }
+            }
+
         }
 
         // GET: Rules/Delete/243?table=PendingRules

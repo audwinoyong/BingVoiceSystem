@@ -19,6 +19,6 @@ namespace BingVoiceSystem.Data
         public string Answer { get; set; }
         public string LastEditedBy { get; set; }
         public string CreatedBy { get; set; }
-        public string DataDriven { get; set; }
+        public string Lookup { get; set; }
     }
 }

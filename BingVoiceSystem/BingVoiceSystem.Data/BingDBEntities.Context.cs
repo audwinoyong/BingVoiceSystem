@@ -26,7 +26,6 @@ namespace BingVoiceSystem.Data
         }
     
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<ApprovedDataRuleQuestion> ApprovedDataRuleQuestions { get; set; }
         public virtual DbSet<ApprovedRule> ApprovedRules { get; set; }
         public virtual DbSet<AspNetRole> AspNetRoles { get; set; }
         public virtual DbSet<AspNetUserClaim> AspNetUserClaims { get; set; }

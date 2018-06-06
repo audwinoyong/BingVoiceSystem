@@ -68,9 +68,6 @@
     <Compile Include="Actor.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="ApprovedDataRuleQuestion.cs">
-      <DependentUpon>BingDBEntities.tt</DependentUpon>
-    </Compile>
     <Compile Include="ApprovedRule.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>

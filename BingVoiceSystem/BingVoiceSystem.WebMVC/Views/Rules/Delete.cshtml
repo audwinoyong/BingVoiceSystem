@@ -13,7 +13,7 @@
     <h2>Delete Rule</h2>
     <h3>Confirm to delete this rule?</h3>
     <hr />
-    @if (Model.PendingRule.RuleID != 0)
+    @if (Model.PendingRule != null && Model.PendingRule.RuleID != 0)
     {
         using (Html.BeginForm())
         {
@@ -27,7 +27,7 @@
             @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
         }
     }
-    else if (Model.ApprovedRule.RuleID != 0)
+    else if (Model.ApprovedRule != null && Model.ApprovedRule.RuleID != 0)
     {
         using (Html.BeginForm())
         {
@@ -41,7 +41,7 @@
             @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
         }
     }
-    else if (Model.RejectedRule.RuleID != 0)
+    else if (Model.RejectedRule != null && Model.RejectedRule.RuleID != 0)
     {
         using (Html.BeginForm())
         {
