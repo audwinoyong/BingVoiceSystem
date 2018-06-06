@@ -49,6 +49,36 @@ namespace BingVoiceSystem
             return "Sorry, no result was found for that query";
         }
 
+        public string GetAnswerFromPending(string question)
+        {
+            //Remove extra whitespace and punctuation from the question
+            question = Regex.Replace(question, "\\s+", " ").Trim();
+            question = removePuncForQuery(question);
+            List<string> wildCard;
+            if ((wildCard = GetWildCard(question)).Count > 0)
+            {
+                Business.Data data = new Business.Data();
+                return data.GetData(wildCard[1], wildCard[0], wildCard[2]);
+            }
+            else
+            {
+                using (var db = new BingDBEntities())
+                {
+                    var query = from r in db.PendingRules
+                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.ToLower()
+                                select r.Answer;
+                    string result = query.FirstOrDefault();
+                    if (result != null)
+                    {
+                        return result;
+                    }
+                }
+            }
+            return "Sorry, no result was found for that query";
+        }
+
         //Returns the wildcard of a given question if it meets any of data driven questions.
         public List<string> GetWildCard(string askedQuestion)
         {
@@ -56,7 +86,10 @@ namespace BingVoiceSystem
             List<string> ApprovedQuestions = new List<string>();
             using (var db = new BingDBEntities())
             {
-                ApprovedQuestions = db.ApprovedRules.Where(q => q.Lookup != null).Select(q => q.Question).ToList();
+                ApprovedQuestions = (from r in db.ApprovedRules
+                                    where r.Lookup != null
+                                    select r.Question).ToList();
+                 //   db.ApprovedRules.Where(q => q.Lookup != null).Select(q => q.Question).ToList();
 
             }
             //Create list of potential matches
@@ -74,8 +107,14 @@ namespace BingVoiceSystem
                     string Lookup;
                     using (var db = new BingDBEntities())
                     {
-                        Answer = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Answer).First();
-                        Lookup = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Lookup).First();
+                        Answer = (from r in db.ApprovedRules
+                                 where r.Question.Equals(question)
+                                 select r.Answer).First();
+                        Lookup = (from r in db.ApprovedRules
+                                  where r.Question.Equals(question)
+                                  select r.Lookup).First();
+                        //Answer = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Answer).First();
+                        //Lookup = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Lookup).First();
                     }
                     Matches.Add(new List<string> { SeparatedQuestion.Item1, askedQuestion.Substring(SeparatedQuestion.Item1.Length, askedQuestion.Length - SeparatedQuestion.Item1.Length - SeparatedQuestion.Item2.Length), SeparatedQuestion.Item2, Lookup, Answer });
                 }
@@ -134,6 +173,11 @@ namespace BingVoiceSystem
 
         public string AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string Lookup, Table table)
         {
+            //Returns false if either question or response is empty
+            if (question == null || response == null)
+            {
+                return "Question and Answer fields are required.";
+            }
             //If it is data driven, make sure it is in the right format.
             if (Lookup != null && !((response == "{Movies}" || response == "{Genres}" || response == "{Actors}") && (question.Contains("{%}"))))
             {
@@ -463,6 +507,17 @@ namespace BingVoiceSystem
                                where r.RuleID == id
                                select r).First();
                 return rejrule;
+            }
+        }
+
+        public int GetPendingID(string question)
+        {
+            using (var db = new BingDBEntities())
+            {
+                var id = (from r in db.PendingRules
+                               where r.Question == question
+                               select r.RuleID).First();
+                return id;
             }
         }
     }
