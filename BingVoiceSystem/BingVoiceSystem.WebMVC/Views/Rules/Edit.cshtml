@@ -22,6 +22,7 @@
                 <tr><td>@Html.LabelFor(x => x.PendingRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.PendingRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
                 <tr><td>@Html.LabelFor(x => x.PendingRule.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.PendingRule.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
             </table>
+            <p class="text-danger">@ViewBag.EmptyError</p>
 
             <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
             @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
@@ -37,6 +38,7 @@
                 <tr><td>@Html.LabelFor(x => x.ApprovedRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.ApprovedRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
                 <tr><td>@Html.LabelFor(x => x.ApprovedRule.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.ApprovedRule.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
             </table>
+            <p class="text-danger">@ViewBag.EmptyError</p>
 
             <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
             @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });
@@ -52,6 +54,7 @@
                 <tr><td>@Html.LabelFor(x => x.RejectedRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.RejectedRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
                 <tr><td>@Html.LabelFor(x => x.RejectedRule.Answer, "Answer")</td><td>@Html.TextAreaFor(x => x.RejectedRule.Answer, new { @class = "form-control", @rows = 5 })</td></tr>
             </table>
+            <p class="text-danger">@ViewBag.EmptyError</p>
 
             <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
             @Html.ActionLink("Cancel", "RulesList", null, new { @class = "btn btn-default" });

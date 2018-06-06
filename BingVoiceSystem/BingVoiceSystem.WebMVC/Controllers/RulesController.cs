@@ -116,22 +116,31 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Edit(RulesModel model, string table)
         {
-            switch (table)
+            if ((model.ApprovedRule.Question != null || model.RejectedRule.Question != null || model.PendingRule.Question != null) &&
+                (model.ApprovedRule.Answer != null || model.RejectedRule.Answer != null || model.PendingRule.Answer != null))
             {
-                case "ApprovedRules":
-                    rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, "ApprovedRules");
-                    break;
-                case "RejectedRules":
-                    rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, "RejectedRules");
-                    break;
-                case "PendingRules":
-                    rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, "PendingRules");
-                    break;
-                default:
-                    System.Diagnostics.Debug.WriteLine("Unknown table");
-                    break;
+                switch (table)
+                {
+                    case "ApprovedRules":
+                        rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, "ApprovedRules");
+                        break;
+                    case "RejectedRules":
+                        rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, "RejectedRules");
+                        break;
+                    case "PendingRules":
+                        rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, "PendingRules");
+                        break;
+                    default:
+                        System.Diagnostics.Debug.WriteLine("Unknown table");
+                        break;
+                }
+                return RedirectToAction("RulesList");
             }
-            return RedirectToAction("RulesList");
+            else
+            {
+                ViewBag.EmptyError = "All fields are required and should not be empty.";
+                return View(model);
+            }
         }
 
         // GET: Rules/Delete/243?table=PendingRules

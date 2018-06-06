@@ -23,7 +23,7 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = removePuncForQuery(question);
+            question = RemovePuncForQuery(question);
             if (question.ToLower().StartsWith("what movies star "))
             {
                 question = question.Remove(0, 17);
@@ -91,7 +91,7 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = removePuncForQuery(question);
+            question = RemovePuncForQuery(question);
             if (question.ToLower().StartsWith("what movies star "))
             {
                 question = question.Remove(0, 17);
@@ -162,7 +162,7 @@ namespace BingVoiceSystem
             return "Sorry, no answer was found for that query.";
         }
 
-        public string removePuncForQuery(string question)
+        public string RemovePuncForQuery(string question)
         {
             return question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
                 Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
