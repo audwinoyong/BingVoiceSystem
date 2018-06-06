@@ -21,13 +21,15 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <!--"Link Text", "ActionName (Method name in Controller, also File Name)", "Folder Name"-->
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("Rules List", "RulesList", "Rules")</li>
-                    <li>@Html.ActionLink("Data List", "DataList", "Data")</li>
-                    <li>@Html.ActionLink("Approver Report", "ApproverReport", "Reports")</li>
-                    <li>@Html.ActionLink("Editor Report", "EditorReport", "Reports")</li>
-                    <li>@Html.ActionLink("Rules Report", "RulesReport", "Reports")</li>
+                    @*@if (User.Identity.IsAuthenticated)
+                    {*@
+                        <!-- ("Link Text", "ActionName (Method name in Controller, also File Name)", "Folder Name") -->
+                        <li>@Html.ActionLink("Rules List", "RulesList", "Rules")</li>
+                        <li>@Html.ActionLink("Data List", "DataList", "Data")</li>
+                        <li>@Html.ActionLink("Approver Report", "ApproverReport", "Reports")</li>
+                        <li>@Html.ActionLink("Editor Report", "EditorReport", "Reports")</li>
+                        <li>@Html.ActionLink("Rules Report", "RulesReport", "Reports")</li>
+@*                    }*@
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

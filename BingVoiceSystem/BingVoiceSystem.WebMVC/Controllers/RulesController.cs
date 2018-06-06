@@ -9,6 +9,7 @@ using BingVoiceSystem.Business;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
+    [Authorize]
     public class RulesController : Controller
     {
         private EFRules rules = new EFRules();
@@ -23,6 +24,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Add
         // Show an edit form to add a new rule
+        [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Add()
         {
             return View();
@@ -32,6 +34,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // Add a Pending Rule based on the supplied data
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Add([Bind(Include = "Question,Answer")] RulesModel model)
         {
             if (ModelState.IsValid)
@@ -54,6 +57,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Edit/243?table=PendingRules
         // Show an edit form to edit an existing rule
+        [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Edit(int? id, string table)
         {
             if (id == null)
@@ -103,18 +107,12 @@ namespace BingVoiceSystem.WebMVC.Controllers
                     System.Diagnostics.Debug.WriteLine("Unknown table");
                     return View();
             }
-
-            //var rule = rules.SearchPendingRule((int)id);
-            //if (rule == null)
-            //{
-            //    return HttpNotFound();
-            //}
-            //return View(rule);
         }
 
         // POST: Rules/Edit/243?table=PendingRules
         // Save changes to an edited rule
         [HttpPost]
+        [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Edit(RulesModel model, string table)
         {
             switch (table)
@@ -137,6 +135,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Delete/243?table=PendingRules
         // Retrieve details of a rule to confirm deletion
+        [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Delete(int? id, string table)
         {
             if (id == null)
@@ -191,6 +190,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // POST: Rules/Delete/243?table=PendingRules
         // Delete a rule
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult DeleteConfirmed(int id, string table)
         {
             switch (table)
@@ -228,6 +228,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Approve/243
         // Retrieve details of a rule to confirm approval
+        [Authorize(Roles = "Approver")]
         public ActionResult Approve(int? id)
         {
             if (id == null)
@@ -245,6 +246,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // POST: Rules/Approve/243
         // Approve a rule
         [HttpPost, ActionName("Approve")]
+        [Authorize(Roles = "Approver")]
         public ActionResult ApproveConfirmed(int id)
         {
             var rule = rules.SearchPendingRule(id);
@@ -258,6 +260,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Reject/243
         // Retrieve details of a rule to confirm rejection
+        [Authorize(Roles = "Approver")]
         public ActionResult Reject(int? id)
         {
             if (id == null)
@@ -275,6 +278,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // POST: Rules/Reject/243
         // Reject a rule
         [HttpPost, ActionName("Reject")]
+        [Authorize(Roles = "Approver")]
         public ActionResult RejectConfirmed(int id)
         {
             var rule = rules.SearchPendingRule(id);
