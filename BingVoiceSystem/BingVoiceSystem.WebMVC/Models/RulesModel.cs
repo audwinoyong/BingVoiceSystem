@@ -39,10 +39,5 @@ namespace BingVoiceSystem.WebMVC.Models
         {
             Answer = EFRules.GetAnswer(question);
         }
-
-        //public void AddRule(string question, string response, string name)
-        //{
-        //    EFRules.AddRule(question, response, name, "PendingRules");
-        //}
     }
 }

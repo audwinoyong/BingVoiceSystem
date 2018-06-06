@@ -8,12 +8,13 @@ using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem
 {
+    // Enum for rules tables
+    public enum Table { ApprovedRules, RejectedRules, PendingRules }
+
     public class EFRules
     {
-
         public EFRules()
         {
-
         }
 
         /*Takes in a question and returns the corresponding answer for that rule 

@@ -67,6 +67,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult DataEdit(DataModel model)
         {
             Business.Data data = new Business.Data();

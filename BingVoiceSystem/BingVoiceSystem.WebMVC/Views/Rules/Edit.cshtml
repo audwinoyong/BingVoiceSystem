@@ -16,6 +16,7 @@
     {
         using (Html.BeginForm())
         {
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(x => x.PendingRule.RuleID)
             <table class="table table-bordered">
                 <tr><td>@Html.LabelFor(x => x.PendingRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.PendingRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
@@ -30,6 +31,7 @@
     {
         using (Html.BeginForm())
         {
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(x => x.ApprovedRule.RuleID)
             <table class="table table-bordered">
                 <tr><td>@Html.LabelFor(x => x.ApprovedRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.ApprovedRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
@@ -44,6 +46,7 @@
     {
         using (Html.BeginForm())
         {
+            @Html.AntiForgeryToken()
             @Html.HiddenFor(x => x.RejectedRule.RuleID)
             <table class="table table-bordered">
                 <tr><td>@Html.LabelFor(x => x.RejectedRule.Question, "Question")</td><td>@Html.TextAreaFor(x => x.RejectedRule.Question, new { @class = "form-control", @rows = 5 })</td></tr>
