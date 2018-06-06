@@ -132,7 +132,7 @@ namespace BingVoiceSystem
                 Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
         }
 
-        public string AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string Lookup, string table)
+        public string AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string Lookup, Table table)
         {
             //If it is data driven, make sure it is in the right format.
             if (Lookup != null && !((response == "{Movies}" || response == "{Genres}" || response == "{Actors}") && (question.Contains("{%}"))))
@@ -148,7 +148,7 @@ namespace BingVoiceSystem
 
                 switch (table)
                 {
-                    case "ApprovedRules":
+                    case Table.ApprovedRules:
                         var apprule = new ApprovedRule
                         {
                             Question = question,
@@ -160,7 +160,7 @@ namespace BingVoiceSystem
                         };
                         db.ApprovedRules.Add(apprule);
                         break;
-                    case "RejectedRules":
+                    case Table.RejectedRules:
                         var rejrule = new RejectedRule
                         {
                             Question = question,
@@ -172,7 +172,7 @@ namespace BingVoiceSystem
                         };
                         db.RejectedRules.Add(rejrule);
                         break;
-                    case "PendingRules":
+                    case Table.PendingRules:
                         if (CheckExisting(question, -1))
                         {
                             return "This question already exists, please use another.";
@@ -196,7 +196,7 @@ namespace BingVoiceSystem
             }
         }
 
-        public string EditRule(int id, string question, string answer, string user, string Lookup, string table)
+        public string EditRule(int id, string question, string answer, string user, string Lookup, Table table)
         {
             //Returns false if either question or response is empty
             if (question == null || answer == null)
@@ -221,7 +221,7 @@ namespace BingVoiceSystem
 
                 switch (table)
                 {
-                    case "ApprovedRules":
+                    case Table.ApprovedRules:
                         var apprule = (from r in db.ApprovedRules
                                        where r.RuleID == id
                                        select r).First();
@@ -230,7 +230,7 @@ namespace BingVoiceSystem
                         apprule.LastEditedBy = user;
                         apprule.Lookup = Lookup;
                         break;
-                    case "RejectedRules":
+                    case Table.RejectedRules:
                         var rejrule = (from r in db.RejectedRules
                                        where r.RuleID == id
                                        select r).First();
@@ -239,7 +239,7 @@ namespace BingVoiceSystem
                         rejrule.LastEditedBy = user;
                         rejrule.Lookup = Lookup;
                         break;
-                    case "PendingRules":
+                    case Table.PendingRules:
                         var penrule = (from r in db.PendingRules
                                        where r.RuleID == id
                                        select r).First();
@@ -257,25 +257,25 @@ namespace BingVoiceSystem
             }
         }
 
-        public void DeleteRule(string question, string table)
+        public void DeleteRule(string question, Table table)
         {
             using (var db = new BingDBEntities())
             {
                 switch (table)
                 {
-                    case "ApprovedRules":
+                    case Table.ApprovedRules:
                         var apprule = (from r in db.ApprovedRules
                                        where r.Question == question
                                        select r).First();
                         db.ApprovedRules.Remove(apprule);
                         break;
-                    case "RejectedRules":
+                    case Table.RejectedRules:
                         var rejrule = (from r in db.RejectedRules
                                        where r.Question == question
                                        select r).First();
                         db.RejectedRules.Remove(rejrule);
                         break;
-                    case "PendingRules":
+                    case Table.PendingRules:
                         var penrule = (from r in db.PendingRules
                                        where r.Question == question
                                        select r).First();
@@ -339,7 +339,7 @@ namespace BingVoiceSystem
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, penrule.Lookup, "ApprovedRules");
+                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, penrule.Lookup, Table.ApprovedRules);
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }
@@ -352,7 +352,7 @@ namespace BingVoiceSystem
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, penrule.Lookup, "RejectedRules");
+                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, penrule.Lookup, Table.RejectedRules);
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }

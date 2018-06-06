@@ -40,7 +40,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
             if (ModelState.IsValid)
             {
                 string result;
-                if ((result = rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, model.Lookup, "PendingRules")) == null)
+                if ((result = rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, model.Lookup, Table.PendingRules)) == null)
                 {
                     return RedirectToAction("RulesList");
                 }
@@ -59,7 +59,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // GET: Rules/Edit/243?table=PendingRules
         // Show an edit form to edit an existing rule
         [Authorize(Roles = "DataMaintainer, Editor")]
-        public ActionResult Edit(int? id, string table)
+        public ActionResult Edit(int? id, Table table)
         {
             if (id == null)
             {
@@ -68,7 +68,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
             switch (table)
             {
-                case "ApprovedRules":
+                case Table.ApprovedRules:
                     var apprule = rules.SearchApprovedRule((int)id);
                     if (apprule == null)
                     {
@@ -80,7 +80,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
                             ApprovedRule = apprule
                         }
                     );
-                case "RejectedRules":
+                case Table.RejectedRules:
                     var rejrule = rules.SearchRejectedRule((int)id);
                     if (rejrule == null)
                     {
@@ -92,7 +92,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
                             RejectedRule = rejrule
                         }
                     );
-                case "PendingRules":
+                case Table.PendingRules:
                     var penrule = rules.SearchPendingRule((int)id);
                     if (penrule == null)
                     {
@@ -115,19 +115,19 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "DataMaintainer, Editor")]
-        public ActionResult Edit(RulesModel model, string table)
+        public ActionResult Edit(RulesModel model, Table table)
         {
             string result = "";
             switch (table)
             {
-                case "ApprovedRules":
-                    result = rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, model.ApprovedRule.Lookup, "ApprovedRules");
+                case Table.ApprovedRules:
+                    result = rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, model.ApprovedRule.Lookup, Table.ApprovedRules);
                     break;
-                case "RejectedRules":
-                    result = rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, model.RejectedRule.Lookup, "RejectedRules");
+                case Table.RejectedRules:
+                    result = rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, model.RejectedRule.Lookup, Table.RejectedRules);
                     break;
-                case "PendingRules":
-                    result = rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, model.PendingRule.Lookup, "PendingRules");
+                case Table.PendingRules:
+                    result = rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, model.PendingRule.Lookup, Table.PendingRules);
                     break;
                 default:
                     System.Diagnostics.Debug.WriteLine("Unknown table");
@@ -149,7 +149,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // GET: Rules/Delete/243?table=PendingRules
         // Retrieve details of a rule to confirm deletion
         [Authorize(Roles = "DataMaintainer, Editor")]
-        public ActionResult Delete(int? id, string table)
+        public ActionResult Delete(int? id, Table table)
         {
             if (id == null)
             {
@@ -158,7 +158,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
             switch (table)
             {
-                case "ApprovedRules":
+                case Table.ApprovedRules:
                     var apprule = rules.SearchApprovedRule((int)id);
                     if (apprule == null)
                     {
@@ -170,7 +170,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
                             ApprovedRule = apprule
                         }
                     );
-                case "RejectedRules":
+                case Table.RejectedRules:
                     var rejrule = rules.SearchRejectedRule((int)id);
                     if (rejrule == null)
                     {
@@ -182,7 +182,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
                             RejectedRule = rejrule
                         }
                     );
-                case "PendingRules":
+                case Table.PendingRules:
                     var penrule = rules.SearchPendingRule((int)id);
                     if (penrule == null)
                     {
@@ -204,33 +204,33 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // Delete a rule
         [HttpPost, ActionName("Delete")]
         [Authorize(Roles = "DataMaintainer, Editor")]
-        public ActionResult DeleteConfirmed(int id, string table)
+        public ActionResult DeleteConfirmed(int id, Table table)
         {
             switch (table)
             {
-                case "ApprovedRules":
+                case Table.ApprovedRules:
                     var apprule = rules.SearchApprovedRule(id);
                     if (apprule == null)
                     {
                         return HttpNotFound();
                     }
-                    rules.DeleteRule(apprule.Question, "ApprovedRules");
+                    rules.DeleteRule(apprule.Question, Table.ApprovedRules);
                     break;
-                case "RejectedRules":
+                case Table.RejectedRules:
                     var rejrule = rules.SearchRejectedRule(id);
                     if (rejrule == null)
                     {
                         return HttpNotFound();
                     }
-                    rules.DeleteRule(rejrule.Question, "RejectedRules");
+                    rules.DeleteRule(rejrule.Question, Table.RejectedRules);
                     break;
-                case "PendingRules":
+                case Table.PendingRules:
                     var penrule = rules.SearchPendingRule(id);
                     if (penrule == null)
                     {
                         return HttpNotFound();
                     }
-                    rules.DeleteRule(penrule.Question, "PendingRules");
+                    rules.DeleteRule(penrule.Question, Table.PendingRules);
                     break;
                 default:
                     System.Diagnostics.Debug.WriteLine("Unknown table");
