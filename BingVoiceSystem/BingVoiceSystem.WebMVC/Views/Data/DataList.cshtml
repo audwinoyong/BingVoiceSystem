@@ -1,14 +1,16 @@
 ﻿@using BingVoiceSystem.Business
 @model Data
-
+@{
+    ViewBag.Title = "Data List";
+}
 <!DOCTYPE html>
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Rules Report</title>
+    <title>Data List</title>
 </head>
 <body>
-    <h2>Rules Report</h2>
+    <h2>Data List</h2>
     <hr />
     <h3>Approved Rules</h3>
     @if (Model.DataList.Count > 0)

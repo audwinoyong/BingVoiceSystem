@@ -21,7 +21,14 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [HttpPost]
         public ActionResult Index([Bind(Include = "Question,Answer")]RulesModel model)
         {
-            model.SetAnswer(model.Question);
+            if (ModelState.IsValidField("Question"))
+            {
+                model.SetAnswer(model.Question);
+            }
+            else
+            {
+                ViewBag.EmptyError = "The Question field cannot be empty.";
+            }
             return View(model);
         }
     }

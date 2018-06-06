@@ -1,8 +1,7 @@
 ﻿@using BingVoiceSystem.WebMVC.Models
 @model RulesModel
-@{ 
+@{
     ViewBag.Title = "Home Page";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <!DOCTYPE html>
@@ -12,19 +11,23 @@
 </head>
 <body>
     <h2>Q&A</h2>
-    <p>
+    <hr />
+    <h4>
         Enter a question and get your answer below!
-    </p>
+    </h4>
     @using (Html.BeginForm())
     {
-        <table>
-            <tr><td>@Html.LabelFor(x => x.Question, "Question: ")</td><td>@Html.TextBoxFor(x => x.Question)</td></tr>
+        <table class="table table-bordered">
+            <tr><td>@Html.LabelFor(x => x.Question, "Question")</td><td>@Html.TextBoxFor(x => x.Question, new { @class = "form-control" })</td></tr>
+
             @if (Model.Answer != null)
             {
-                <tr><td><p>Answer: </p></td><td><p>@Model.Answer</p></td></tr>
+                <tr><td>@Html.LabelFor(x => x.Answer, "Answer")</td><td>@Model.Answer</td></tr>
             }
         </table>
-        <input type="submit" />
+        <p class="text-danger">@ViewBag.EmptyError</p>
+
+        <input type="submit" class="btn btn-primary" value="Submit" style="padding-right: 10px" />
     }
 </body>
 </html>
