@@ -35,17 +35,18 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "DataMaintainer, Editor")]
-        public ActionResult Add([Bind(Include = "Question,Answer")] RulesModel model)
+        public ActionResult Add([Bind(Include = "Question,Answer,Lookup")] RulesModel model)
         {
             if (ModelState.IsValid)
             {
-                if (rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, "PendingRules"))
+                string result;
+                if ((result = rules.AddRule(model.Question, model.Answer, User.Identity.Name, User.Identity.Name, User.Identity.Name, model.Lookup, "PendingRules")) == null)
                 {
                     return RedirectToAction("RulesList");
                 }
                 else
                 {
-                    ViewBag.DuplicateError = "That question already has an answer";
+                    ViewBag.DuplicateError = result;
                     return View();
                 }
             }
@@ -116,31 +117,33 @@ namespace BingVoiceSystem.WebMVC.Controllers
         [Authorize(Roles = "DataMaintainer, Editor")]
         public ActionResult Edit(RulesModel model, string table)
         {
-            if ((model.ApprovedRule.Question != null || model.RejectedRule.Question != null || model.PendingRule.Question != null) &&
-                (model.ApprovedRule.Answer != null || model.RejectedRule.Answer != null || model.PendingRule.Answer != null))
+            string result = "";
+            switch (table)
             {
-                switch (table)
-                {
-                    case "ApprovedRules":
-                        rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, "ApprovedRules");
-                        break;
-                    case "RejectedRules":
-                        rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, "RejectedRules");
-                        break;
-                    case "PendingRules":
-                        rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, "PendingRules");
-                        break;
-                    default:
-                        System.Diagnostics.Debug.WriteLine("Unknown table");
-                        break;
-                }
+                case "ApprovedRules":
+                    result = rules.EditRule(model.ApprovedRule.RuleID, model.ApprovedRule.Question, model.ApprovedRule.Answer, User.Identity.Name, model.ApprovedRule.Lookup, "ApprovedRules");
+                    break;
+                case "RejectedRules":
+                    result = rules.EditRule(model.RejectedRule.RuleID, model.RejectedRule.Question, model.RejectedRule.Answer, User.Identity.Name, model.RejectedRule.Lookup, "RejectedRules");
+                    break;
+                case "PendingRules":
+                    result = rules.EditRule(model.PendingRule.RuleID, model.PendingRule.Question, model.PendingRule.Answer, User.Identity.Name, model.PendingRule.Lookup, "PendingRules");
+                    break;
+                default:
+                    System.Diagnostics.Debug.WriteLine("Unknown table");
+                    break;
+            }
+
+            if (result == null)
+            {
                 return RedirectToAction("RulesList");
             }
             else
             {
-                ViewBag.EmptyError = "All fields are required and should not be empty.";
+                ViewBag.DuplicateError = result;
                 return View(model);
             }
+
         }
 
         // GET: Rules/Delete/243?table=PendingRules

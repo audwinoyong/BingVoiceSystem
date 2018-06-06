@@ -23,50 +23,12 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = RemovePuncForQuery(question);
-            if (question.ToLower().StartsWith("what movies star "))
+            question = removePuncForQuery(question);
+            List<string> wildCard;
+            if ((wildCard = GetWildCard(question)).Count > 0)
             {
-                question = question.Remove(0, 17);
-                Business.Data d = new Business.Data();
-                string result = d.GetData("Actors", question, "Movies");
-                if (result != null)
-                {
-                    return result;
-                }
-            }
-            else if (question.ToLower().StartsWith("who stars in "))
-            {
-                question = question.Remove(0, 13);
-                using (var db = new BingDBEntities())
-                {
-                    var query = from r in db.ApprovedRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower() && r.DataDriven == "Movie"
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-            else if (question.ToLower().StartsWith("what are some movies in "))
-            {
-                question = question.Remove(0, 24);
-                using (var db = new BingDBEntities())
-                {
-                    var query = from r in db.ApprovedRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower() && r.DataDriven == "Genre"
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
+                Business.Data data = new Business.Data();
+                return data.GetData(wildCard[1], wildCard[0], wildCard[2]);
             }
             else
             {
@@ -84,102 +46,106 @@ namespace BingVoiceSystem
                     }
                 }
             }
-            return "Sorry, no answer was found for that query.";
+            return "Sorry, no result was found for that query";
         }
 
-        public string GetAnswerFromPending(string question)
+        //Returns the wildcard of a given question if it meets any of data driven questions.
+        public List<string> GetWildCard(string askedQuestion)
         {
-            //Remove extra whitespace and punctuation from the question
-            question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = RemovePuncForQuery(question);
-            if (question.ToLower().StartsWith("what movies star "))
+            //Get all data driven questions
+            List<string> ApprovedQuestions = new List<string>();
+            using (var db = new BingDBEntities())
             {
-                question = question.Remove(0, 17);
-                using (var db = new BingDBEntities())
+                ApprovedQuestions = db.ApprovedRules.Where(q => q.Lookup != null).Select(q => q.Question).ToList();
+
+            }
+            //Create list of potential matches
+            List<List<string>> Matches = new List<List<string>>();
+            foreach (string question in ApprovedQuestions)
+            {
+                string comparison = question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower();
+
+                Tuple<string, string> SeparatedQuestion = GetQuestionPrefixSufix(comparison);
+
+                if (askedQuestion.IndexOf(SeparatedQuestion.Item1, StringComparison.OrdinalIgnoreCase) >= 0 && askedQuestion.IndexOf(SeparatedQuestion.Item2, StringComparison.OrdinalIgnoreCase) >= 0)
                 {
-                    var query = from r in db.PendingRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower() && r.DataDriven == "Actor"
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
+                    string Answer;
+                    string Lookup;
+                    using (var db = new BingDBEntities())
                     {
-                        return result;
+                        Answer = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Answer).First();
+                        Lookup = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Lookup).First();
                     }
+                    Matches.Add(new List<string> { SeparatedQuestion.Item1, askedQuestion.Substring(SeparatedQuestion.Item1.Length, askedQuestion.Length - SeparatedQuestion.Item1.Length - SeparatedQuestion.Item2.Length), SeparatedQuestion.Item2, Lookup, Answer });
                 }
             }
-            else if (question.ToLower().StartsWith("who stars in "))
+
+            //Return best match
+            int LargestPrefix = 0;
+            int LargestSufix = 0;
+            List<string> BestMatch = new List<string>();
+
+            foreach (List<string> match in Matches)
             {
-                question = question.Remove(0, 13);
-                using (var db = new BingDBEntities())
+                if (match[0].Length >= LargestPrefix && match[2].Length >= LargestSufix)
                 {
-                    var query = from r in db.PendingRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower() && r.DataDriven == "Movie"
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
-                    {
-                        return result;
-                    }
+                    BestMatch.Clear();
+                    BestMatch.Add(match[1]);
+                    BestMatch.Add(match[3]);
+                    BestMatch.Add(match[4]);
+
+                    LargestPrefix = match[0].Length;
+                    LargestSufix = match[2].Length;
                 }
             }
-            else if (question.ToLower().StartsWith("what are some movies in "))
-            {
-                question = question.Remove(0, 24);
-                using (var db = new BingDBEntities())
-                {
-                    var query = from r in db.PendingRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower() && r.DataDriven == "Genre"
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-            else
-            {
-                using (var db = new BingDBEntities())
-                {
-                    var query = from r in db.PendingRules
-                                where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.ToLower()
-                                select r.Answer;
-                    string result = query.FirstOrDefault();
-                    if (result != null)
-                    {
-                        return result;
-                    }
-                }
-            }
-            return "Sorry, no answer was found for that query.";
+
+            return BestMatch;
         }
 
-        public string RemovePuncForQuery(string question)
+        //Splits a data driven question into its prefix (before wildcard) and sufix (after wildcard)
+        public Tuple<string, string> GetQuestionPrefixSufix(string question)
+        {
+            string Prefix = "";
+            string Sufix = "";
+            bool MetWildcard = false;
+
+            foreach (char c in question)
+            {
+                if (c == '{' || c == '%' || c == '}')
+                {
+                    MetWildcard = true;
+                }
+                else if (!MetWildcard)
+                {
+                    Prefix += c;
+                }
+                else Sufix += c;
+            }
+
+            return Tuple.Create(Prefix, Sufix);
+        }
+
+        public string removePuncForQuery(string question)
         {
             return question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
                 Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
         }
 
-        public bool AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string table)
+        public string AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string Lookup, string table)
         {
-            //Returns false if either question or response is empty
-            if (question.Equals("") || response.Equals(""))
+            //If it is data driven, make sure it is in the right format.
+            if (Lookup != null && !((response == "{Movies}" || response == "{Genres}" || response == "{Actors}") && (question.Contains("{%}"))))
             {
-                return false;
+                return "You are attempting to make a data driven rule. Ensure your question contains {%} and your answer is either {Movies}, {Genres} or {Actors}.";
             }
 
             //Remove extra whitespace from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             using (var db = new BingDBEntities())
             {
+                question = question.TrimEnd(' ');
+
                 switch (table)
                 {
                     case "ApprovedRules":
@@ -189,7 +155,8 @@ namespace BingVoiceSystem
                             Answer = response,
                             ApprovedBy = user,
                             LastEditedBy = lastEditedBy,
-                            CreatedBy = createdBy
+                            CreatedBy = createdBy,
+                            Lookup = Lookup
                         };
                         db.ApprovedRules.Add(apprule);
                         break;
@@ -200,30 +167,93 @@ namespace BingVoiceSystem
                             Answer = response,
                             RejectedBy = user,
                             LastEditedBy = lastEditedBy,
-                            CreatedBy = createdBy
+                            CreatedBy = createdBy,
+                            Lookup = Lookup
                         };
                         db.RejectedRules.Add(rejrule);
                         break;
                     case "PendingRules":
-                        if (!CheckExisting(question))
+                        if (CheckExisting(question, -1))
                         {
-                            return false;
+                            return "This question already exists, please use another.";
                         }
                         var penrule = new PendingRule
                         {
                             Question = question,
                             Answer = response,
                             LastEditedBy = user,
-                            CreatedBy = user
+                            CreatedBy = user,
+                            Lookup = Lookup
                         };
                         db.PendingRules.Add(penrule);
                         break;
                     default:
                         System.Diagnostics.Debug.WriteLine("Unknown table");
-                        return false;
+                        return "Sorry something went wrong. Try reload the page and try again.";
                 }
                 db.SaveChanges();
-                return true;
+                return null;
+            }
+        }
+
+        public string EditRule(int id, string question, string answer, string user, string Lookup, string table)
+        {
+            //Returns false if either question or response is empty
+            if (question == null || answer == null)
+            {
+                return "Question and Answer fields are required.";
+            }
+
+            //If it is data driven, make sure it is in the right format.
+            if (Lookup != null && !((answer == "{Movies}" || answer == "{Genres}" || answer == "{Actors}") && (question.Contains("{%}"))))
+            {
+                return "You are attempting to make a data driven rule. Ensure your question contains {%} and your answer is either {Movies}, {Genres} or {Actors}.";
+            }
+
+            using (var db = new BingDBEntities())
+            {
+                question = question.TrimEnd(' ');
+
+                if (CheckExisting(question, id))
+                {
+                    return "This question already exists, please use another.";
+                }
+
+                switch (table)
+                {
+                    case "ApprovedRules":
+                        var apprule = (from r in db.ApprovedRules
+                                       where r.RuleID == id
+                                       select r).First();
+                        apprule.Question = question;
+                        apprule.Answer = answer;
+                        apprule.LastEditedBy = user;
+                        apprule.Lookup = Lookup;
+                        break;
+                    case "RejectedRules":
+                        var rejrule = (from r in db.RejectedRules
+                                       where r.RuleID == id
+                                       select r).First();
+                        rejrule.Question = question;
+                        rejrule.Answer = answer;
+                        rejrule.LastEditedBy = user;
+                        rejrule.Lookup = Lookup;
+                        break;
+                    case "PendingRules":
+                        var penrule = (from r in db.PendingRules
+                                       where r.RuleID == id
+                                       select r).First();
+                        penrule.Question = question;
+                        penrule.Answer = answer;
+                        penrule.LastEditedBy = user;
+                        penrule.Lookup = Lookup;
+                        break;
+                    default:
+                        System.Diagnostics.Debug.WriteLine("Unknown table");
+                        return "Sorry something went wrong. Try reload the page and try again.";
+                }
+                db.SaveChanges();
+                return null;
             }
         }
 
@@ -259,10 +289,40 @@ namespace BingVoiceSystem
             }
         }
 
-        public bool CheckExisting(string question)
+        public bool CheckExisting(string question, int RuleID)
         {
-            if (GetAnswer(question).Equals("Sorry, no answer was found for that query.") &&
-                GetAnswerFromPending(question).Equals("Sorry, no answer was found for that query."))
+            int ApprovedCheck;
+            int RejectedCheck;
+            int PendingCheck;
+
+            using (var db = new BingDBEntities())
+            {
+                var query = from r in db.ApprovedRules
+                            where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                            select r.RuleID;
+                ApprovedCheck = query.FirstOrDefault();
+
+                query = from r in db.RejectedRules
+                            where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                            select r.RuleID;
+                RejectedCheck = query.FirstOrDefault();
+
+                query = from r in db.PendingRules
+                            where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                    == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                            select r.RuleID;
+                PendingCheck = query.FirstOrDefault();
+            }
+
+            if ((ApprovedCheck != 0 || RejectedCheck != 0 || PendingCheck != 0) && (ApprovedCheck != RuleID && RejectedCheck != RuleID && PendingCheck != RuleID))
             {
                 return true;
             }
@@ -279,7 +339,7 @@ namespace BingVoiceSystem
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, "ApprovedRules");
+                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, penrule.Lookup, "ApprovedRules");
                 db.PendingRules.Remove(penrule);
                 db.SaveChanges();
             }
@@ -292,46 +352,8 @@ namespace BingVoiceSystem
                 var penrule = (from r in db.PendingRules
                                where r.Question == question
                                select r).First();
-                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, "RejectedRules");
+                AddRule(penrule.Question, penrule.Answer, user, createdBy, lastEditedBy, penrule.Lookup, "RejectedRules");
                 db.PendingRules.Remove(penrule);
-                db.SaveChanges();
-            }
-        }
-
-        public void EditRule(int id, string question, string answer, string user, string table)
-        {
-            using (var db = new BingDBEntities())
-            {
-                switch (table)
-                {
-                    case "ApprovedRules":
-                        var apprule = (from r in db.ApprovedRules
-                                       where r.RuleID == id
-                                       select r).First();
-                        apprule.Question = question;
-                        apprule.Answer = answer;
-                        apprule.LastEditedBy = user;
-                        break;
-                    case "RejectedRules":
-                        var rejrule = (from r in db.RejectedRules
-                                       where r.RuleID == id
-                                       select r).First();
-                        rejrule.Question = question;
-                        rejrule.Answer = answer;
-                        rejrule.LastEditedBy = user;
-                        break;
-                    case "PendingRules":
-                        var penrule = (from r in db.PendingRules
-                                       where r.RuleID == id
-                                       select r).First();
-                        penrule.Question = question;
-                        penrule.Answer = answer;
-                        penrule.LastEditedBy = user;
-                        break;
-                    default:
-                        System.Diagnostics.Debug.WriteLine("Unknown table");
-                        return;
-                }
                 db.SaveChanges();
             }
         }
@@ -443,88 +465,5 @@ namespace BingVoiceSystem
                 return rejrule;
             }
         }
-
-        public bool AddDataDrivenRule(string question, string response, string type, string user, string table)
-        {
-            //Returns false if either question or response is empty
-            if (question.Equals("") || response.Equals(""))
-            {
-                return false;
-            }
-
-            //Remove extra whitespace from the question
-            question = Regex.Replace(question, "\\s+", " ").Trim();
-            using (var db = new BingDBEntities())
-            {
-                switch (table)
-                {
-                    case "ApprovedRules":
-                        if (GetAnswer(question).Equals("Sorry, no result was found for that query"))
-                        {
-                            var apprule = new ApprovedRule
-                            {
-                                Question = question,
-                                Answer = response,
-                                ApprovedBy = user,
-                                DataDriven = type
-                            };
-                            db.ApprovedRules.Add(apprule);
-                        }
-                        else
-                        {
-                            var apprule = new ApprovedRule
-                            {
-                                Question = question,
-                                Answer = GetAnswer(question) + ", " + response,
-                                ApprovedBy = user,
-                                DataDriven = type
-                            };
-                            db.ApprovedRules.Add(apprule);
-                        }
-                        break;
-                    case "RejectedRules":
-                        var rejrule = new RejectedRule
-                        {
-                            Question = question,
-                            Answer = response,
-                            RejectedBy = user
-                        };
-                        db.RejectedRules.Add(rejrule);
-                        break;
-                    case "PendingRules":
-                        if (GetAnswerFromPending(question).Equals("Sorry, no result was found for that query"))
-                        {
-                            var penrule = new PendingRule
-                            {
-                                Question = question,
-                                Answer = response,
-                                LastEditedBy = user,
-                                CreatedBy = user,
-                                DataDriven = type
-                            };
-                            db.PendingRules.Add(penrule);
-                        }
-                        else
-                        {
-                            var penrule = new PendingRule
-                            {
-                                Question = question,
-                                Answer = GetAnswerFromPending(question) + ", " + response,
-                                LastEditedBy = user,
-                                CreatedBy = user,
-                                DataDriven = type
-                            };
-                            db.PendingRules.Add(penrule);
-                        }
-                        break;
-                    default:
-                        System.Diagnostics.Debug.WriteLine("Unknown table");
-                        return false;
-                }
-                db.SaveChanges();
-                return true;
-            }
-        }
-
     }
 }

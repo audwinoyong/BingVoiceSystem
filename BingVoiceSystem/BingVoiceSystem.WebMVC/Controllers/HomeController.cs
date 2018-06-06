@@ -23,7 +23,8 @@ namespace BingVoiceSystem.WebMVC.Controllers
         {
             if (ModelState.IsValidField("Question"))
             {
-                model.SetAnswer(model.Question);
+                EFRules Rules = new EFRules();
+                model.Answer = Rules.GetAnswer(model.Question);
             }
             else
             {

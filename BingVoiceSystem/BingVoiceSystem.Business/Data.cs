@@ -39,31 +39,31 @@ namespace BingVoiceSystem.Business
                 switch (LookupTable)
                 {
                     case "Movies":
-                        Matches = db.Movies.Where(q => q.MovieName.ToLower() == Value).Select(q => q.MovieID).ToList();
+                        Matches = db.Movies.Where(q => q.MovieName.ToLower() == Value.ToLower()).Select(q => q.MovieID).ToList();
                         break;
                     case "Genres":
-                        Matches = db.Genres.Where(q => q.GenreType.ToLower() == Value).Select(q => q.MovieID).ToList();
+                        Matches = db.Genres.Where(q => q.GenreType.ToLower() == Value.ToLower()).Select(q => q.MovieID).ToList();
                         break;
                     case "Actors":
-                        Matches = db.Actors.Where(q => q.ActorName.ToLower() == Value).Select(q => q.MovieID).ToList();
+                        Matches = db.Actors.Where(q => q.ActorName.ToLower() == Value.ToLower()).Select(q => q.MovieID).ToList();
                         break;
                 }
 
                 switch (AnswerTable)
                 {
-                    case "Movies":
+                    case "{Movies}":
                         foreach (int Match in Matches)
                         {
                             Answers.AddRange(db.Movies.Where(q => q.MovieID == Match).Select(q => q.MovieName).ToList());
                         }
                         break;
-                    case "Genres":
+                    case "{Genres}":
                         foreach (int Match in Matches)
                         {
                             Answers.AddRange(db.Genres.Where(q => q.MovieID == Match).Select(q => q.GenreType).ToList());
                         }
                         break;
-                    case "Actors":
+                    case "{Actors}":
                         foreach (int Match in Matches)
                         {
                             Answers.AddRange(db.Actors.Where(q => q.MovieID == Match).Select(q => q.ActorName).ToList());

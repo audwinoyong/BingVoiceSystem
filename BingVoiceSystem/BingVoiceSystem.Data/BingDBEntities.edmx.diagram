@@ -6,7 +6,6 @@
     <edmx:Diagrams>
       <Diagram DiagramId="bd8a1617f4c54b83bb0e741d39c474db" Name="Diagram1">
         <EntityTypeShape EntityType="BingDBModel.C__MigrationHistory" Width="1.5" PointX="5.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="BingDBModel.ApprovedDataRuleQuestion" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
         <EntityTypeShape EntityType="BingDBModel.ApprovedRule" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="BingDBModel.AspNetRole" Width="1.5" PointX="0.75" PointY="2.5" IsExpanded="true" />
         <EntityTypeShape EntityType="BingDBModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="1" IsExpanded="true" />
