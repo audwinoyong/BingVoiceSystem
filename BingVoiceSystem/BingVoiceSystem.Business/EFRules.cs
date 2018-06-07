@@ -29,6 +29,7 @@ namespace BingVoiceSystem
             {
                 Business.Data data = new Business.Data();
                 return data.GetData(wildCard[1], wildCard[0], wildCard[2]);
+                
             }
             else
             {
@@ -517,6 +518,17 @@ namespace BingVoiceSystem
                 var id = (from r in db.PendingRules
                                where r.Question == question
                                select r.RuleID).First();
+                return id;
+            }
+        }
+
+        public int GetApprovedID(string question)
+        {
+            using (var db = new BingDBEntities())
+            {
+                var id = (from r in db.ApprovedRules
+                          where r.Question == question
+                          select r.RuleID).First();
                 return id;
             }
         }
