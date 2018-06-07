@@ -114,8 +114,6 @@
     <Compile Include="RejectedRule.cs">
       <DependentUpon>BingDBEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="Rules.cs" />
-    <Compile Include="User.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="BingDatabase.mdf">

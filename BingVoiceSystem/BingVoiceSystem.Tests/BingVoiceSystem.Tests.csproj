@@ -73,10 +73,6 @@
       <Project>{ac98e611-674a-4650-a0e3-2e6a0aa9021d}</Project>
       <Name>BingVoiceSystem.Data</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BingVoiceSystem\BingVoiceSystem.Web.csproj">
-      <Project>{4508176e-ab03-4a9c-9db4-3cef9fabc378}</Project>
-      <Name>BingVoiceSystem.Web</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
