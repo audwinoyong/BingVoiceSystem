@@ -73,7 +73,7 @@ namespace BingVoiceSystem.Business
 
                 if (Answers.Count == 0)
                 {
-                    return null;
+                    return "Sorry, no data was found for that query";
                 }
                 else
                 {
