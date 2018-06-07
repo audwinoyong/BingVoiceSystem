@@ -69,25 +69,15 @@
                 <th>Approved By</th>
                 <th>Last Edited By</th>
                 <th>CreatedBy</th>
-                @if (User.IsInRole("Editor"))
-                {
-                    <th colspan="2">Action</th>
-                }
             </tr>
             @foreach (var Item in Model.ApprovedRulesList)
             {
-            <tr>
-                <td>@Item.Question</td>
-                <td>@Item.Answer</td>
-                <td>@Item.ApprovedBy</td>
-                <td>@Item.LastEditedBy</td>
-                <td>@Item.CreatedBy</td>
-
-                    @if (User.IsInRole("Editor"))
-                    {
-                        <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "ApprovedRules" }, new { @class = "btn btn-primary" })</td>
-                        <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "ApprovedRules" }, new { @class = "btn btn-danger" })</td>
-                    }
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                    <td>@Item.ApprovedBy</td>
+                    <td>@Item.LastEditedBy</td>
+                    <td>@Item.CreatedBy</td>
                 </tr>
             }
         </table>
@@ -111,13 +101,13 @@
             </tr>
             @foreach (var Item in Model.RejectedRulesList)
             {
-            <tr>
-                <td>@Item.Question</td>
-                <td>@Item.Answer</td>
-                <td>@Item.RejectedBy</td>
-                <td>@Item.LastEditedBy</td>
-                <td>@Item.CreatedBy</td>
-            </tr>
+                <tr>
+                    <td>@Item.Question</td>
+                    <td>@Item.Answer</td>
+                    <td>@Item.RejectedBy</td>
+                    <td>@Item.LastEditedBy</td>
+                    <td>@Item.CreatedBy</td>
+                </tr>
             }
         </table>
     }
