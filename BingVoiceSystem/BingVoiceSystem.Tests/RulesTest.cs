@@ -12,27 +12,71 @@ namespace BingVoiceSystem
     [TestClass]
     public class RulesTest
     {
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///  Gets or sets the test context which provides
-        ///  information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get { return testContextInstance; }
-            set { testContextInstance = value; }
-        }
 
         // private Rules rules = new Rules();
-        private EFRules efrules = new EFRules();
-
+        private static EFRules efrules = new EFRules();
+        private static Business.Data data = new Business.Data();
         [AssemblyInitialize]
         public static void SetupDataDirectory(TestContext context)
         {
             string path = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\BingVoiceSystem.Data"));
             AppDomain.CurrentDomain.SetData("DataDirectory", path);
+            data.DataAdd("Test Movie", "Test Genre", new List<string> { "Actor1", "Actor2" }, "User");
+            efrules.AddRule("What movies star {%}?", "{Movies}", "User", "User", "User", "Actors", Table.ApprovedRules);
+            efrules.AddRule("What genre is {%}?", "{Genres}", "User", "User", "User", "Movies", Table.ApprovedRules);
+            efrules.AddRule("What actors star in {%}?", "{Actors}", "User", "User", "User", "Movies", Table.ApprovedRules);
+
         }
+
+        [TestMethod]
+        public void DDRule_FindAnswerMovies_True()
+        {
+            Assert.IsTrue(efrules.GetAnswer("What movies star Actor1").Contains("Test Movie") && efrules.GetAnswer("What movies star Actor2").Contains("Test Movie"));
+        }
+
+        [TestMethod]
+        public void DDRule_FindAnswerGenre_True()
+        {
+            Assert.IsTrue(efrules.GetAnswer("What Genre is test movie").Contains("Test Genre"));
+        }
+
+        [TestMethod]
+        public void DDRule_FindAnswerActor_True()
+        {
+            Assert.IsTrue(efrules.GetAnswer("What actors star in test movie").Contains("Actor1, Actor2"));
+        }
+
+        [TestMethod]
+        public void EditDDRule_EditSuccessful_True()
+        {
+            efrules.EditRule(efrules.GetApprovedID("What genre is {%}?"), "What is the genre of {%}?", "{Genres}", "User", "Movies", Table.ApprovedRules);
+            Assert.IsTrue(efrules.GetAnswer("What is the genre of test movie").Contains("Test Genre"));
+        }
+
+        [TestMethod]
+        public void EditDDData_EditSuccessful_True()
+        {
+            data.EditData(data.MovieNameToID("Test Movie"), "Not Test Movie", "Test Genre", new List<string> { "Actor1", "Actor2" }, "User");
+            Assert.IsTrue(efrules.GetAnswer("What movies star Actor1").Contains("Not Test Movie"));
+        }
+
+        [TestMethod]
+        public void EditDDRule_CannotFind_True()
+        {
+            efrules.EditRule(efrules.GetApprovedID("What actors star in {%}?"), "Who are the actors in {%}?", "{Actors}", "User", "Movies", Table.ApprovedRules);
+            Assert.IsTrue(efrules.GetAnswer("What actors star in test movie").Contains("Sorry, no result was found for that query"));
+        }
+
+        [TestMethod]
+        public void DeleteData_Successful_True()
+        {
+            data.DeleteData(data.MovieNameToID("Not Test Movie"));
+            Assert.IsTrue(efrules.GetAnswer("What movies star Actor1").Contains("Sorry, no data was found for that query"));
+            efrules.DeleteRule("What is the genre of {%}?", Table.ApprovedRules);
+            efrules.DeleteRule("Who are the actors in {%}?", Table.ApprovedRules);
+            efrules.DeleteRule("What movies star {%}?", Table.ApprovedRules);
+        }
+
 
         [TestMethod]
         public void DatabaseOpens_Successful()
@@ -50,12 +94,12 @@ namespace BingVoiceSystem
             Assert.IsTrue(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
             efrules.DeleteRule("Test Question?", Table.PendingRules);
         }
-        
-        
+
+
         [TestMethod]
         public void GetAnswer_CaseDifferences_True()
         {
-            efrules.AddRule("Test Question?", "Test Answer", "User","User", "User", null, Table.PendingRules);
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", null, Table.PendingRules);
             Assert.IsTrue(efrules.GetAnswerFromPending("TEsT quesTioN?").Contains("Test Answer"));
             efrules.DeleteRule("Test Question?", Table.PendingRules);
         }
