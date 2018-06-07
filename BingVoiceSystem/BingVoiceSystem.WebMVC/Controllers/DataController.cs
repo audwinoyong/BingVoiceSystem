@@ -33,13 +33,14 @@ namespace BingVoiceSystem.WebMVC.Controllers
             Business.Data data = new Business.Data();
             if (ModelState.IsValid)
             {
-                if (data.DataAdd(model.MovieName, model.Genre, data.ActorsFromString(model.Actors), User.Identity.Name))
+                string result;
+                if ((result = data.DataAdd(model.MovieName, model.Genre, data.ActorsFromString(model.Actors), User.Identity.Name)) == null)
                 {
                     return RedirectToAction("DataList");
                 }
                 else
                 {
-                    ViewBag.DuplicateError = "That movie already exists. Please edit the movie on the Data List screen.";
+                    ViewBag.DuplicateError = result;
                     return View();
                 }
             }
@@ -77,8 +78,23 @@ namespace BingVoiceSystem.WebMVC.Controllers
         public ActionResult DataEdit(DataModel model)
         {
             Business.Data data = new Business.Data();
-            data.EditData(model.DataList.MovieID, model.DataList.MovieName, model.DataList.Genre, data.ActorsFromString(model.ActorString), User.Identity.Name);
-            return RedirectToAction("DataList");
+            if (ModelState.IsValid)
+            {
+                string result;
+                if ((result = data.EditData(model.DataList.MovieID, model.DataList.MovieName, model.DataList.Genre, data.ActorsFromString(model.ActorString), User.Identity.Name)) == null)
+                {
+                    return RedirectToAction("DataList");
+                }
+                else
+                {
+                    ViewBag.DuplicateError = result;
+                    return View(model);
+                }
+            }            
+            else
+            {
+                return View();
+            }
         }
 
         // GET: Data/DataDelete?MovieID=15

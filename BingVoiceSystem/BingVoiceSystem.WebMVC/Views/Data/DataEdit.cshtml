@@ -12,7 +12,7 @@
 <body>
     <h2>Edit Data</h2>
     <hr />
-    @if (Model.DataList.MovieID != 0)
+    @if (Model.DataList != null && Model.DataList.MovieID != 0)
     {
         using (Html.BeginForm())
         {
@@ -23,6 +23,9 @@
                 <tr><td>@Html.LabelFor(x => x.DataList.Genre, "Genre")</td><td>@Html.TextAreaFor(x => x.DataList.Genre, new { @class = "form-control" })</td></tr>
                 <tr><td>@Html.LabelFor(x => x.DataList.Actors, "Actors (Separate each actor by ';')")</td><td>@Html.TextAreaFor(x => x.ActorString, new { @class = "form-control", @rows = 5 })</td></tr>
             </table>
+
+            @Html.ValidationSummary()
+            <p class="text-danger">@ViewBag.DuplicateError</p>
 
             <input type="submit" class="btn btn-primary" value="Save" style="padding-right: 10px" />
             @Html.ActionLink("Cancel", "DataList", null, new { @class = "btn btn-default" });

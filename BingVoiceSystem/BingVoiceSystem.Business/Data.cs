@@ -87,11 +87,15 @@ namespace BingVoiceSystem.Business
         }
 
         //Add data to the relevant tables in the database.
-        public bool DataAdd(string MovieName, string Genre, List<string> Actors, string CreatedBy)
+        public string DataAdd(string MovieName, string Genre, List<string> Actors, string CreatedBy)
         {
-            if (MovieName.Equals("") || Genre.Equals("") || Actors.Count == 0 || CheckDuplicate(MovieName))
+            if (MovieName == null || Genre == null || Actors == null)
             {
-                return false;
+                return "Movie, Genre and Actors fields are required.";
+            }
+            else if(CheckDuplicate(MovieName, -1) != null)
+            {
+                return (CheckDuplicate(MovieName, -1));
             }
             else
             {
@@ -107,12 +111,12 @@ namespace BingVoiceSystem.Business
                 }
                 db.SaveChanges();
 
-                return true;
+                return null;
             }
         }
 
         //Returns true if the movie data trying to be added is a duplicate movie.
-        public bool CheckDuplicate(string Movie)
+        public string CheckDuplicate(string Movie, int MovieID)
         {
             List<int> Matches = new List<int>();
             using (var db = new BingDBEntities())
@@ -122,16 +126,37 @@ namespace BingVoiceSystem.Business
             }
             if (Matches.Count > 0)
             {
-                return true;
+                int sameIDCount = 0;
+                foreach (int match in Matches)
+                {
+                    if (match == MovieID) { sameIDCount++; }
+                }
+                if(sameIDCount > 0)
+                {
+                    return null;
+                }
+                else
+                {
+                    return "That movie already exists. Please edit the movie on the Data List screen.";
+                }                
             }
-            return false;
+            return null;
         }
 
 
     //Handles data edits. Updates movie and genre details, deletes all existing actors and adds a new list of actors.
-    public bool EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
+    public string EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
         {
             //ADD CHECK TO SEE IF MOVIE NAME ALREADY EXISTS
+            if(MovieName == null || Genre == null || Actors == null)
+            {
+                return "Movie, Genre and Actors fields are required.";
+            }
+            else if (CheckDuplicate(MovieName, MovieID) != null)
+            {
+                return (CheckDuplicate(MovieName, MovieID));
+            }
+
 
             using (var db = new BingDBEntities())
             {
@@ -156,7 +181,7 @@ namespace BingVoiceSystem.Business
                 db.SaveChanges();
             }
 
-            return true;
+            return null;
         }
 
         public void DeleteData(int MovieID)
@@ -179,6 +204,10 @@ namespace BingVoiceSystem.Business
         //Splits a string into a List of values. Determines item by separation of ';'.
         public List<string> ActorsFromString(string actors)
         {
+            if (actors == null)
+            {
+                return null;
+            }
             List<string> Actors = new List<string>();
             string actor = "";
             for (int i = 0; i < actors.Length; i++)
