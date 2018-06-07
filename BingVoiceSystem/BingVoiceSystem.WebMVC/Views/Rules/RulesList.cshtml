@@ -31,7 +31,7 @@
                     <td>@Item.LastEditedBy</td>
                     <td>@Item.CreatedBy</td>
 
-                    @if (User.IsInRole("DataMaintainer") || (User.IsInRole("Editor")))
+                    @if (User.IsInRole("Editor"))
                     {
                         <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "PendingRules" }, new { @class = "btn btn-primary" })</td>
                         <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "PendingRules" }, new { @class = "btn btn-danger" })</td>
@@ -51,7 +51,7 @@
         <p>There are no pending rules to display.</p>
     }
 
-    @if (User.IsInRole("DataMaintainer") || (User.IsInRole("Editor")))
+    @if (User.IsInRole("Editor"))
     {
         <form method="get" action="Add">
             <input type="submit" class="btn btn-primary" value="Add New Rule" />
@@ -68,7 +68,7 @@
                 <th>Answer</th>
                 <th>Approved By</th>
                 <th>Last Edited By</th>
-                @if (User.IsInRole("DataMaintainer") || (User.IsInRole("Editor")))
+                @if (User.IsInRole("Editor"))
                 {
                     <th colspan="2">Action</th>
                 }
@@ -81,7 +81,7 @@
                     <td>@Item.ApprovedBy</td>
                     <td>@Item.LastEditedBy</td>
 
-                    @if (User.IsInRole("DataMaintainer") || (User.IsInRole("Editor")))
+                    @if (User.IsInRole("Editor"))
                     {
                         <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "ApprovedRules" }, new { @class = "btn btn-primary" })</td>
                         <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "ApprovedRules" }, new { @class = "btn btn-danger" })</td>
@@ -105,10 +105,6 @@
                 <th>Answer</th>
                 <th>Rejected By</th>
                 <th>Last Edited By</th>
-                @if (User.IsInRole("DataMaintainer"))
-                {
-                    <th colspan="2">Action</th>
-                }
             </tr>
             @foreach (var Item in Model.RejectedRulesList)
             {
@@ -117,12 +113,6 @@
                     <td>@Item.Answer</td>
                     <td>@Item.RejectedBy</td>
                     <td>@Item.LastEditedBy</td>
-
-                    @if (User.IsInRole("DataMaintainer"))
-                    {
-                        <td>@Html.ActionLink("Edit", "Edit", new { id = Item.RuleID, table = "RejectedRules" }, new { @class = "btn btn-primary" })</td>
-                        <td>@Html.ActionLink("Delete", "Delete", new { id = Item.RuleID, table = "RejectedRules" }, new { @class = "btn btn-danger" })</td>
-                    }
                 </tr>
             }
         </table>

@@ -27,7 +27,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Add
         // Show an edit form to add a new rule
-        [Authorize(Roles = "DataMaintainer, Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult Add()
         {
             return View();
@@ -37,7 +37,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // Add a Pending Rule based on the supplied data
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "DataMaintainer, Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult Add([Bind(Include = "Question,Answer,Lookup")] RulesModel model)
         {
             if (ModelState.IsValid)
@@ -61,7 +61,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Edit/243?table=PendingRules
         // Show an edit form to edit an existing rule
-        [Authorize(Roles = "DataMaintainer, Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult Edit(int? id, Table table)
         {
             if (id == null)
@@ -117,7 +117,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // Save changes to an edited rule
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "DataMaintainer, Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult Edit(RulesModel model, Table table)
         {
             string result = "";
@@ -151,7 +151,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
 
         // GET: Rules/Delete/243?table=PendingRules
         // Retrieve details of a rule to confirm deletion
-        [Authorize(Roles = "DataMaintainer, Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult Delete(int? id, Table table)
         {
             if (id == null)
@@ -206,7 +206,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
         // POST: Rules/Delete/243?table=PendingRules
         // Delete a rule
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "DataMaintainer, Editor")]
+        [Authorize(Roles = "Editor")]
         public ActionResult DeleteConfirmed(int id, Table table)
         {
             switch (table)
