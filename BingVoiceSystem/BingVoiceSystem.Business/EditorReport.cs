@@ -30,8 +30,8 @@ namespace BingVoiceSystem.Business
             BingDBEntities db = new BingDBEntities();
 
             UsersApprovedRules = db.ApprovedRules.Where(q => q.CreatedBy == Email).ToList();
-            UsersApprovedRulesCount = db.ApprovedRules.Where(q => q.ApprovedBy == Email).ToList().Count;
-            UsersRejectedRulesCount = db.RejectedRules.Where(q => q.RejectedBy == Email).ToList().Count;
+            UsersApprovedRulesCount = db.ApprovedRules.Where(q => q.CreatedBy == Email).ToList().Count;
+            UsersRejectedRulesCount = db.RejectedRules.Where(q => q.CreatedBy == Email).ToList().Count;
 
             if (UsersApprovedRulesCount == 0 && UsersRejectedRulesCount == 0)
             {
