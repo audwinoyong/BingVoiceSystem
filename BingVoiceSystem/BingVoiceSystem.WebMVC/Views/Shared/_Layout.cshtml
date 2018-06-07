@@ -24,7 +24,11 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <!-- ("Link Text", "ActionName (Method name in Controller, also File Name)", "Folder Name") -->
-                        <li>@Html.ActionLink("Rules List", "RulesList", "Rules")</li>
+                        if (User.IsInRole("Editor") || User.IsInRole("Approver"))
+                        {
+                            <li>@Html.ActionLink("Rules List", "RulesList", "Rules")</li>
+                        }
+
                         <li>@Html.ActionLink("Data List", "DataList", "Data")</li>
 
                         if (User.IsInRole("Editor"))
