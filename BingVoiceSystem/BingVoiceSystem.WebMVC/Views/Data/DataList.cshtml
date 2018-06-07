@@ -22,7 +22,10 @@
                 <th>Actor</th>
                 <th>Last Edited By</th>
                 <th>Created By</th>
-                <th colspan="2">Action</th>
+                @if (User.IsInRole("DataMaintainer"))
+                {
+                    <th colspan="2">Action</th>
+                }
             </tr>
             @foreach (var Item in Model.DataList)
             {
@@ -43,8 +46,12 @@
                         {
                             <td rowspan="@Item.Actors.Count">@Item.LastEditedBy</td>
                             <td rowspan="@Item.Actors.Count">@Item.CreatedBy</td>
-                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { MovieID = Item.MovieID }, new { @class = "btn btn-primary" })</td>
-                            <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "DataDelete", new { MovieID = Item.MovieID }, new { @class = "btn btn-danger" })</td>
+
+                            if (User.IsInRole("DataMaintainer"))
+                            {
+                                <td rowspan="@Item.Actors.Count">@Html.ActionLink("Edit", "DataEdit", new { MovieID = Item.MovieID }, new { @class = "btn btn-primary" })</td>
+                                <td rowspan="@Item.Actors.Count">@Html.ActionLink("Delete", "DataDelete", new { MovieID = Item.MovieID }, new { @class = "btn btn-danger" })</td>
+                            }
                         }
                     </tr>
                 }
@@ -55,8 +62,12 @@
     {
         <h4>There is no data to display.</h4>
     }
-    <form method="get" action="DataAdd">
-        <input type="submit" class="btn btn-primary" value="Add Data" />
-    </form>
+
+    @if (User.IsInRole("DataMaintainer"))
+    {
+        <form method="get" action="DataAdd">
+            <input type="submit" class="btn btn-primary" value="Add Data" />
+        </form>
+    }
 </body>
 </html>

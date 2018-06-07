@@ -6,11 +6,6 @@ namespace BingVoiceSystem.WebMVC.Controllers
     [Authorize]
     public class ReportsController : Controller
     {
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         // GET: Reports/EditorReport
         // Shows the Editor's report
         [Authorize(Roles = "Editor")]

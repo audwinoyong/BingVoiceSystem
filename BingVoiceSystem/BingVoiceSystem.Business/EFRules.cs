@@ -23,7 +23,7 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = removePuncForQuery(question);
+            question = RemovePuncForQuery(question);
             List<string> wildCard;
             if ((wildCard = GetWildCard(question)).Count > 0)
             {
@@ -53,7 +53,7 @@ namespace BingVoiceSystem
         {
             //Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
-            question = removePuncForQuery(question);
+            question = RemovePuncForQuery(question);
             List<string> wildCard;
             if ((wildCard = GetWildCard(question)).Count > 0)
             {
@@ -165,7 +165,7 @@ namespace BingVoiceSystem
             return Tuple.Create(Prefix, Sufix);
         }
 
-        public string removePuncForQuery(string question)
+        public string RemovePuncForQuery(string question)
         {
             return question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
                 Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
