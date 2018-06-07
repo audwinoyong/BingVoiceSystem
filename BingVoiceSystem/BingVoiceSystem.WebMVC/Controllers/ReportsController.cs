@@ -3,6 +3,9 @@ using BingVoiceSystem.Business;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
+    /// <summary>
+    /// The reports to be generated.
+    /// </summary>
     [Authorize]
     public class ReportsController : Controller
     {

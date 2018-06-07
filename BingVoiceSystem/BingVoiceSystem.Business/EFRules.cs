@@ -8,20 +8,32 @@ using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem
 {
-    // Enum for rules tables
+    /// <summary>
+    /// Enum for rules tables.
+    /// </summary>
     public enum Table { ApprovedRules, RejectedRules, PendingRules }
 
+    /// <summary>
+    /// Business logic for the Rules using Entity Framework.
+    /// </summary>
     public class EFRules
     {
+        /// <summary>
+        /// Empty Constructor.
+        /// </summary>
         public EFRules()
         {
         }
 
-        /*Takes in a question and returns the corresponding answer for that rule 
-         * from the approvedrules table*/
+        /// <summary>
+        /// Takes in a question and returns the corresponding answer for that rule
+        /// from the ApprovedRules table.
+        /// </summary>
+        /// <param name="question">The supplied question</param>
+        /// <returns>The answer of the question</returns>
         public string GetAnswer(string question)
         {
-            //Remove extra whitespace and punctuation from the question
+            // Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             question = RemovePuncForQuery(question);
             List<string> wildCard;
@@ -29,7 +41,6 @@ namespace BingVoiceSystem
             {
                 Business.Data data = new Business.Data();
                 return data.GetData(wildCard[1], wildCard[0], wildCard[2]);
-                
             }
             else
             {
@@ -50,9 +61,15 @@ namespace BingVoiceSystem
             return "Sorry, no result was found for that query";
         }
 
+        /// <summary>
+        /// Takes in a question and returns the corresponding answer for that rule
+        /// from the PendingRules table.
+        /// </summary>
+        /// <param name="question">The supplied question</param>
+        /// <returns>The answer of the question</returns>
         public string GetAnswerFromPending(string question)
         {
-            //Remove extra whitespace and punctuation from the question
+            // Remove extra whitespace and punctuation from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             question = RemovePuncForQuery(question);
             List<string> wildCard;
@@ -80,20 +97,22 @@ namespace BingVoiceSystem
             return "Sorry, no result was found for that query";
         }
 
-        //Returns the wildcard of a given question if it meets any of data driven questions.
+        /// <summary>
+        /// Return the wildcard of a given question if it meets any of data driven questions.
+        /// </summary>
+        /// <param name="askedQuestion">The supplied question</param>
+        /// <returns>A list of best matches</returns>
         public List<string> GetWildCard(string askedQuestion)
         {
-            //Get all data driven questions
+            // Get all data driven questions
             List<string> ApprovedQuestions = new List<string>();
             using (var db = new BingDBEntities())
             {
                 ApprovedQuestions = (from r in db.ApprovedRules
-                                    where r.Lookup != null
-                                    select r.Question).ToList();
-                 //   db.ApprovedRules.Where(q => q.Lookup != null).Select(q => q.Question).ToList();
-
+                                     where r.Lookup != null
+                                     select r.Question).ToList();
             }
-            //Create list of potential matches
+            // Create list of potential matches
             List<List<string>> Matches = new List<List<string>>();
             foreach (string question in ApprovedQuestions)
             {
@@ -109,19 +128,17 @@ namespace BingVoiceSystem
                     using (var db = new BingDBEntities())
                     {
                         Answer = (from r in db.ApprovedRules
-                                 where r.Question.Equals(question)
-                                 select r.Answer).First();
+                                  where r.Question.Equals(question)
+                                  select r.Answer).First();
                         Lookup = (from r in db.ApprovedRules
                                   where r.Question.Equals(question)
                                   select r.Lookup).First();
-                        //Answer = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Answer).First();
-                        //Lookup = db.ApprovedRules.Where(q => q.Question.Equals(question)).Select(q => q.Lookup).First();
                     }
                     Matches.Add(new List<string> { SeparatedQuestion.Item1, askedQuestion.Substring(SeparatedQuestion.Item1.Length, askedQuestion.Length - SeparatedQuestion.Item1.Length - SeparatedQuestion.Item2.Length), SeparatedQuestion.Item2, Lookup, Answer });
                 }
             }
 
-            //Return best match
+            // Return best match
             int LargestPrefix = 0;
             int LargestSufix = 0;
             List<string> BestMatch = new List<string>();
@@ -143,7 +160,11 @@ namespace BingVoiceSystem
             return BestMatch;
         }
 
-        //Splits a data driven question into its prefix (before wildcard) and sufix (after wildcard)
+        /// <summary>
+        /// Split a data driven question into its prefix (before wildcard) and suffix (after wildcard).
+        /// </summary>
+        /// <param name="question">The data driven question</param>
+        /// <returns>A pair of prefix (before wildcard) and suffix (after wildcard)</returns>
         public Tuple<string, string> GetQuestionPrefixSufix(string question)
         {
             string Prefix = "";
@@ -166,26 +187,42 @@ namespace BingVoiceSystem
             return Tuple.Create(Prefix, Sufix);
         }
 
+        /// <summary>
+        /// Remove the punctuations for a question.
+        /// </summary>
+        /// <param name="question">The question with punctuations</param>
+        /// <returns>The question without punctuations</returns>
         public string RemovePuncForQuery(string question)
         {
             return question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
                 Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "");
         }
 
+        /// <summary>
+        /// Add a new rule into the specified Table.
+        /// </summary>
+        /// <param name="question">The question</param>
+        /// <param name="response">The answer to the question</param>
+        /// <param name="user">The current User</param>
+        /// <param name="createdBy">The User who created the rule</param>
+        /// <param name="lastEditedBy">The last User who edited the rule</param>
+        /// <param name="Lookup">The lookup table for data driven rule</param>
+        /// <param name="table">The specified Table</param>
+        /// <returns>Error message if adding a rule fails</returns>
         public string AddRule(string question, string response, string user, string createdBy, string lastEditedBy, string Lookup, Table table)
         {
-            //Returns false if either question or response is empty
+            // Returns false if either question or response is empty
             if (question == null || response == null)
             {
                 return "Question and Answer fields are required.";
             }
-            //If it is data driven, make sure it is in the right format.
+            // If it is data driven, make sure it is in the right format.
             if (Lookup != null && !((response == "{Movies}" || response == "{Genres}" || response == "{Actors}") && (question.Contains("{%}"))))
             {
                 return "You are attempting to make a data driven rule. Ensure your question contains {%} and your answer is either {Movies}, {Genres} or {Actors}.";
             }
 
-            //Remove extra whitespace from the question
+            // Remove extra whitespace from the question
             question = Regex.Replace(question, "\\s+", " ").Trim();
             using (var db = new BingDBEntities())
             {
@@ -241,15 +278,25 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Edit an existing rule.
+        /// </summary>
+        /// <param name="id">The ID of the rule</param>
+        /// <param name="question">The new question</param>
+        /// <param name="answer">The new answer</param>
+        /// <param name="user">The current User</param>
+        /// <param name="Lookup">The lookup table for data driven rule</param>
+        /// <param name="table">The specified Table</param>
+        /// <returns>Error message if editing a rule fails</returns>
         public string EditRule(int id, string question, string answer, string user, string Lookup, Table table)
         {
-            //Returns false if either question or response is empty
+            // Returns false if either question or response is empty
             if (question == null || answer == null)
             {
                 return "Question and Answer fields are required.";
             }
 
-            //If it is data driven, make sure it is in the right format.
+            // If it is data driven, make sure it is in the right format
             if (Lookup != null && !((answer == "{Movies}" || answer == "{Genres}" || answer == "{Actors}") && (question.Contains("{%}"))))
             {
                 return "You are attempting to make a data driven rule. Ensure your question contains {%} and your answer is either {Movies}, {Genres} or {Actors}.";
@@ -302,6 +349,11 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Delete a rule.
+        /// </summary>
+        /// <param name="question">The question</param>
+        /// <param name="table">The specified Table</param>
         public void DeleteRule(string question, Table table)
         {
             using (var db = new BingDBEntities())
@@ -334,6 +386,12 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Check whether the question is already exists in the database
+        /// </summary>
+        /// <param name="question">The question supplied</param>
+        /// <param name="RuleID"></param>
+        /// <returns>True if the question already exists</returns>
         public bool CheckExisting(string question, int RuleID)
         {
             int ApprovedCheck;
@@ -351,19 +409,19 @@ namespace BingVoiceSystem
                 ApprovedCheck = query.FirstOrDefault();
 
                 query = from r in db.RejectedRules
-                            where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                            select r.RuleID;
+                        where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                        select r.RuleID;
                 RejectedCheck = query.FirstOrDefault();
 
                 query = from r in db.PendingRules
-                            where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                                    == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
-                                    Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
-                            select r.RuleID;
+                        where r.Question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                                == question.Replace("?", "").Replace(".", "").Replace(",", "").Replace("!", "").Replace("<", "").
+                                Replace(">", "").Replace("/", "").Replace("\\", "").Replace(":", "").Replace(";", "").ToLower()
+                        select r.RuleID;
                 PendingCheck = query.FirstOrDefault();
             }
 
@@ -377,6 +435,13 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Approve a rule.
+        /// </summary>
+        /// <param name="question">The question</param>
+        /// <param name="user">The current User</param>
+        /// <param name="createdBy">The User who created the rule</param>
+        /// <param name="lastEditedBy">The last User who edited the rule</param>
         public void ApproveRule(string question, string user, string createdBy, string lastEditedBy)
         {
             using (var db = new BingDBEntities())
@@ -390,6 +455,13 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Reject a rule.
+        /// </summary>
+        /// <param name="question">The question</param>
+        /// <param name="user">The current User</param>
+        /// <param name="createdBy">The User who created the rule</param>
+        /// <param name="lastEditedBy">The last User who edited the rule</param>
         public void RejectRule(string question, string user, string createdBy, string lastEditedBy)
         {
             using (var db = new BingDBEntities())
@@ -403,6 +475,10 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Print all pending rules.
+        /// </summary>
+        /// <returns>A list of all pending rules</returns>
         public List<PendingRule> PrintPendingRules()
         {
             using (var db = new BingDBEntities())
@@ -413,6 +489,10 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Print all approved rules.
+        /// </summary>
+        /// <returns>A list of all approved rules</returns>
         public List<ApprovedRule> PrintApprovedRules()
         {
             using (var db = new BingDBEntities())
@@ -423,6 +503,10 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Print all rejected rules.
+        /// </summary>
+        /// <returns>A list of all rejected rules</returns>
         public List<RejectedRule> PrintRejectedRules()
         {
             using (var db = new BingDBEntities())
@@ -433,6 +517,11 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Print all pending rules of a specific User.
+        /// </summary>
+        /// <param name="user">The specified User</param>
+        /// <returns>A list of all pending rules of the specified User</returns>
         public List<PendingRule> PrintUsersPendingRules(string user)
         {
             using (var db = new BingDBEntities())
@@ -444,6 +533,11 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Print all approved rules of a specific User.
+        /// </summary>
+        /// <param name="user">The specified User</param>
+        /// <returns>A list of all approved rules of the specified User</returns>
         public List<ApprovedRule> PrintUsersApprovedRules(string user)
         {
             using (var db = new BingDBEntities())
@@ -455,6 +549,11 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Print all rejected rules of a specific User.
+        /// </summary>
+        /// <param name="user">The specified User</param>
+        /// <returns>A list of all rejected rules of the specified User</returns>
         public List<RejectedRule> PrintUsersRejectedRules(string user)
         {
             using (var db = new BingDBEntities())
@@ -466,18 +565,29 @@ namespace BingVoiceSystem
             }
         }
 
-        /*Returns the number of approved rules.*/
+        /// <summary>
+        /// Get the number of approved rules.
+        /// </summary>
+        /// <returns>The number of approved rules</returns>
         public int CountApproved()
         {
             return PrintApprovedRules().Count;
         }
 
-        /*Returns the number of rejected rules.*/
+        /// <summary>
+        /// Get the number of rejected rules.
+        /// </summary>
+        /// <returns>The number of rejected rules</returns>
         public int CountRejected()
         {
             return PrintRejectedRules().Count;
         }
 
+        /// <summary>
+        /// Search for a pending rule based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of a pending rule</param>
+        /// <returns>The pending rule</returns>
         public PendingRule SearchPendingRule(int id)
         {
             using (var db = new BingDBEntities())
@@ -489,6 +599,11 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Search for an approved rule based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of a approved rule</param>
+        /// <returns>The approved rule</returns>
         public ApprovedRule SearchApprovedRule(int id)
         {
             using (var db = new BingDBEntities())
@@ -500,6 +615,11 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Search for a rejected rule based on its ID.
+        /// </summary>
+        /// <param name="id">The ID of a rejected rule</param>
+        /// <returns>The rejected rule</returns>
         public RejectedRule SearchRejectedRule(int id)
         {
             using (var db = new BingDBEntities())
@@ -511,17 +631,27 @@ namespace BingVoiceSystem
             }
         }
 
+        /// <summary>
+        /// Get the ID of a pending rule.
+        /// </summary>
+        /// <param name="question">The question</param>
+        /// <returns>The ID of the pending rule</returns>
         public int GetPendingID(string question)
         {
             using (var db = new BingDBEntities())
             {
                 var id = (from r in db.PendingRules
-                               where r.Question == question
-                               select r.RuleID).First();
+                          where r.Question == question
+                          select r.RuleID).First();
                 return id;
             }
         }
 
+        /// <summary>
+        /// Get the ID of an approved rule.
+        /// </summary>
+        /// <param name="question">The question</param>
+        /// <returns>The ID of the approved rule</returns>
         public int GetApprovedID(string question)
         {
             using (var db = new BingDBEntities())

@@ -9,6 +9,9 @@ using BingVoiceSystem.Business;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
+    /// <summary>
+    /// The list of rules.
+    /// </summary>
     [Authorize]
     public class RulesController : Controller
     {

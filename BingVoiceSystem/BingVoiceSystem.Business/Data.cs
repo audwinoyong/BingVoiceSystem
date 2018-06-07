@@ -1,15 +1,21 @@
 ﻿using BingVoiceSystem.Data;
-//using BingVoiceSystem.WebMVC.Models;
 using System.Linq;
 using System.Collections.Generic;
 using System;
 
 namespace BingVoiceSystem.Business
 {
+    /// <summary>
+    /// Business logic for the Data.
+    /// </summary>
     public class Data
     {
+        // The list of Data
         public List<DataList> DataList;
 
+        /// <summary>
+        /// Constructor of the Data.
+        /// </summary>
         public Data()
         {
             BingDBEntities db = new BingDBEntities();
@@ -27,8 +33,13 @@ namespace BingVoiceSystem.Business
             }
         }
 
-        //Gets desired data from the data tables.
-        //LookupTable is what to compare Value to, AnswerTable is the table to get the relevant answers.
+        /// <summary>
+        /// Gets desired data from the data tables.
+        /// </summary>
+        /// <param name="LookupTable">Table to lookup the comparison for the Value</param>
+        /// <param name="Value">The value to compare</param>
+        /// <param name="AnswerTable">Table to get the relevant answers</param>
+        /// <returns>The desired data</returns>
         public string GetData(string LookupTable, string Value, string AnswerTable)
         {
             using (var db = new BingDBEntities())
@@ -78,7 +89,8 @@ namespace BingVoiceSystem.Business
                 else
                 {
                     string answer = "";
-                    foreach (string ans in Answers) {
+                    foreach (string ans in Answers)
+                    {
                         answer = answer + ans + ", ";
                     }
                     return answer.Substring(0, answer.Length - 2);
@@ -86,14 +98,21 @@ namespace BingVoiceSystem.Business
             }
         }
 
-        //Add data to the relevant tables in the database.
+        /// <summary>
+        /// Add data to the relevant tables in the database.
+        /// </summary>
+        /// <param name="MovieName">The movie name</param>
+        /// <param name="Genre">The genre</param>
+        /// <param name="Actors">The actors</param>
+        /// <param name="CreatedBy">User who created this data</param>
+        /// <returns>Error message if adding data fails</returns>
         public string DataAdd(string MovieName, string Genre, List<string> Actors, string CreatedBy)
         {
             if (MovieName == null || Genre == null || Actors == null)
             {
                 return "Movie, Genre and Actors fields are required.";
             }
-            else if(CheckDuplicate(MovieName, -1) != null)
+            else if (CheckDuplicate(MovieName, -1) != null)
             {
                 return (CheckDuplicate(MovieName, -1));
             }
@@ -115,13 +134,18 @@ namespace BingVoiceSystem.Business
             }
         }
 
-        //Returns true if the movie data trying to be added is a duplicate movie.
+        /// <summary>
+        /// Returns true if the movie data trying to be added is a duplicate movie.
+        /// </summary>
+        /// <param name="Movie">The movie title</param>
+        /// <param name="MovieID">The movie ID</param>
+        /// <returns>Error message if duplicate exists</returns>
         public string CheckDuplicate(string Movie, int MovieID)
         {
             List<int> Matches = new List<int>();
             using (var db = new BingDBEntities())
             {
-                          
+
                 Matches = db.Movies.Where(q => q.MovieName == Movie).Select(q => q.MovieID).ToList();
             }
             if (Matches.Count > 0)
@@ -131,24 +155,32 @@ namespace BingVoiceSystem.Business
                 {
                     if (match == MovieID) { sameIDCount++; }
                 }
-                if(sameIDCount > 0)
+                if (sameIDCount > 0)
                 {
                     return null;
                 }
                 else
                 {
                     return "That movie already exists. Please edit the movie on the Data List screen.";
-                }                
+                }
             }
             return null;
         }
 
 
-    //Handles data edits. Updates movie and genre details, deletes all existing actors and adds a new list of actors.
-    public string EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
+        /// <summary>
+        /// Handles data edits. Updates movie and genre details, deletes all existing actors and adds a new list of actors.
+        /// </summary>
+        /// <param name="MovieID">The movie ID</param>
+        /// <param name="MovieName">The movie name</param>
+        /// <param name="Genre">The movie genre</param>
+        /// <param name="Actors">The actors of the movie</param>
+        /// <param name="LastEditedBy">The last User who edits the data</param>
+        /// <returns>Error message if editing fails</returns>
+        public string EditData(int MovieID, string MovieName, string Genre, List<string> Actors, string LastEditedBy)
         {
             //ADD CHECK TO SEE IF MOVIE NAME ALREADY EXISTS
-            if(MovieName == null || Genre == null || Actors == null)
+            if (MovieName == null || Genre == null || Actors == null)
             {
                 return "Movie, Genre and Actors fields are required.";
             }
@@ -184,6 +216,10 @@ namespace BingVoiceSystem.Business
             return null;
         }
 
+        /// <summary>
+        /// Delete the data
+        /// </summary>
+        /// <param name="MovieID">The movie ID</param>
         public void DeleteData(int MovieID)
         {
             BingDBEntities db = new BingDBEntities();
@@ -201,7 +237,11 @@ namespace BingVoiceSystem.Business
             db.SaveChanges();
         }
 
-        //Splits a string into a List of values. Determines item by separation of ';'.
+        /// <summary>
+        /// Splits a string into a List of values. Determines item by separation of ';'.
+        /// </summary>
+        /// <param name="actors">Name of the actors</param>
+        /// <returns>The list of the actors</returns>
         public List<string> ActorsFromString(string actors)
         {
             if (actors == null)
@@ -230,7 +270,11 @@ namespace BingVoiceSystem.Business
             return Actors;
         }
 
-        //Create a complete DataList from a MovieID.
+        /// <summary>
+        /// Create a complete DataList from a MovieID.
+        /// </summary>
+        /// <param name="MovieID">The movie ID</param>
+        /// <returns>A data list of the Movie</returns>
         public DataList CreateDataList(int MovieID)
         {
             string MovieName;
@@ -247,7 +291,11 @@ namespace BingVoiceSystem.Business
             return new DataList { MovieID = MovieID, MovieName = MovieName, Genre = Genre, Actors = Actors };
         }
 
-        //Get MovieID from the name of a movie.
+        /// <summary>
+        /// Get MovieID from the name of a movie.
+        /// </summary>
+        /// <param name="MovieName">Name of the movie</param>
+        /// <returns>The ID of the movie</returns>
         public int MovieNameToID(string MovieName)
         {
             using (var db = new BingDBEntities())
@@ -257,7 +305,11 @@ namespace BingVoiceSystem.Business
             }
         }
 
-        //Convert actor list to a string for view.
+        /// <summary>
+        /// Convert actor list to a string for view.
+        /// </summary>
+        /// <param name="Actors">The list of actors</param>
+        /// <returns>A string converted from the list</returns>
         public string ActorsToString(List<string> Actors)
         {
             string ActorText = "";

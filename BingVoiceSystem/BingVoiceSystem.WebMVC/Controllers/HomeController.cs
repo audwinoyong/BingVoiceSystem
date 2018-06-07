@@ -8,8 +8,13 @@ using BingVoiceSystem.WebMVC.Models;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
+    /// <summary>
+    /// The home page for Question & Answer.
+    /// </summary>
     public class HomeController : Controller
     {
+        // GET: /
+        // Show the home page
         [HttpGet]
         public ActionResult Index()
         {
@@ -17,7 +22,8 @@ namespace BingVoiceSystem.WebMVC.Controllers
             return View(model);
         }
 
-        
+        // POST: /
+        // Show the answer to the given question
         [HttpPost]
         public ActionResult Index([Bind(Include = "Question,Answer")]RulesModel model)
         {

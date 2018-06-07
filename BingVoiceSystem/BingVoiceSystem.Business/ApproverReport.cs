@@ -4,10 +4,16 @@ using BingVoiceSystem.Data;
 
 namespace BingVoiceSystem.Business
 {
+    /// <summary>
+    /// Business logic for the Approver's Report.
+    /// </summary>
     public class ApproverReport
     {
+        // The list of Editors' data
         public List<List<string>> EditorData;
-        public string AvgSuccessRate; 
+
+        // The average success rate for all editors
+        public string AvgSuccessRate;
 
         public ApproverReport()
         {

@@ -4,6 +4,9 @@ using System.Net;
 
 namespace BingVoiceSystem.WebMVC.Controllers
 {
+    /// <summary>
+    /// The data list of data-driven rules.
+    /// </summary>
     [Authorize]
     public class DataController : Controller
     {
@@ -90,7 +93,7 @@ namespace BingVoiceSystem.WebMVC.Controllers
                     ViewBag.DuplicateError = result;
                     return View(model);
                 }
-            }            
+            }
             else
             {
                 return View();

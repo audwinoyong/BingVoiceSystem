@@ -136,7 +136,7 @@ namespace BingVoiceSystem
         public void AddRule_DuplicateQuestion_False()
         {
             efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", null, Table.PendingRules);
-            //adding duplicate question
+            // adding duplicate question
             Assert.IsTrue(efrules.AddRule("Test Question?", "Test Different Answer", "User", "User", "User", null, Table.PendingRules).Contains("This question already exists, please use another."));
             efrules.DeleteRule("Test Question?", Table.PendingRules);
         }
@@ -229,8 +229,6 @@ namespace BingVoiceSystem
             Assert.IsFalse(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
             efrules.DeleteRule("Test Question?", Table.RejectedRules);
         }
-
-
 
     }
 }
