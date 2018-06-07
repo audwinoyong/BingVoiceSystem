@@ -186,7 +186,7 @@ namespace BingVoiceSystem.Business
                 if (i == actors.Length - 1 && !actors[i].Equals(';'))
                 {
                     actor += actors[i];
-                    Actors.Add(actor);
+                    Actors.Add(actor.Trim());
                 }
                 else if (!actors[i].Equals(';'))
                 {
@@ -194,7 +194,7 @@ namespace BingVoiceSystem.Business
                 }
                 else
                 {
-                    Actors.Add(actor);
+                    Actors.Add(actor.Trim());
                     actor = "";
                 }
             }
