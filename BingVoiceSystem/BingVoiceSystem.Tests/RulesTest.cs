@@ -2,20 +2,21 @@
 using System.Data.SqlClient;
 using System.Configuration;
 using System.IO;
+using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Data;
 using System.Collections.Generic;
 using BingVoiceSystem.Data;
+using BingVoiceSystem.WebMVC.Controllers;
+using BingVoiceSystem.WebMVC.Models;
 
 namespace BingVoiceSystem
 {
     [TestClass]
     public class RulesTest
     {
-
-        // private Rules rules = new Rules();
         private static EFRules efrules = new EFRules();
         private static Business.Data data = new Business.Data();
+
         [AssemblyInitialize]
         public static void SetupDataDirectory(TestContext context)
         {
@@ -25,7 +26,6 @@ namespace BingVoiceSystem
             efrules.AddRule("What movies star {%}?", "{Movies}", "User", "User", "User", "Actors", Table.ApprovedRules);
             efrules.AddRule("What genre is {%}?", "{Genres}", "User", "User", "User", "Movies", Table.ApprovedRules);
             efrules.AddRule("What actors star in {%}?", "{Actors}", "User", "User", "User", "Movies", Table.ApprovedRules);
-
         }
 
         [TestMethod]
@@ -230,5 +230,51 @@ namespace BingVoiceSystem
             efrules.DeleteRule("Test Question?", Table.RejectedRules);
         }
 
+
+        [TestMethod]
+        public void HomeController_GetAnswer_AnswerFound()
+        {
+            // add and approve the rule
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", null, Table.PendingRules);
+            efrules.ApproveRule("Test Question?", "User", "User", "User");
+            Assert.IsFalse(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
+
+            // create the home controller and mock rules model
+            var controller = new HomeController();
+            var model = new RulesModel { Question = "Test Question?" };
+
+            // get the answer
+            var result = controller.Index(model) as ViewResult;
+            var response = (RulesModel)result.ViewData.Model;
+
+            // answer is found
+            Assert.AreEqual("Test Answer", response.Answer);
+
+            // delete the rule
+            efrules.DeleteRule("Test Question?", Table.ApprovedRules);
+        }
+
+        [TestMethod]
+        public void HomeController_GetAnswer_AnswerNotFound()
+        {
+            // add and approve the rule
+            efrules.AddRule("Test Question?", "Test Answer", "User", "User", "User", null, Table.PendingRules);
+            efrules.ApproveRule("Test Question?", "User", "User", "User");
+            Assert.IsFalse(efrules.GetAnswerFromPending("Test Question?").Contains("Test Answer"));
+
+            // create the home controller and mock rules model
+            var controller = new HomeController();
+            var model = new RulesModel { Question = "Not a Test Question?" };
+
+            // get the answer
+            var result = controller.Index(model) as ViewResult;
+            var response = (RulesModel)result.ViewData.Model;
+
+            // answer is not found
+            Assert.AreEqual("Sorry, no result was found for that query", response.Answer);
+
+            // delete the rule
+            efrules.DeleteRule("Test Question?", Table.ApprovedRules);
+        }
     }
 }
